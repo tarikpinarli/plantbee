@@ -1,28 +1,47 @@
 package config
 
 import (
+	"log"
 	"os"
+	"strings"
+
+	"github.com/joho/godotenv"
 )
 
 type Config struct {
 	Port        string
 	DatabaseURL string
+	
+	// OAuth
+	ClientID     string
+	ClientSecret string
+	RedirectURI  string
 }
 
 func Load() *Config {
+	if err := godotenv.Load(); err != nil {
+		log.Println("ℹ️  .env not found, using system environment")
+	}
+
 	return &Config{
-		Port:        getEnv("PORT", ":8080"),
-		DatabaseURL: getEnv("DATABASE_URL", ""), // If no set it to empty string to trigger no-database in main
+		Port:         fixPortAddr(getEnv("PORT", "8080")),
+		DatabaseURL:  getEnv("DATABASE_URL", ""),
+		ClientID:     getEnv("CLIENT_ID", ""),
+		ClientSecret: getEnv("CLIENT_SECRET", ""),
+		RedirectURI:  getEnv("REDIRECT_URI", "http://localhost:8080/auth/callback"),
 	}
 }
 
-// Helper function: If variables dont exist in env assign the local variables for testing
 func getEnv(key, fallback string) string {
 	if value, exists := os.LookupEnv(key); exists {
-		if key == "PORT" && value[0] != ':' {
-			return ":" + value
-		}
 		return value
 	}
 	return fallback
+}
+
+func fixPortAddr(port string) string {
+	if !strings.HasPrefix(port, ":") {
+		return ":" + port
+	}
+	return port
 }

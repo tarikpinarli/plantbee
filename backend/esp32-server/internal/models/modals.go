@@ -16,3 +16,17 @@ type TelemetryData struct {
 	MoisturePct int       `json:"moisture_percent"`
 	WakeTimeSec float64   `json:"wake_time_seconds"`
 }
+
+type User struct {
+	ID           int       `json:"id"`
+	Login        string    `json:"login"`
+	Email        string    `json:"email"`  
+	Role         string    `json:"role"`       
+	CampusID     int       `json:"campus_id"`
+	SessionToken string    `json:"-"`
+	CreatedAt    time.Time `json:"created_at"`
+}
+
+type RoleRequest struct {
+	Role string `json:"role"`
+}
