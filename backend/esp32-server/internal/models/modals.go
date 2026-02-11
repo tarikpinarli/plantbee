@@ -21,6 +21,7 @@ type User struct {
 	ID           int       `json:"id"`
 	Login        string    `json:"login"`
 	Email        string    `json:"email"`
+	ImageURL     string    `json:"image_url"`
 	Role         string    `json:"role"`
 	CampusID     int       `json:"campus_id"`
 	SessionToken string    `json:"-"`
