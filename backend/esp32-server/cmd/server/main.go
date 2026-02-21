@@ -10,37 +10,37 @@ import (
 )
 
 func main() {
-	// 1. Loading configurations
 	cfg := config.Load()
 
-	// 2. Here we will try to connect the database. If we added the database url in config.load()
-	// we will be saving incoming data from esp32 to the database. if not we will print out 
-	// NO-DATABASE mdoe and continue operation with writing on console.
-	var database *storage.DB
+	var db *storage.DB
 	var err error
 
 	if cfg.DatabaseURL != "" {
-		database, err = storage.New(cfg.DatabaseURL)
+		db, err = storage.New(cfg.DatabaseURL)
 		if err != nil {
-			log.Printf("⚠️  Database Connection Failed: %v\n", err)
-		} else {
-			fmt.Println("✅ Connected to Database")
+			log.Fatalf("Database connection failed: %v", err)
 		}
+
+		if err := db.CreateTables(); err != nil {
+			log.Fatalf("Failed to create tables: %v", err)
+		}
+
+		log.Println("Connected to Database & Tables Created")
 	} else {
-		fmt.Println("ℹ️  Running in NO-DATABASE mode")
+		log.Println("Running in NO-DATABASE mode")
 	}
 
-	// 3. preparing the database and passing it to the handler so that it can write in it.
-	h := &handlers.Handler{
-		DB: database,
-	}
+	h := handlers.New(db, cfg)
 
-	// 4. Start the server
 	http.HandleFunc("/api/reading", h.IngestData)
+	http.HandleFunc("/auth/login", h.HandleLogin)
+	http.HandleFunc("/auth/callback", h.HandleCallback)
 
-	fmt.Println("=================================")
-	fmt.Printf("🚀 ESP32 SERVER RUNNING ON %s\n", cfg.Port)
-	fmt.Println("=================================")
+	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Content-Type", "text/html")
+		fmt.Fprintf(w, "<h1>PlantBee Server Online!</h1><p>System is running.</p>")
+	})
 
+	log.Printf("Server starting on port %s", cfg.Port)
 	log.Fatal(http.ListenAndServe(cfg.Port, nil))
 }
