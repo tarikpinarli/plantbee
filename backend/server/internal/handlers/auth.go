@@ -4,6 +4,8 @@ import (
 	"context"
 	"encoding/json"
 	"esp32-server/internal/models"
+	"github.com/golang-jwt/jwt/v5"
+	"os"
 	"fmt"
 	"net/http"
 	"strconv"
@@ -60,13 +62,27 @@ func (h *Handler) HandleCallback(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	http.SetCookie(w, &http.Cookie{
-		Name:     "auth_user",
-		Value:    user.Login,
-		Path:     "/",
-		HttpOnly: true,
-		Expires:  time.Now().Add(24 * time.Hour),
-	})
+	jwtToken := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
+        "user_id":  user.ID,
+        "login":    user.Login,
+        "exp":      time.Now().Add(24 * time.Hour).Unix(),
+    })
 
-	http.Redirect(w, r, "/", http.StatusTemporaryRedirect)
+    secretKey := []byte(os.Getenv("SESSION_SECRET"))
+    tokenString, err := jwtToken.SignedString(secretKey)
+    if err != nil {
+        http.Error(w, "Token generation failed", http.StatusInternalServerError)
+        return
+    }
+
+    http.SetCookie(w, &http.Cookie{
+        Name:     "auth_token",
+        Value:    tokenString,
+        Path:     "/",
+        HttpOnly: true,
+        Secure:   false,
+        Expires:  time.Now().Add(24 * time.Hour),
+    })
+
+    http.Redirect(w, r, "/", http.StatusTemporaryRedirect)
 }
