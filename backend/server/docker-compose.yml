@@ -37,5 +37,15 @@ services:
     ports:
       - "8081:8080"
 
+  frontend:
+    container_name: plantbee-frontend
+    build:
+      context: ../../frontend
+      dockerfile: Dockerfile
+    ports:
+      - "3000:80"
+    depends_on:
+      - app
+
 volumes:
   postgres_data:

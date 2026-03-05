@@ -35,6 +35,7 @@ func main() {
 	http.HandleFunc("/api/reading", h.IngestData)
 	http.HandleFunc("/auth/login", h.HandleLogin)
 	http.HandleFunc("/auth/callback", h.HandleCallback)
+	http.HandleFunc("/plants/add", h.HandleAddPlant)
 
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", "text/html")
