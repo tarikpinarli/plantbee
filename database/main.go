@@ -5,6 +5,7 @@ import (
 	"log" //print errors and stop program
 	"gorm.io/driver/postgres" //progres driver for gorm
 	"gorm.io/gorm" // ORM engine
+	// "plant_data/database"
 )
 
 type Student struct {
@@ -15,8 +16,10 @@ type Student struct {
 }
 
 func main() {
+	// db.Setup()
+
 	// database connection string
-	dsn := "host=localhost user=postgres password=postgrespw dbname=plant_db port=5432 sslmode=disable"
+	dsn := "host=localhost user=postgres password=postgrespw dbname=  port=5432 sslmode=disable"
 
 	// open database connection
 	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})

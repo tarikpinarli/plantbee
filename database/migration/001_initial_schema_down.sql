@@ -1,0 +1,3 @@
+DROP TABLE IF EXISTS plants;
+DROP TABLE IF EXISTS students;
+DROP TABLE IF EXISTS assignments;
