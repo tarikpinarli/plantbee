@@ -16,6 +16,7 @@ type addPlantRequest struct {
 	LightRequirement string  `json:"light_need"`
 	TargetMoisture   int     `json:"target_moisture"`
 	SensorID         string  `json:"sensor_id"`
+	ImageURL         string  `json:"image_url"`
 }
 
 func (h *Handler) HandleAddPlant(w http.ResponseWriter, r *http.Request) {
@@ -64,6 +65,7 @@ func (h *Handler) HandleAddPlant(w http.ResponseWriter, r *http.Request) {
 		LightRequirement: req.LightRequirement,
 		TargetMoisture:   req.TargetMoisture,
 		SensorID:         req.SensorID,
+		ImageURL:         req.ImageURL,
 	}
 
 	if err := h.DB.CreatePlant(plant); err != nil {

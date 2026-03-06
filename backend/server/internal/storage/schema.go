@@ -5,7 +5,7 @@ import (
 )
 
 func (d *DB) CreateTables() error {
-	
+
 	const createUsersTable = `
 	CREATE TABLE IF NOT EXISTS users (
 		id SERIAL PRIMARY KEY,
@@ -38,7 +38,8 @@ func (d *DB) CreateTables() error {
 		current_moisture INTEGER DEFAULT 50,
 		owner_id INTEGER REFERENCES users(id),
 		sensor_id VARCHAR(50) UNIQUE,
-		created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+		created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+		image_url TEXT
 	);`
 
 	if _, err := d.Exec(createUsersTable); err != nil {

@@ -4,12 +4,13 @@ import (
 	"context"
 	"encoding/json"
 	"esp32-server/internal/models"
-	"github.com/golang-jwt/jwt/v5"
-	"os"
 	"fmt"
 	"net/http"
+	"os"
 	"strconv"
 	"time"
+
+	"github.com/golang-jwt/jwt/v5"
 )
 
 func (h *Handler) HandleLogin(w http.ResponseWriter, r *http.Request) {
@@ -22,6 +23,7 @@ func (h *Handler) HandleCallback(w http.ResponseWriter, r *http.Request) {
 
 	token, err := h.OAuthConfig.Exchange(context.Background(), code)
 	if err != nil {
+		fmt.Printf("❌ Token exchange failed: %v\n", err)
 		http.Error(w, "Token exchange failed", http.StatusInternalServerError)
 		return
 	}
@@ -63,26 +65,26 @@ func (h *Handler) HandleCallback(w http.ResponseWriter, r *http.Request) {
 	}
 
 	jwtToken := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
-        "user_id":  user.ID,
-        "login":    user.Login,
-        "exp":      time.Now().Add(24 * time.Hour).Unix(),
-    })
+		"user_id": user.ID,
+		"login":   user.Login,
+		"exp":     time.Now().Add(24 * time.Hour).Unix(),
+	})
 
-    secretKey := []byte(os.Getenv("SESSION_SECRET"))
-    tokenString, err := jwtToken.SignedString(secretKey)
-    if err != nil {
-        http.Error(w, "Token generation failed", http.StatusInternalServerError)
-        return
-    }
+	secretKey := []byte(os.Getenv("SESSION_SECRET"))
+	tokenString, err := jwtToken.SignedString(secretKey)
+	if err != nil {
+		http.Error(w, "Token generation failed", http.StatusInternalServerError)
+		return
+	}
 
-    http.SetCookie(w, &http.Cookie{
-        Name:     "auth_token",
-        Value:    tokenString,
-        Path:     "/",
-        HttpOnly: true,
-        Secure:   false,
-        Expires:  time.Now().Add(24 * time.Hour),
-    })
+	http.SetCookie(w, &http.Cookie{
+		Name:     "auth_token",
+		Value:    tokenString,
+		Path:     "/",
+		HttpOnly: true,
+		Secure:   false,
+		Expires:  time.Now().Add(24 * time.Hour),
+	})
 
-    http.Redirect(w, r, "/", http.StatusTemporaryRedirect)
+	http.Redirect(w, r, "/", http.StatusTemporaryRedirect)
 }

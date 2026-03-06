@@ -38,4 +38,5 @@ type Plant struct {
     OwnerID             int       `json:"owner_id"`
     SensorID            string    `json:"sensor_id"`
     CreatedAt           time.Time `json:"created_at"`
+	ImageURL			string	  `json:"image_url"`
 }

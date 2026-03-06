@@ -49,13 +49,13 @@ func (d *DB) SaveSensorReadings(reading *models.SensorReading) error {
 // Plant Operations
 func (d *DB) CreatePlant(plant *models.Plant) error {
 	query := `
-		INSERT INTO plants (name, species, category, pot_volume_liters, light_need, target_moisture, sensor_id)
-		VALUES ($1, $2, $3, $4, $5, $6, $7)
+		INSERT INTO plants (name, species, category, pot_volume_liters, light_need, target_moisture, sensor_id, image_url)
+		VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
 		RETURNING id, created_at;
 	`
 	return d.QueryRow(query,
 		plant.Name, plant.Species, plant.Category,
 		plant.PotVolumeLiters, plant.LightRequirement,
-		plant.TargetMoisture, plant.SensorID,
+		plant.TargetMoisture, plant.SensorID, plant.ImageURL,
 	).Scan(&plant.ID, &plant.CreatedAt)
 }
