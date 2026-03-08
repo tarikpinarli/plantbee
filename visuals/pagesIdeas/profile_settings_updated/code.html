@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>PlantBee - Profile Settings</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#13ec5b",
+                        "background-light": "#f6f8f6",
+                        "background-dark": "#102216",
+                    },
+                    fontFamily: {
+                        "display": ["Space Grotesk"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            font-family: 'Space Grotesk', sans-serif;
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 antialiased">
+<div class="relative flex min-h-screen w-full flex-col overflow-x-hidden">
+<div class="layout-container flex h-full grow flex-col">
+<!-- Navigation Header -->
+<header class="flex items-center justify-between border-b border-primary/10 bg-white dark:bg-slate-900 px-6 py-4 lg:px-20">
+<div class="flex items-center gap-3">
+<div class="text-primary">
+<span class="material-symbols-outlined text-4xl">eco</span>
+</div>
+<h2 class="text-xl font-bold tracking-tight">PlantBee</h2>
+</div>
+<div class="flex flex-1 justify-end items-center gap-6 lg:gap-10">
+<nav class="hidden md:flex items-center gap-8">
+<a class="text-sm font-medium hover:text-primary transition-colors" href="#">Plants</a>
+<a class="text-sm font-medium hover:text-primary transition-colors" href="#">Tasks</a>
+<a class="text-sm font-medium hover:text-primary transition-colors" href="#">Leaderboard</a>
+<a class="text-sm font-medium hover:text-primary transition-colors" href="#">Add Plant</a>
+</nav>
+<div class="h-10 w-10 rounded-full bg-primary/20 border-2 border-primary flex items-center justify-center overflow-hidden">
+<img alt="User avatar" class="h-full w-full object-cover" data-alt="Professional headshot of a smiling young man" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA05c-u06tI2FPOTEt9xTgGvgP9QQCnBLtYUM9Ypawhnns2P8896uGQGiYD3Nn1El_1Bz1996yMIQocqvDwRFcDooaGguTUsbNngWkK0rsYClgcabD0WeqaGhPT-O7NWBqKgFiG7qPbgXwy1olgkXkDsx7jWZw59eJZ_VVbF_UC6bAX0ONYcz58tM7PYGVdhqzcC-Rx_piHAUJpzygfPnGgW2D1T1crpFehB0OTZsugPEPwfvyFge4rSkagVn9Lzdp8U_AFrpdvQh0"/>
+</div>
+</div>
+</header>
+<main class="flex-1 px-4 py-8 lg:px-20">
+<div class="max-w-3xl mx-auto space-y-8">
+<!-- Profile Header Section -->
+<div class="flex flex-col items-center md:flex-row md:items-start gap-6 bg-white dark:bg-slate-900 p-8 rounded-xl shadow-sm border border-primary/5">
+<div class="relative">
+<div class="size-32 rounded-full border-4 border-primary/20 p-1">
+<img alt="Profile Picture" class="size-full rounded-full object-cover" data-alt="Close up profile picture of a person" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDWF05ANEwHLAYAzcwbFRaGHUDgEHIWpkukIzYhPDmcDvEzrH93pfPNEzzONnZpiu5ZINelnnChZ5IFfE0dX3N3LJWSVOGUP8ZtCfZzGjnSliydSe-BzoNFSgJBnkrR0j4By0_EH5-xAILmMv6iFzMfG1wN9_QD99HVM95Zq4BIVeMT48pyGkS8K78nJd3EbwnplSLL5R3b1VyvrOtbuZ-Y_kQa4D8K9qzRk14mzNZx040QT3p1fZiB5B2c7Jjc3swjrDLZF4HLDyk"/>
+</div>
+<button class="absolute bottom-1 right-1 bg-primary text-slate-900 p-2 rounded-full shadow-lg hover:scale-105 transition-transform">
+<span class="material-symbols-outlined text-sm">edit</span>
+</button>
+</div>
+<div class="flex flex-col justify-center text-center md:text-left space-y-1">
+<h1 class="text-3xl font-bold">Alex Rivera</h1>
+<p class="text-slate-500 dark:text-slate-400 font-medium">alex.rivera@nature.org</p>
+<div class="pt-2 flex flex-wrap justify-center md:justify-start gap-2">
+<span class="px-3 py-1 bg-primary/10 text-primary text-xs font-bold rounded-full uppercase tracking-wider">Top Contributor</span>
+<span class="px-3 py-1 bg-slate-100 dark:bg-slate-800 text-slate-500 text-xs font-bold rounded-full uppercase tracking-wider">Level 42</span>
+</div>
+</div>
+</div>
+<!-- Volunteer Status -->
+<section class="space-y-4">
+<div class="flex items-center gap-2 px-1">
+<span class="material-symbols-outlined text-primary">volunteer_activism</span>
+<h2 class="text-xl font-bold">Volunteer Status</h2>
+</div>
+<div class="bg-white dark:bg-slate-900 p-6 rounded-xl shadow-sm border border-primary/5 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+<div class="max-w-md">
+<p class="text-lg font-semibold mb-1">Active Volunteer</p>
+<p class="text-sm text-slate-500 dark:text-slate-400 leading-relaxed">
+                                    When active, you'll receive real-time notifications for nearby gardening tasks and community events. Switch to Quiet Observer to temporarily pause all alerts.
+                                </p>
+</div>
+<div class="flex items-center">
+<label class="relative inline-flex items-center cursor-pointer">
+<input checked="" class="sr-only peer" type="checkbox"/>
+<div class="w-14 h-8 bg-slate-200 peer-focus:outline-none rounded-full peer dark:bg-slate-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-1 after:start-[4px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-6 after:w-6 after:transition-all peer-checked:bg-primary"></div>
+</label>
+</div>
+</div>
+</section>
+<!-- Account Management -->
+<!-- Danger Zone -->
+<section class="space-y-4">
+<div class="flex items-center gap-2 px-1">
+<span class="material-symbols-outlined text-red-500">warning</span>
+<h2 class="text-xl font-bold text-red-500">Danger Zone</h2>
+</div>
+<div class="bg-red-50/30 dark:bg-red-900/10 border-2 border-dashed border-red-200 dark:border-red-900/50 p-8 rounded-xl flex flex-col md:flex-row items-center justify-between gap-6">
+<div class="text-center md:text-left">
+<p class="text-lg font-bold text-red-700 dark:text-red-400">Delete Account</p>
+<p class="text-sm text-red-600/80 dark:text-red-400/60 mt-1 max-w-md">
+                                    This action is permanent and cannot be undone. All your data, plant records, and achievements will be removed from our servers.
+                                </p>
+</div>
+<button class="bg-red-500 hover:bg-red-600 text-white font-bold py-3 px-8 rounded-lg transition-all shadow-lg shadow-red-500/20 active:scale-95 whitespace-nowrap">
+                                Delete Account
+                            </button>
+</div>
+</section>
+</div>
+</main>
+<!-- Footer -->
+<footer class="mt-auto py-10 px-4 border-t border-primary/5 bg-white dark:bg-slate-900 text-center">
+<p class="text-sm text-slate-400">© 2024 PlantBee Community. Growing together since 2021.</p>
+</footer>
+</div>
+</div>
+</body></html>
