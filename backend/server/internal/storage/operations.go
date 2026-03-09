@@ -8,12 +8,14 @@ import (
 
 func (d *DB) UpsertUser(user *models.User) error {
 	query := `
-		INSERT INTO users (intra_id, email, login, image_url)
-		VALUES ($1, $2, $3, $4)
+		INSERT INTO users (intra_id, email, login, image_url, intend_to_help, water_count)
+		VALUES ($1, $2, $3, $4, $5, $6)
 		ON CONFLICT (intra_id) DO UPDATE
 		SET email = EXCLUDED.email,
 			login = EXCLUDED.login,
-			image_url = EXCLUDED.image_url
+			image_url = EXCLUDED.image_url,
+			intend_to_help = EXCLUDED.intend_to_help,
+			water_count = EXCLUDED.water_count
 		RETURNING id;
 	`
 	return d.QueryRow(
@@ -22,12 +24,20 @@ func (d *DB) UpsertUser(user *models.User) error {
 		user.Email,
 		user.Login,
 		user.ImageURL,
+		user.IntendToHelp,
+		user.WaterCount,
 	).Scan(&user.ID)
 }
 
 func (d *DB) SetUserIntention(userID int, help bool) error {
 	query := `UPDATE users SET intend_to_help = $1 WHERE id = $2`
 	_, err := d.Exec(query, help, userID)
+	return err
+}
+
+func (d *DB) IncrementWaterCount(userID int) error {
+	query := `UPDATE users SET water_count = water_count + 1 WHERE id = $1`
+	_, err := d.Exec(query, userID)
 	return err
 }
 

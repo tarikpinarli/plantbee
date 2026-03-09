@@ -15,6 +15,7 @@ type User struct {
 	Login     string    `json:"login"`
 	ImageURL  string    `json:"image_url"`
 	IntendToHelp bool   `json:"intend_to_help"`
+	WaterCount int		`json:"water_count"`
 	CreatedAt time.Time `json:"created_at"`
 }
 
