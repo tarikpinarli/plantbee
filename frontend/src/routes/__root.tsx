@@ -1,3 +1,6 @@
+// Root layout (navbar lives here)
+// main.tsx renders RouterProvider, the router system handles the UI instead., define the layout here
+
 import { createRootRoute, Link, Outlet } from '@tanstack/react-router'
 import { TanStackRouterDevtools } from '@tanstack/react-router-devtools'
 
@@ -9,6 +12,9 @@ const RootLayout = () => (
       </Link>{' '}
       <Link to="/about" className="[&.active]:font-bold">
         About
+      </Link>
+      <Link to="/add" className="[&.active]:font-bold">
+        Add New Plant
       </Link>
     </div>
     <hr />

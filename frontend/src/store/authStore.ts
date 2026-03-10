@@ -1,0 +1,1 @@
+//  token, isLoggedIn, setToken, logout

@@ -17,4 +17,5 @@ gives us autocompletes / detects errors
 
 ## run docker for frontend
 ```docker build --no-cache -t transcendent-frontend .```
+
 ```docker run -d -p 3000:80 --name frontend-test transcendent-frontend```

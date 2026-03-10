@@ -1,0 +1,1 @@
+// Redirects to /login if not authed

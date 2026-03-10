@@ -1,9 +1,12 @@
-import { createFileRoute } from '@tanstack/react-router'
+// /plants    Garden list page
 
-export const Route = createFileRoute('/plants')({
-  component: RouteComponent,
-})
+// import { createFileRoute } from '@tanstack/react-router'
 
-function RouteComponent() {
-  return <div>Hello "/plants"!</div>
-}
+// export const Route = createFileRoute('/plants')({
+//   component: RouteComponent,
+// })
+
+// function RouteComponent() {
+//   return <div>Hello "/plants"!</div>
+// }
+
