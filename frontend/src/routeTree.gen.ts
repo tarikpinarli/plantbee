@@ -9,15 +9,27 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as TasksRouteImport } from './routes/tasks'
 import { Route as RegisterRouteImport } from './routes/register'
+import { Route as PlantsRouteImport } from './routes/plants'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as AddRouteImport } from './routes/add'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
 
+const TasksRoute = TasksRouteImport.update({
+  id: '/tasks',
+  path: '/tasks',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const RegisterRoute = RegisterRouteImport.update({
   id: '/register',
   path: '/register',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PlantsRoute = PlantsRouteImport.update({
+  id: '/plants',
+  path: '/plants',
   getParentRoute: () => rootRouteImport,
 } as any)
 const LoginRoute = LoginRouteImport.update({
@@ -46,14 +58,18 @@ export interface FileRoutesByFullPath {
   '/about': typeof AboutRoute
   '/add': typeof AddRoute
   '/login': typeof LoginRoute
+  '/plants': typeof PlantsRoute
   '/register': typeof RegisterRoute
+  '/tasks': typeof TasksRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/add': typeof AddRoute
   '/login': typeof LoginRoute
+  '/plants': typeof PlantsRoute
   '/register': typeof RegisterRoute
+  '/tasks': typeof TasksRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -61,14 +77,31 @@ export interface FileRoutesById {
   '/about': typeof AboutRoute
   '/add': typeof AddRoute
   '/login': typeof LoginRoute
+  '/plants': typeof PlantsRoute
   '/register': typeof RegisterRoute
+  '/tasks': typeof TasksRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/about' | '/add' | '/login' | '/register'
+  fullPaths:
+    | '/'
+    | '/about'
+    | '/add'
+    | '/login'
+    | '/plants'
+    | '/register'
+    | '/tasks'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/about' | '/add' | '/login' | '/register'
-  id: '__root__' | '/' | '/about' | '/add' | '/login' | '/register'
+  to: '/' | '/about' | '/add' | '/login' | '/plants' | '/register' | '/tasks'
+  id:
+    | '__root__'
+    | '/'
+    | '/about'
+    | '/add'
+    | '/login'
+    | '/plants'
+    | '/register'
+    | '/tasks'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -76,16 +109,32 @@ export interface RootRouteChildren {
   AboutRoute: typeof AboutRoute
   AddRoute: typeof AddRoute
   LoginRoute: typeof LoginRoute
+  PlantsRoute: typeof PlantsRoute
   RegisterRoute: typeof RegisterRoute
+  TasksRoute: typeof TasksRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/tasks': {
+      id: '/tasks'
+      path: '/tasks'
+      fullPath: '/tasks'
+      preLoaderRoute: typeof TasksRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/register': {
       id: '/register'
       path: '/register'
       fullPath: '/register'
       preLoaderRoute: typeof RegisterRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/plants': {
+      id: '/plants'
+      path: '/plants'
+      fullPath: '/plants'
+      preLoaderRoute: typeof PlantsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/login': {
@@ -124,7 +173,9 @@ const rootRouteChildren: RootRouteChildren = {
   AboutRoute: AboutRoute,
   AddRoute: AddRoute,
   LoginRoute: LoginRoute,
+  PlantsRoute: PlantsRoute,
   RegisterRoute: RegisterRoute,
+  TasksRoute: TasksRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

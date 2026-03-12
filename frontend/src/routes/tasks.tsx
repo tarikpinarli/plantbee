@@ -1,12 +1,9 @@
-// /plants    Garden list page
-
 import { createFileRoute } from '@tanstack/react-router'
 
-export const Route = createFileRoute('/plants')({
+export const Route = createFileRoute('/tasks')({
   component: RouteComponent,
 })
 
 function RouteComponent() {
-  return <div>Hello "/plants"!</div>
+  return <div>Hello "/tasks"!</div>
 }
-
