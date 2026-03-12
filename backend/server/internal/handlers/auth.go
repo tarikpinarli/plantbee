@@ -51,11 +51,12 @@ func (h *Handler) HandleCallback(w http.ResponseWriter, r *http.Request) {
 	}
 
 	user := &models.User{
-		IntraID:   strconv.Itoa(user42.ID),
-		Login:     user42.Login,
-		Email:     user42.Email,
-		ImageURL:  user42.Image.Link,
-		CreatedAt: time.Now(),
+		IntraID:    strconv.Itoa(user42.ID),
+		Login:      user42.Login,
+		Email:      user42.Email,
+		ImageURL:   user42.Image.Link,
+		FirstVisit: true,
+		CreatedAt:  time.Now(),
 	}
 
 	if err := h.DB.UpsertUser(user); err != nil {
@@ -86,5 +87,23 @@ func (h *Handler) HandleCallback(w http.ResponseWriter, r *http.Request) {
 		Expires:  time.Now().Add(24 * time.Hour),
 	})
 
-	http.Redirect(w, r, "/", http.StatusTemporaryRedirect)
+	if user.FirstVisit {
+		http.Redirect(w, r, "/welcome.html", http.StatusTemporaryRedirect)
+	} else {
+		http.Redirect(w, r, "/dashboard.html", http.StatusTemporaryRedirect)
+	}
+}
+
+func (h *Handler) HandleLogout(w http.ResponseWriter, r *http.Request) {
+	http.SetCookie(w, &http.Cookie{
+		Name:     "auth_token",
+		Value:    "",
+		Path:     "/",
+		HttpOnly: true,
+		Secure:   false,
+		MaxAge:   -1,
+		Expires:  time.Unix(0, 0),
+	})
+
+	http.Redirect(w, r, "/goodbye.html", http.StatusTemporaryRedirect)
 }
