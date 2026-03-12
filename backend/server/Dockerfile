@@ -5,11 +5,11 @@ RUN apk add --no-cache git
 
 WORKDIR /app
 
-COPY go.mod go.sum ./
+COPY backend/server/go.mod backend/server/go.sum ./
 RUN go mod download
 
 # Copy source code and build the binary
-COPY . .
+COPY backend/server .
 RUN go build -o server cmd/server/main.go
 
 FROM alpine:latest
@@ -20,6 +20,7 @@ RUN apk --no-cache add ca-certificates
 WORKDIR /root/
 
 COPY --from=builder /app/server .
+COPY frontend /frontend
 
 EXPOSE 8080
 
