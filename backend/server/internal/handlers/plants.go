@@ -52,6 +52,13 @@ func (h *Handler) HandleAddPlant(w http.ResponseWriter, r *http.Request) {
 		req.TargetMoisture = 50
 	}
 
+	// Extract user ID from context
+	userID, ok := r.Context().Value(UserIDKey).(int)
+	if !ok {
+		jsonError(w, "Unauthorized", http.StatusUnauthorized)
+		return
+	}
+
 	if h.DB == nil {
 		jsonError(w, "Database not available", http.StatusServiceUnavailable)
 		return
@@ -66,6 +73,7 @@ func (h *Handler) HandleAddPlant(w http.ResponseWriter, r *http.Request) {
 		TargetMoisture:   req.TargetMoisture,
 		SensorID:         req.SensorID,
 		ImageURL:         req.ImageURL,
+		OwnerID:          userID,
 	}
 
 	if err := h.DB.CreatePlant(plant); err != nil {
