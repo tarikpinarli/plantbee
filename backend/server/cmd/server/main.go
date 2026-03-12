@@ -4,7 +4,6 @@ import (
 	"esp32-server/internal/config"
 	"esp32-server/internal/handlers"
 	"esp32-server/internal/storage"
-	"fmt"
 	"log"
 	"net/http"
 )
@@ -35,11 +34,18 @@ func main() {
 	http.HandleFunc("/api/reading", h.IngestData)
 	http.HandleFunc("/auth/login", h.HandleLogin)
 	http.HandleFunc("/auth/callback", h.HandleCallback)
-	http.HandleFunc("/plants/add", h.HandleAddPlant)
+	http.HandleFunc("/auth/logout", h.HandleLogout)
+	http.HandleFunc("/plants/add", h.RequireAuth(h.HandleAddPlant))
+	http.HandleFunc("/api/user/welcome", h.RequireAuth(h.HandleWelcome))
 
+	// Serve the frontend static files
+	fs := http.FileServer(http.Dir("/frontend"))
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		w.Header().Set("Content-Type", "text/html")
-		fmt.Fprintf(w, "<h1>PlantBee Server Online!</h1><p>System is running.</p>")
+		if r.URL.Path == "/" {
+			http.Redirect(w, r, "/landing.html", http.StatusTemporaryRedirect)
+			return
+		}
+		fs.ServeHTTP(w, r)
 	})
 
 	log.Printf("Server starting on port %s", cfg.Port)
