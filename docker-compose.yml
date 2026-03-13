@@ -4,8 +4,8 @@ services:
   app:
     container_name: plantbee-app
     build:
-      context: ./backend/server
-      dockerfile: Dockerfile
+      context: .
+      dockerfile: backend/server/Dockerfile
     ports:
       - "8080:8080"
     env_file:
