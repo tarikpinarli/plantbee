@@ -14,6 +14,7 @@ func (d *DB) CreateTables() error {
 		login VARCHAR(50) NOT NULL,
 		image_url TEXT,
 		intend_to_help BOOLEAN DEFAULT FALSE,
+		first_visit BOOLEAN DEFAULT TRUE,
 		water_count INT DEFAULT 0,
 		created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 	);`

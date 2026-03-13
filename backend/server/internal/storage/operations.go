@@ -8,15 +8,13 @@ import (
 
 func (d *DB) UpsertUser(user *models.User) error {
 	query := `
-		INSERT INTO users (intra_id, email, login, image_url, intend_to_help, water_count)
-		VALUES ($1, $2, $3, $4, $5, $6)
+		INSERT INTO users (intra_id, email, login, image_url, intend_to_help, first_visit, water_count)
+		VALUES ($1, $2, $3, $4, $5, $6, $7)
 		ON CONFLICT (intra_id) DO UPDATE
 		SET email = EXCLUDED.email,
 			login = EXCLUDED.login,
-			image_url = EXCLUDED.image_url,
-			intend_to_help = EXCLUDED.intend_to_help,
-			water_count = EXCLUDED.water_count
-		RETURNING id;
+			image_url = EXCLUDED.image_url
+		RETURNING id, intend_to_help, first_visit, water_count;
 	`
 	return d.QueryRow(
 		query,
@@ -25,8 +23,15 @@ func (d *DB) UpsertUser(user *models.User) error {
 		user.Login,
 		user.ImageURL,
 		user.IntendToHelp,
+		user.FirstVisit,
 		user.WaterCount,
-	).Scan(&user.ID)
+	).Scan(&user.ID, &user.IntendToHelp, &user.FirstVisit, &user.WaterCount)
+}
+
+func (d *DB) CompleteWelcome(userID int, intendToHelp bool) error {
+	query := `UPDATE users SET intend_to_help = $1, first_visit = false WHERE id = $2`
+	_, err := d.Exec(query, intendToHelp, userID)
+	return err
 }
 
 func (d *DB) SetUserIntention(userID int, help bool) error {
