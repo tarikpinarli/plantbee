@@ -44,6 +44,18 @@ func (d *DB) CreateTables() error {
 		image_url TEXT
 	);`
 
+	const createTasksTable = `
+	CREATE TABLE IF NOT EXISTS tasks (
+		id SERIAL PRIMARY KEY,
+		plant_id INTEGER REFERENCES plants(id),
+		type VARCHAR(50) NOT NULL,
+		water_amount INTEGER,
+		status VARCHAR(50) NOT NULL,
+		volentee_id INTEGER REFERENCES users(id),
+		scheduled_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+		completed_at TIMESTAMP WITH TIME ZONE
+	);`
+
 	if _, err := d.Exec(createUsersTable); err != nil {
 		return err
 	}
@@ -58,6 +70,11 @@ func (d *DB) CreateTables() error {
 		return err
 	}
 	log.Println("✅ Plant table ensured")
+
+	if _, err := d.Exec(createTasksTable); err != nil {
+		return err
+	}
+	log.Println("✅ Tasks table ensured")
 
 	return nil
 }

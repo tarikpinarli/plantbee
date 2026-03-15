@@ -3,7 +3,7 @@ package handlers
 import (
 	"context"
 	"encoding/json"
-	"esp32-server/internal/models"
+	"plantbee-backend/internal/models"
 	"fmt"
 	"net/http"
 	"os"

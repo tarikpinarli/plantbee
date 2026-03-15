@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>PlantBee Dashboard</title>
+</head>
+
+<body style="background-color: #f0fdf4;"> <!-- Light green background -->
+    <div
+        style="font-family: sans-serif; max-width: 600px; margin: 40px auto; padding: 20px; background: white; border: 2px solid #27ae60; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+        <h1 style="color: #27ae60;">🎉 Welcome to PlantBee!</h1>
+        <p>This is your first time logging in! We are so glad to have you.</p>
+        <p>Before you get started, we'd like to know how you plan on using PlantBee.</p>
+
+        <div style="margin-top: 30px; display: flex; gap: 15px; justify-content: center;">
+            <button onclick="selectRole(true)"
+                style="padding: 15px 20px; background: #27ae60; color: white; border: none; border-radius: 6px; cursor: pointer; font-size: 16px;">
+                🧑‍🌾 I want to be a Volunteer
+            </button>
+            <button onclick="selectRole(false)"
+                style="padding: 15px 20px; background: #34495e; color: white; border: none; border-radius: 6px; cursor: pointer; font-size: 16px;">
+                👀 I am just observing
+            </button>
+        </div>
+
+        <script>
+            async function selectRole(intendToHelp) {
+                try {
+                    const response = await fetch('/api/user/welcome', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({ intend_to_help: intendToHelp })
+                    });
+
+                    if (response.ok) {
+                        window.location.href = '/dashboard.html';
+                    } else {
+                        alert('Something went wrong saving your choice!');
+                    }
+                } catch (error) {
+                    console.error('Error saving choice:', error);
+                    alert('Could not reach the server.');
+                }
+            }
+        </script>
+    </div>
+</body>
+
+</html>

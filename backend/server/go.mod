@@ -1,4 +1,4 @@
-module esp32-server
+module plantbee-backend
 
 go 1.25.6
 

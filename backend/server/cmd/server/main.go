@@ -1,9 +1,9 @@
 package main
 
 import (
-	"esp32-server/internal/config"
-	"esp32-server/internal/handlers"
-	"esp32-server/internal/storage"
+	"plantbee-backend/internal/config"
+	"plantbee-backend/internal/handlers"
+	"plantbee-backend/internal/storage"
 	"log"
 	"net/http"
 )
@@ -37,7 +37,8 @@ func main() {
 	http.HandleFunc("/auth/logout", h.HandleLogout)
 	http.HandleFunc("/plants/add", h.RequireAuth(h.HandleAddPlant))
 	http.HandleFunc("/api/user/welcome", h.RequireAuth(h.HandleWelcome))
-
+	http.HandleFunc("/api/tasks/accept", h.RequireAuth(h.HandleAcceptTask))
+	http.HandleFunc("/api/tasks/cancel", h.RequireAuth(h.HandleCancelTask))
 	// Serve the frontend static files
 	fs := http.FileServer(http.Dir("/frontend"))
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {

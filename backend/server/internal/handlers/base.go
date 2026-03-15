@@ -1,14 +1,19 @@
 package handlers
 
 import (
-	"esp32-server/internal/config"
-	"esp32-server/internal/storage"
+	"plantbee-backend/internal/config"
+	"plantbee-backend/internal/services"
+	"plantbee-backend/internal/storage"
+
 	"golang.org/x/oauth2"
 )
 
 type Handler struct {
-	DB          *storage.DB
-	OAuthConfig *oauth2.Config
+	DB           *storage.DB
+	OAuthConfig  *oauth2.Config
+	PlantService *services.PlantService
+	AuthService  *services.AuthService
+	TaskService  *services.TaskService
 }
 
 func New(db *storage.DB, cfg *config.Config) *Handler {
@@ -24,7 +29,10 @@ func New(db *storage.DB, cfg *config.Config) *Handler {
 	}
 
 	return &Handler{
-		DB:          db,
-		OAuthConfig: oauth,
+		DB:           db,
+		OAuthConfig:  oauth,
+		PlantService: services.NewPlantService(db),
+		AuthService:  services.NewAuthService(),
+		TaskService:  services.NewTaskService(db),
 	}
 }

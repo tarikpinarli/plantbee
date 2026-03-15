@@ -1,11 +1,10 @@
 package storage
 
 import (
-	"esp32-server/internal/models"
+	"plantbee-backend/internal/models"
 )
 
 // User operations
-
 func (d *DB) UpsertUser(user *models.User) error {
 	query := `
 		INSERT INTO users (intra_id, email, login, image_url, intend_to_help, first_visit, water_count)
@@ -74,3 +73,46 @@ func (d *DB) CreatePlant(plant *models.Plant) error {
 		plant.TargetMoisture, plant.SensorID, plant.ImageURL,
 	).Scan(&plant.ID, &plant.CreatedAt)
 }
+
+func (d *DB) GetPlantBySensorID(sensorID string) (*models.Plant, error) {
+	query := `SELECT id, name, target_moisture FROM plants WHERE sensor_id = $1`
+	var plant models.Plant
+	err := d.QueryRow(query, sensorID).Scan(&plant.ID, &plant.Name, &plant.TargetMoisture)
+	return &plant, err
+}
+
+func (d *DB) GetPlantByOwnerID(ownerID int) (*models.Plant, error) {
+	query := `SELECT id, name, target_moisture FROM plants WHERE owner_id = $1`
+	var plant models.Plant
+	err := d.QueryRow(query, ownerID).Scan(&plant.ID, &plant.Name, &plant.TargetMoisture)
+	return &plant, err
+}
+
+
+
+// Task Operations
+func (d *DB) CreateTask(task *models.Task) error {
+	query := `
+		INSERT INTO tasks (plant_id, type, status, volenteer_id, scheduled_at, completed_at)
+		VALUES ($1, $2, $3, $4, $5, $6)
+		RETURNING id, created_at;
+	`
+	return d.QueryRow(query,
+		task.PlantID, task.Type, task.Status,
+		task.VolenteeID, task.ScheduledAt, task.CompletedAt,
+	).Scan(&task.ID, &task.ScheduledAt)
+}
+
+func (d *DB) AcceptTask(task *models.Task) error {
+	query := `UPDATE tasks SET status = 'accepted', volenteer_id = $1 WHERE id = $2`
+	_, err := d.Exec(query, task.VolenteeID, task.ID)
+	return err
+}
+
+func (d *DB) CancelTask(task *models.Task) error {
+	query := `UPDATE tasks SET status = 'in_progress' WHERE id = $1`
+	_, err := d.Exec(query, task.ID)
+	return err
+}
+
+

@@ -2,7 +2,7 @@ package handlers
 
 import (
 	"encoding/json"
-	"esp32-server/internal/models"
+	"plantbee-backend/internal/models"
 	"fmt"
 	"net/http"
 )
@@ -45,6 +45,21 @@ func (h *Handler) HandleAddPlant(w http.ResponseWriter, r *http.Request) {
 
 	if req.Name == "" {
 		jsonError(w, "Plant name is required", http.StatusBadRequest)
+		return
+	}
+
+	if req.SensorID == "" {
+		jsonError(w, "Sensor ID is required", http.StatusBadRequest)
+		return
+	}
+
+	if req.PotVolumeLiters == 0 {
+		jsonError(w, "Pot volume is required", http.StatusBadRequest)
+		return
+	}
+
+	if req.LightRequirement == "" {
+		jsonError(w, "Light requirement is required", http.StatusBadRequest)
 		return
 	}
 
