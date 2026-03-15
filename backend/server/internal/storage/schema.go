@@ -1,11 +1,8 @@
 package storage
 
-import (
-	"log"
-)
+import "log"
 
 func (d *DB) CreateTables() error {
-
 	const createUsersTable = `
 	CREATE TABLE IF NOT EXISTS users (
 		id SERIAL PRIMARY KEY,
