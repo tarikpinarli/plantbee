@@ -4,3 +4,4 @@
 server
 *.exe
 *.o
+tmp

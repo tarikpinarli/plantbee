@@ -1,0 +1,101 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+
+jobs:
+  lint:
+    name: Lint
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version-file: backend/server/go.mod
+          cache-dependency-path: backend/server/go.sum
+
+      - name: Set up Task
+        uses: go-task/setup-task@v1
+
+      - name: Install golangci-lint
+        run: task tools:install
+
+      - name: Run linters
+        run: task lint
+
+  backend:
+    name: Backend Checks
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version-file: backend/server/go.mod
+          cache-dependency-path: backend/server/go.sum
+
+      - name: Set up Task
+        uses: go-task/setup-task@v1
+
+      - name: Run tests
+        run: task test
+
+      - name: Build backend
+        run: task build
+
+  frontend:
+    name: Frontend Checks
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: frontend
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run Biome checks
+        run: npm run check
+
+      - name: Run type check
+        run: npm run typecheck
+
+      - name: Build frontend
+        run: npm run build
+
+  docker:
+    name: Docker Checks
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Validate Compose file
+        run: docker compose config
+
+      - name: Build backend image
+        run: docker build -t plantbee-backend-ci ./backend/server
+
+      - name: Build frontend image
+        run: docker build --target production -t plantbee-frontend-ci ./frontend

@@ -10,10 +10,12 @@
 - [1 · 42 OAuth App Setup](#1--42-oauth-app-setup)
 - [2 · Environment Variables](#2--environment-variables)
 - [3 · Running the Stack](#3--running-the-stack)
-- [4 · Service Map](#4--service-map)
-- [5 · API Reference](#5--api-reference)
-- [6 · Database Schema](#6--database-schema)
-- [7 · Project Structure](#7--project-structure)
+- [4 · Development Mode](#4--development-mode)
+- [5 · Service Map](#5--service-map)
+- [6 · API Reference](#6--api-reference)
+- [7 · Database Schema](#7--database-schema)
+- [8 · Dev Tooling](#8--dev-tooling)
+- [9 · Project Structure](#9--project-structure)
 
 All services are orchestrated with a single `docker-compose.yml` at the project root.
 
@@ -22,7 +24,7 @@ All services are orchestrated with a single `docker-compose.yml` at the project 
 ## Prerequisites
 Docker and Docker Compose are required to run the stack.
 
-> **No Go or Node.js installation is required on your machine** — everything runs inside Docker.
+> **No Go or Node.js installation is required on your machine** to run the stack. If you want to use the local lint/format tasks, you also need `Go` and `Task`.
 
 ---
 
@@ -81,11 +83,33 @@ docker-compose down
 
 ---
 
-## 4 · Service Map
+## 4 · Development Mode
+
+`docker compose up --build` runs the stack in development mode:
+
+- The backend uses `air` for hot reload inside the container
+- The frontend uses the Vite dev server with the source directory mounted into the container
+- File changes in `backend/server` restart the Go server automatically
+- File changes in `frontend` are reflected immediately by Vite
+
+Development URLs:
+
+- Frontend: http://localhost:3000
+- Backend: http://localhost:8080
+- Adminer: http://localhost:8081
+
+For production-style image validation, CI builds:
+
+- the backend final Docker image
+- the frontend `production` Docker target, which serves the built app through Nginx
+
+---
+
+## 5 · Service Map
 
 | Container | URL | Description |
 |-----------|-----|-------------|
-| `plantbee-frontend` | http://localhost:3000 | Static frontend served by Nginx |
+| `plantbee-frontend` | http://localhost:3000 | Vite frontend dev server |
 | `plantbee-app` | http://localhost:8080 | Go REST API |
 | `plantbee-db` | `localhost:5432` | PostgreSQL 15 (internal only) |
 | `plantbee-adminer` | http://localhost:8081 | Database browser UI |
@@ -104,7 +128,7 @@ Navigate to http://localhost:8081 and use:
 
 ---
 
-## 5 · API Reference
+## 6 · API Reference
 
 ### `POST /plants/add` — Create a plant
 
@@ -166,7 +190,7 @@ curl -X POST http://localhost:8080/api/reading \
 
 ---
 
-## 6 · Database Schema
+## 7 · Database Schema
 
 ### `users`
 | Column | Type | Notes |
@@ -206,13 +230,37 @@ curl -X POST http://localhost:8080/api/reading \
 
 ---
 
-## 7 · Project Structure
+## 8 · Dev Tooling
+
+The repository now includes:
+
+- `Taskfile.yml` at the root for repeatable development commands
+- `backend/server/.golangci.yml` for linting and formatting rules
+- GitHub Actions CI that runs backend lint/test/build, frontend checks, and Docker checks
+
+Available commands from the repository root:
+
+```bash
+task tools:install   # installs golangci-lint into ./.bin
+task fmt             # formats Go code with gofumpt + goimports
+task lint            # runs errcheck, govet, ineffassign, unused
+task test            # runs go test ./...
+task build           # runs go build ./...
+task ci              # runs lint, test, and build
+```
+
+> The runtime Docker images in this repo do not include the Go toolchain, so these tasks should run on a machine or container that has `Go` and `Task` installed.
+
+---
+
+## 9 · Project Structure
 
 ```
 plantbee_repo/
 ├── docker-compose.yml          # Orchestrates all services
+├── Taskfile.yml                # Common lint/test/build commands
 ├── frontend/
-│   ├── Dockerfile              # Nginx image serving static files
+│   ├── Dockerfile              # Dev + production frontend image targets
 │   └── index.html              # Frontend entry point
 └── backend/
     └── server/
