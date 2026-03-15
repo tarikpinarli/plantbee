@@ -194,8 +194,8 @@ curl -X POST http://localhost:8080/api/reading \
 
 | Endpoint | What it does |
 |----------|-------------|
-| `POST /api/tasks/accept` | Accepts a watering task for a plant |
-| `POST /api/tasks/cancel` | Cancels an accepted watering task |
+| `POST /api/tasks/accept` | Accepts a task for a plant |
+| `POST /api/tasks/cancel` | Cancels an accepted task |
 
 ---
 
@@ -283,8 +283,10 @@ plantbee_repo/
 ├── docker-compose.yml          # Orchestrates all services
 ├── Taskfile.yml                # Common lint/test/build commands
 ├── frontend/
-│   ├── Dockerfile              # Dev + production frontend image targets
-│   └── index.html              # Frontend entry point
+│   ├── package.json            # Node dependencies and scripts
+│   ├── vite.config.ts          # Vite bundler and proxy config
+│   ├── index.html              # Frontend entry point
+│   └── src/                    # React source code (pages, routing, components)
 └── backend/
     └── server/
         ├── Dockerfile          # Multi-stage Go build
