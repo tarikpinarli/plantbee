@@ -13,7 +13,8 @@
 - [4 · Service Map](#4--service-map)
 - [5 · API Reference](#5--api-reference)
 - [6 · Database Schema](#6--database-schema)
-- [7 · Project Structure](#7--project-structure)
+- [7 · Dev Tooling](#7--dev-tooling)
+- [8 · Project Structure](#8--project-structure)
 
 All services are orchestrated with a single `docker-compose.yml` at the project root.
 
@@ -22,7 +23,7 @@ All services are orchestrated with a single `docker-compose.yml` at the project 
 ## Prerequisites
 Docker and Docker Compose are required to run the stack.
 
-> **No Go or Node.js installation is required on your machine** — everything runs inside Docker.
+> **No Go or Node.js installation is required on your machine** to run the stack. If you want to use the local lint/format tasks, you also need `Go` and `Task`.
 
 ---
 
@@ -206,11 +207,35 @@ curl -X POST http://localhost:8080/api/reading \
 
 ---
 
-## 7 · Project Structure
+## 7 · Dev Tooling
+
+The repository now includes:
+
+- `Taskfile.yml` at the root for repeatable development commands
+- `backend/server/.golangci.yml` for linting and formatting rules
+- GitHub Actions CI that runs lint, test, build, and Docker checks
+
+Available commands from the repository root:
+
+```bash
+task tools:install   # installs golangci-lint into ./.bin
+task fmt             # formats Go code with gofumpt + goimports
+task lint            # runs errcheck, govet, ineffassign, unused
+task test            # runs go test ./...
+task build           # runs go build ./...
+task ci              # runs lint, test, and build
+```
+
+> The runtime Docker images in this repo do not include the Go toolchain, so these tasks should run on a machine or container that has `Go` and `Task` installed.
+
+---
+
+## 8 · Project Structure
 
 ```
 plantbee_repo/
 ├── docker-compose.yml          # Orchestrates all services
+├── Taskfile.yml                # Common lint/test/build commands
 ├── frontend/
 │   ├── Dockerfile              # Nginx image serving static files
 │   └── index.html              # Frontend entry point
