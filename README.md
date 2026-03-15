@@ -190,6 +190,15 @@ curl -X POST http://localhost:8080/api/reading \
 
 ---
 
+### Task endpoints
+
+| Endpoint | What it does |
+|----------|-------------|
+| `POST /api/tasks/accept` | Accepts a watering task for a plant |
+| `POST /api/tasks/cancel` | Cancels an accepted watering task |
+
+---
+
 ## 7 · Database Schema
 
 ### `users`
@@ -201,6 +210,8 @@ curl -X POST http://localhost:8080/api/reading \
 | `login` | VARCHAR(50) | 42 username |
 | `image_url` | TEXT | 42 profile picture |
 | `intend_to_help` | BOOLEAN | volunteer flag |
+| `first_visit` | BOOLEAN | tracks if user has completed welcome flow |
+| `water_count` | INTEGER | tracks number of completed watering tasks |
 | `created_at` | TIMESTAMPTZ | |
 
 ### `plants`
@@ -227,6 +238,18 @@ curl -X POST http://localhost:8080/api/reading \
 | `moisture` | INTEGER | |
 | `wake_time` | FLOAT | seconds the ESP32 was awake |
 | `recorded_at` | TIMESTAMPTZ | |
+
+### `tasks`
+| Column | Type | Notes |
+|--------|------|-------|
+| `id` | SERIAL PK | |
+| `plant_id` | INTEGER | FK → `plants.id` |
+| `type` | VARCHAR(50) | `water` or `error` |
+| `water_amount` | INTEGER | amount in ml |
+| `status` | VARCHAR(50) | `open`, `in_progress`, or `completed` |
+| `volentee_id` | INTEGER | FK → `users.id` |
+| `scheduled_at` | TIMESTAMPTZ | |
+| `completed_at` | TIMESTAMPTZ | |
 
 ---
 
@@ -271,7 +294,8 @@ plantbee_repo/
         │   └── main.go         # Entry point — registers routes
         └── internal/
             ├── config/         # Loads env vars
-            ├── handlers/       # HTTP handlers (auth, plants, ingest)
-            ├── models/         # Go structs (Plant, User, etc.)
+            ├── handlers/       # HTTP handlers (auth, plants, ingest, tasks, user)
+            ├── models/         # Go structs (Plant, User, Task, etc.)
+            ├── services/       # Business logic (Auth, Tasks, etc.)
             └── storage/        # PostgreSQL queries & schema
 ```
