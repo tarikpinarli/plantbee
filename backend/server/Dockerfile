@@ -1,3 +1,12 @@
+# --- Stage 1: Build the React Frontend ---
+FROM node:20-alpine AS frontend-builder
+WORKDIR /app
+COPY frontend/package*.json ./
+RUN npm ci
+COPY frontend ./
+RUN npm run build
+
+# --- Stage 2: Build the Go Backend ---
 FROM golang:alpine AS base
 
 # Installing git for fetching dependencies
@@ -24,6 +33,7 @@ FROM base AS builder
 COPY backend/server .
 RUN go build -o server cmd/server/main.go
 
+# --- Stage 3: Final Production Image ---
 FROM alpine:latest
 
 # required for HTTPS/DB connections
@@ -31,8 +41,10 @@ RUN apk --no-cache add ca-certificates
 
 WORKDIR /root/
 
+# Copy Go binary
 COPY --from=builder /app/server .
-COPY frontend /frontend
+# Copy built React frontend
+COPY --from=frontend-builder /app/dist /frontend/dist
 
 EXPOSE 8080
 

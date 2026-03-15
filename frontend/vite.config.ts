@@ -19,5 +19,10 @@ export default defineConfig({
       usePolling: true,
       interval: 500,
     },
+    proxy: {
+      '/api': 'http://app:8080',
+      '/auth': 'http://app:8080',
+      '/plants': 'http://app:8080'
+    }
   },
 });
