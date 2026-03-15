@@ -34,7 +34,11 @@ func (h *Handler) HandleCallback(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Failed to get user info", http.StatusInternalServerError)
 		return
 	}
-	_ = resp.Body.Close()
+	defer func() {
+		if err := resp.Body.Close(); err != nil {
+			fmt.Printf("error closing auth response body: %v\n", err)
+		}
+	}()
 
 	var user42 struct {
 		ID    int    `json:"id"`

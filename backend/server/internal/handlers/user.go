@@ -37,5 +37,7 @@ func (h *Handler) HandleWelcome(w http.ResponseWriter, r *http.Request) {
 	}
 
 	w.WriteHeader(http.StatusOK)
-	_ = json.NewEncoder(w).Encode(map[string]string{"message": "Welcome flow completed"})
+	if err := json.NewEncoder(w).Encode(map[string]string{"message": "Welcome flow completed"}); err != nil {
+		log.Printf("error encoding welcome response: %v\n", err)
+	}
 }

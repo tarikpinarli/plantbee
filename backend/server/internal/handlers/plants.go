@@ -101,12 +101,16 @@ func (h *Handler) HandleAddPlant(w http.ResponseWriter, r *http.Request) {
 
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusCreated)
-	_ = json.NewEncoder(w).Encode(plant)
+	if err := json.NewEncoder(w).Encode(plant); err != nil {
+		fmt.Printf("error encoding plant response: %v\n", err)
+	}
 }
 
 // jsonError writes a JSON error response with the given message and status code.
 func jsonError(w http.ResponseWriter, message string, status int) {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(status)
-	_ = json.NewEncoder(w).Encode(map[string]string{"error": message})
+	if err := json.NewEncoder(w).Encode(map[string]string{"error": message}); err != nil {
+		fmt.Printf("error encoding json error response: %v\n", err)
+	}
 }
