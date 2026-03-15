@@ -88,8 +88,6 @@ func (d *DB) GetPlantByOwnerID(ownerID int) (*models.Plant, error) {
 	return &plant, err
 }
 
-
-
 // Task Operations
 func (d *DB) CreateTask(task *models.Task) error {
 	query := `
@@ -110,9 +108,7 @@ func (d *DB) AcceptTask(task *models.Task) error {
 }
 
 func (d *DB) CancelTask(task *models.Task) error {
-	query := `UPDATE tasks SET status = 'in_progress' WHERE id = $1`
+	query := `UPDATE tasks SET status = 'open' WHERE id = $1`
 	_, err := d.Exec(query, task.ID)
 	return err
 }
-
-

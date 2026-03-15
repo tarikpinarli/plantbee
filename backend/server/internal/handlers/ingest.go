@@ -2,9 +2,9 @@ package handlers
 
 import (
 	"encoding/json"
-	"plantbee-backend/internal/models"
 	"fmt"
 	"net/http"
+	"plantbee-backend/internal/models"
 )
 
 func (h *Handler) IngestData(w http.ResponseWriter, r *http.Request) {
@@ -26,5 +26,5 @@ func (h *Handler) IngestData(w http.ResponseWriter, r *http.Request) {
 	}
 
 	w.WriteHeader(http.StatusOK)
-	w.Write([]byte("Ack"))
+	_, _ = w.Write([]byte("Ack"))
 }

@@ -2,9 +2,9 @@ package handlers
 
 import (
 	"encoding/json"
-	"plantbee-backend/internal/models"
 	"fmt"
 	"net/http"
+	"plantbee-backend/internal/models"
 )
 
 // addPlantRequest is the expected JSON body for creating a plant.
@@ -101,12 +101,12 @@ func (h *Handler) HandleAddPlant(w http.ResponseWriter, r *http.Request) {
 
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusCreated)
-	json.NewEncoder(w).Encode(plant)
+	_ = json.NewEncoder(w).Encode(plant)
 }
 
 // jsonError writes a JSON error response with the given message and status code.
 func jsonError(w http.ResponseWriter, message string, status int) {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(status)
-	json.NewEncoder(w).Encode(map[string]string{"error": message})
+	_ = json.NewEncoder(w).Encode(map[string]string{"error": message})
 }

@@ -3,10 +3,10 @@ package handlers
 import (
 	"context"
 	"encoding/json"
-	"plantbee-backend/internal/models"
 	"fmt"
 	"net/http"
 	"os"
+	"plantbee-backend/internal/models"
 	"strconv"
 	"time"
 
@@ -34,7 +34,7 @@ func (h *Handler) HandleCallback(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Failed to get user info", http.StatusInternalServerError)
 		return
 	}
-	defer resp.Body.Close()
+	_ = resp.Body.Close()
 
 	var user42 struct {
 		ID    int    `json:"id"`

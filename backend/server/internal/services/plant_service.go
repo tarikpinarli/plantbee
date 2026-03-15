@@ -81,5 +81,4 @@ func (s *PlantService) triggerLowMoistureProcess(plant *models.Plant, reading *m
 		fmt.Printf("Failed to create task: %v\n", err)
 	}
 	// from here Yutong needs to find a way to inform available users about the task
-	
 }
