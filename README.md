@@ -289,7 +289,7 @@ plantbee_repo/
 │   └── src/                    # React source code (pages, routing, components)
 └── backend/
     └── server/
-        ├── Dockerfile          # Multi-stage Go build
+        ├── Dockerfile          # Multi-stage build (Compiles React + Runs Go)
         ├── .env                # ⚠️ You must create this (see §2)
         ├── go.mod
         ├── cmd/server/

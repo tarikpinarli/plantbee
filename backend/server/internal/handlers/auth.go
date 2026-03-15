@@ -6,9 +6,10 @@ import (
 	"fmt"
 	"net/http"
 	"os"
-	"plantbee-backend/internal/models"
 	"strconv"
 	"time"
+
+	"plantbee-backend/internal/models"
 
 	"github.com/golang-jwt/jwt/v5"
 )
@@ -92,9 +93,9 @@ func (h *Handler) HandleCallback(w http.ResponseWriter, r *http.Request) {
 	})
 
 	if user.FirstVisit {
-		http.Redirect(w, r, "/welcome.html", http.StatusTemporaryRedirect)
+		http.Redirect(w, r, "/welcome", http.StatusTemporaryRedirect)
 	} else {
-		http.Redirect(w, r, "/dashboard.html", http.StatusTemporaryRedirect)
+		http.Redirect(w, r, "/dashboard", http.StatusTemporaryRedirect)
 	}
 }
 
@@ -109,5 +110,5 @@ func (h *Handler) HandleLogout(w http.ResponseWriter, r *http.Request) {
 		Expires:  time.Unix(0, 0),
 	})
 
-	http.Redirect(w, r, "/goodbye.html", http.StatusTemporaryRedirect)
+	http.Redirect(w, r, "/goodbye", http.StatusTemporaryRedirect)
 }
