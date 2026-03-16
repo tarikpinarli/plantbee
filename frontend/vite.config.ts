@@ -22,7 +22,7 @@ export default defineConfig({
     proxy: {
       '/api': 'http://app:8080',
       '/auth': 'http://app:8080',
-      '/plants': 'http://app:8080'
-    }
+      '/plants': 'http://app:8080',
+    },
   },
 });
