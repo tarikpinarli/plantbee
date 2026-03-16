@@ -94,8 +94,5 @@ jobs:
       - name: Validate Compose file
         run: docker compose config
 
-      - name: Build backend image
-        run: docker build -t plantbee-backend-ci ./backend/server
-
-      - name: Build frontend image
-        run: docker build --target production -t plantbee-frontend-ci ./frontend
+      - name: Build monolith image
+        run: docker build -t plantbee-app-ci -f backend/server/Dockerfile .
