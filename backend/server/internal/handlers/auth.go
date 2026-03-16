@@ -9,7 +9,7 @@ import (
 	"strconv"
 	"time"
 
-	"esp32-server/internal/models"
+	"plantbee-backend/internal/models"
 
 	"github.com/golang-jwt/jwt/v5"
 )
@@ -37,7 +37,7 @@ func (h *Handler) HandleCallback(w http.ResponseWriter, r *http.Request) {
 	}
 	defer func() {
 		if err := resp.Body.Close(); err != nil {
-			fmt.Printf("failed to close response body: %v\n", err)
+			fmt.Printf("error closing auth response body: %v\n", err)
 		}
 	}()
 
@@ -56,11 +56,12 @@ func (h *Handler) HandleCallback(w http.ResponseWriter, r *http.Request) {
 	}
 
 	user := &models.User{
-		IntraID:   strconv.Itoa(user42.ID),
-		Login:     user42.Login,
-		Email:     user42.Email,
-		ImageURL:  user42.Image.Link,
-		CreatedAt: time.Now(),
+		IntraID:    strconv.Itoa(user42.ID),
+		Login:      user42.Login,
+		Email:      user42.Email,
+		ImageURL:   user42.Image.Link,
+		FirstVisit: true,
+		CreatedAt:  time.Now(),
 	}
 
 	if err := h.DB.UpsertUser(user); err != nil {
@@ -91,5 +92,23 @@ func (h *Handler) HandleCallback(w http.ResponseWriter, r *http.Request) {
 		Expires:  time.Now().Add(24 * time.Hour),
 	})
 
-	http.Redirect(w, r, "/", http.StatusTemporaryRedirect)
+	if user.FirstVisit {
+		http.Redirect(w, r, "/welcome", http.StatusTemporaryRedirect)
+	} else {
+		http.Redirect(w, r, "/dashboard", http.StatusTemporaryRedirect)
+	}
+}
+
+func (h *Handler) HandleLogout(w http.ResponseWriter, r *http.Request) {
+	http.SetCookie(w, &http.Cookie{
+		Name:     "auth_token",
+		Value:    "",
+		Path:     "/",
+		HttpOnly: true,
+		Secure:   false,
+		MaxAge:   -1,
+		Expires:  time.Unix(0, 0),
+	})
+
+	http.Redirect(w, r, "/goodbye", http.StatusTemporaryRedirect)
 }

@@ -190,6 +190,15 @@ curl -X POST http://localhost:8080/api/reading \
 
 ---
 
+### Task endpoints
+
+| Endpoint | What it does |
+|----------|-------------|
+| `POST /api/tasks/accept` | Accepts a task for a plant |
+| `POST /api/tasks/cancel` | Cancels an accepted task |
+
+---
+
 ## 7 · Database Schema
 
 ### `users`
@@ -201,6 +210,8 @@ curl -X POST http://localhost:8080/api/reading \
 | `login` | VARCHAR(50) | 42 username |
 | `image_url` | TEXT | 42 profile picture |
 | `intend_to_help` | BOOLEAN | volunteer flag |
+| `first_visit` | BOOLEAN | tracks if user has completed welcome flow |
+| `water_count` | INTEGER | tracks number of completed watering tasks |
 | `created_at` | TIMESTAMPTZ | |
 
 ### `plants`
@@ -227,6 +238,18 @@ curl -X POST http://localhost:8080/api/reading \
 | `moisture` | INTEGER | |
 | `wake_time` | FLOAT | seconds the ESP32 was awake |
 | `recorded_at` | TIMESTAMPTZ | |
+
+### `tasks`
+| Column | Type | Notes |
+|--------|------|-------|
+| `id` | SERIAL PK | |
+| `plant_id` | INTEGER | FK → `plants.id` |
+| `type` | VARCHAR(50) | `water` or `error` |
+| `water_amount` | INTEGER | amount in ml |
+| `status` | VARCHAR(50) | `open`, `in_progress`, or `completed` |
+| `volentee_id` | INTEGER | FK → `users.id` |
+| `scheduled_at` | TIMESTAMPTZ | |
+| `completed_at` | TIMESTAMPTZ | |
 
 ---
 
@@ -260,18 +283,21 @@ plantbee_repo/
 ├── docker-compose.yml          # Orchestrates all services
 ├── Taskfile.yml                # Common lint/test/build commands
 ├── frontend/
-│   ├── Dockerfile              # Dev + production frontend image targets
-│   └── index.html              # Frontend entry point
+│   ├── package.json            # Node dependencies and scripts
+│   ├── vite.config.ts          # Vite bundler and proxy config
+│   ├── index.html              # Frontend entry point
+│   └── src/                    # React source code (pages, routing, components)
 └── backend/
     └── server/
-        ├── Dockerfile          # Multi-stage Go build
+        ├── Dockerfile          # Multi-stage build (Compiles React + Runs Go)
         ├── .env                # ⚠️ You must create this (see §2)
         ├── go.mod
         ├── cmd/server/
         │   └── main.go         # Entry point — registers routes
         └── internal/
             ├── config/         # Loads env vars
-            ├── handlers/       # HTTP handlers (auth, plants, ingest)
-            ├── models/         # Go structs (Plant, User, etc.)
+            ├── handlers/       # HTTP handlers (auth, plants, ingest, tasks, user)
+            ├── models/         # Go structs (Plant, User, Task, etc.)
+            ├── services/       # Business logic (Auth, Tasks, etc.)
             └── storage/        # PostgreSQL queries & schema
 ```

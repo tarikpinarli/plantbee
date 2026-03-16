@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"net/http"
 
-	"esp32-server/internal/models"
+	"plantbee-backend/internal/models"
 )
 
 // addPlantRequest is the expected JSON body for creating a plant.
@@ -49,8 +49,30 @@ func (h *Handler) HandleAddPlant(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	if req.SensorID == "" {
+		jsonError(w, "Sensor ID is required", http.StatusBadRequest)
+		return
+	}
+
+	if req.PotVolumeLiters == 0 {
+		jsonError(w, "Pot volume is required", http.StatusBadRequest)
+		return
+	}
+
+	if req.LightRequirement == "" {
+		jsonError(w, "Light requirement is required", http.StatusBadRequest)
+		return
+	}
+
 	if req.TargetMoisture == 0 {
 		req.TargetMoisture = 50
+	}
+
+	// Extract user ID from context
+	userID, ok := r.Context().Value(UserIDKey).(int)
+	if !ok {
+		jsonError(w, "Unauthorized", http.StatusUnauthorized)
+		return
 	}
 
 	if h.DB == nil {
@@ -67,6 +89,7 @@ func (h *Handler) HandleAddPlant(w http.ResponseWriter, r *http.Request) {
 		TargetMoisture:   req.TargetMoisture,
 		SensorID:         req.SensorID,
 		ImageURL:         req.ImageURL,
+		OwnerID:          userID,
 	}
 
 	if err := h.DB.CreatePlant(plant); err != nil {
@@ -80,7 +103,7 @@ func (h *Handler) HandleAddPlant(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusCreated)
 	if err := json.NewEncoder(w).Encode(plant); err != nil {
-		fmt.Printf("failed to write plant response: %v\n", err)
+		fmt.Printf("error encoding plant response: %v\n", err)
 	}
 }
 
@@ -89,6 +112,6 @@ func jsonError(w http.ResponseWriter, message string, status int) {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(status)
 	if err := json.NewEncoder(w).Encode(map[string]string{"error": message}); err != nil {
-		fmt.Printf("failed to write error response: %v\n", err)
+		fmt.Printf("error encoding json error response: %v\n", err)
 	}
 }

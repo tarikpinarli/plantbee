@@ -19,7 +19,7 @@ formatters:
     - goimports
   settings:
     gofumpt:
-      module-path: esp32-server
+      module-path: plantbee-backend
     goimports:
       local-prefixes:
-        - esp32-server
+        - plantbee-backend

@@ -1,13 +1,13 @@
 package main
 
 import (
-	"fmt"
 	"log"
 	"net/http"
+	"os"
 
-	"esp32-server/internal/config"
-	"esp32-server/internal/handlers"
-	"esp32-server/internal/storage"
+	"plantbee-backend/internal/config"
+	"plantbee-backend/internal/handlers"
+	"plantbee-backend/internal/storage"
 )
 
 func main() {
@@ -36,13 +36,28 @@ func main() {
 	http.HandleFunc("/api/reading", h.IngestData)
 	http.HandleFunc("/auth/login", h.HandleLogin)
 	http.HandleFunc("/auth/callback", h.HandleCallback)
-	http.HandleFunc("/plants/add", h.HandleAddPlant)
-
+	http.HandleFunc("/auth/logout", h.HandleLogout)
+	http.HandleFunc("/plants/add", h.RequireAuth(h.HandleAddPlant))
+	http.HandleFunc("/api/user/welcome", h.RequireAuth(h.HandleWelcome))
+	http.HandleFunc("/api/tasks/accept", h.RequireAuth(h.HandleAcceptTask))
+	http.HandleFunc("/api/tasks/cancel", h.RequireAuth(h.HandleCancelTask))
+	// Serve the frontend static files
+	fs := http.FileServer(http.Dir("/frontend/dist"))
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		w.Header().Set("Content-Type", "text/html")
-		if _, err := fmt.Fprint(w, "<h1>PlantBee Server Online!</h1><p>System is running.</p>"); err != nil {
-			log.Printf("failed to write root response: %v", err)
+		// If it's an API route that wasn't caught above, return 404
+		if len(r.URL.Path) >= 5 && r.URL.Path[:5] == "/api/" {
+			http.NotFound(w, r)
+			return
 		}
+
+		// Check if the requested file exists
+		if _, err := os.Stat("/frontend/dist" + r.URL.Path); os.IsNotExist(err) {
+			// If file not found, serve index.html for React Router
+			http.ServeFile(w, r, "/frontend/dist/index.html")
+			return
+		}
+
+		fs.ServeHTTP(w, r)
 	})
 
 	log.Printf("Server starting on port %s", cfg.Port)
