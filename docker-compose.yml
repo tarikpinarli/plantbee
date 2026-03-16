@@ -7,7 +7,8 @@ services:
     ports:
       - "8080:8080"
     env_file:
-      - ./backend/server/.env
+      - path: ./backend/server/.env
+        required: false
     restart: on-failure
     depends_on:
       db:
