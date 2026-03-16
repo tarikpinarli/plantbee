@@ -21,12 +21,17 @@ export default defineConfig({
   },
   // triggers the Cross-Origin Resource Sharing (CORS) mechanism.If the backend does not explicitly allow the frontend origin, the browser blocks the request.
   server: {
-    port: 3000,
+    port: 5173,
     proxy: {
       "/api": {
         target: "http://localhost:8080",
         changeOrigin: true,
       },
+    },
+    strictPort: true,
+    watch: {
+      usePolling: true,
+      interval: 500,
     },
   },
 

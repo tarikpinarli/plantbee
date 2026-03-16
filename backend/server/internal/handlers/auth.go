@@ -3,12 +3,13 @@ package handlers
 import (
 	"context"
 	"encoding/json"
-	"esp32-server/internal/models"
 	"fmt"
 	"net/http"
 	"os"
 	"strconv"
 	"time"
+
+	"esp32-server/internal/models"
 
 	"github.com/golang-jwt/jwt/v5"
 )
@@ -34,7 +35,11 @@ func (h *Handler) HandleCallback(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Failed to get user info", http.StatusInternalServerError)
 		return
 	}
-	defer resp.Body.Close()
+	defer func() {
+		if err := resp.Body.Close(); err != nil {
+			fmt.Printf("failed to close response body: %v\n", err)
+		}
+	}()
 
 	var user42 struct {
 		ID    int    `json:"id"`

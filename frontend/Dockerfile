@@ -1,6 +1,6 @@
 # ── Stage 1: Builder stage → compiles the frontend application.───────────────
 # Node.js is a software platform for scalable server-side and networking applications. 
-FROM node:20-alpine AS builder
+FROM node:22-alpine AS base
 
 # Install pnpm
 RUN npm install -g pnpm

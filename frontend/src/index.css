@@ -131,6 +131,7 @@ button:focus-visible {
   --color-border: var(--border);
   --color-input: var(--input);
   --color-ring: var(--ring);
+<<<<<<< HEAD
   --color-chart-1: var(--chart-1);
   --color-chart-2: var(--chart-2);
   --color-chart-3: var(--chart-3);
@@ -188,3 +189,57 @@ button:focus-visible {
     @apply bg-background text-foreground;
   }
 }
+=======
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+}
+
+:root {
+  --background: oklch(0.985 0.002 95);
+  --foreground: oklch(0.23 0.01 95);
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.23 0.01 95);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.23 0.01 95);
+  --primary: oklch(0.56 0.13 150);
+  --primary-foreground: oklch(0.98 0.01 120);
+  --secondary: oklch(0.94 0.015 95);
+  --secondary-foreground: oklch(0.3 0.015 95);
+  --muted: oklch(0.95 0.01 95);
+  --muted-foreground: oklch(0.5 0.015 95);
+  --accent: oklch(0.92 0.03 150);
+  --accent-foreground: oklch(0.28 0.015 140);
+  --destructive: oklch(0.62 0.22 26);
+  --border: oklch(0.89 0.01 95);
+  --input: oklch(0.89 0.01 95);
+  --ring: oklch(0.56 0.13 150);
+  --radius: 0.85rem;
+}
+
+* {
+  border-color: var(--border);
+}
+
+html {
+  font-family: "IBM Plex Sans", "Segoe UI", sans-serif;
+  background:
+    radial-gradient(circle at top, rgba(123, 172, 126, 0.16), transparent 36%),
+    linear-gradient(
+      180deg,
+      rgba(252, 250, 244, 1) 0%,
+      rgba(246, 243, 232, 1) 100%
+    );
+  color: var(--foreground);
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+}
+
+#root {
+  min-height: 100vh;
+}
+>>>>>>> main

@@ -1,0 +1,315 @@
+<!DOCTYPE html><html lang="en"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>PlantBee Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#13ec5b",
+                        "background-light": "#f6f8f6",
+                        "background-dark": "#102216",
+                    },
+                    fontFamily: {
+                        "display": ["Space Grotesk"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100 min-h-screen selection:bg-primary/30 selection:text-primary">
+<div class="relative flex h-auto min-h-screen w-full flex-col group/design-root overflow-x-hidden">
+<div class="layout-container flex h-full grow flex-col">
+<header class="sticky top-0 z-50 flex items-center justify-between whitespace-nowrap border-b border-solid border-primary/20 bg-background-light/80 dark:bg-background-dark/80 backdrop-blur-md px-10 py-4 shadow-sm">
+<div class="flex items-center gap-4 text-primary">
+<span class="material-symbols-outlined text-3xl" style="">potted_plant</span>
+<h2 class="text-slate-900 dark:text-slate-100 text-2xl font-bold leading-tight tracking-tight" style="">PlantBee</h2>
+</div>
+<nav class="hidden md:flex flex-1 justify-end gap-8">
+<div class="flex items-center gap-9">
+<a class="text-primary font-bold leading-normal relative after:content-[''] after:absolute after:-bottom-5 after:left-0 after:w-full after:h-1 after:bg-primary after:rounded-t-lg" href="#" style="">Plants</a>
+<a class="text-slate-600 hover:text-primary dark:text-slate-400 dark:hover:text-primary transition-colors text-sm font-medium leading-normal" href="#" style="">Tasks</a>
+<a class="text-slate-600 hover:text-primary dark:text-slate-400 dark:hover:text-primary transition-colors text-sm font-medium leading-normal" href="#" style="">Leaderboard</a>
+<a class="text-slate-600 hover:text-primary dark:text-slate-400 dark:hover:text-primary transition-colors text-sm font-medium leading-normal" href="#" style="">Add Plant</a>
+</div>
+<button class="flex min-w-[84px] cursor-pointer items-center justify-center overflow-hidden rounded-full h-10 px-6 bg-primary hover:bg-primary/90 transition-colors text-background-dark text-sm font-bold shadow-lg shadow-primary/20" style="">
+<span class="truncate" style="">Add Plant</span>
+</button>
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-10 border-2 border-primary/30" data-alt="User profile picture placeholder" style="background-image: url(&quot;https://lh3.googleusercontent.com/aida-public/AB6AXuBk7uGC_uqIob-HSJ47hdz3qWFK4So4POponHR_l3AVWQz_z5JblB8LCzVEwtjcmptmq4IgtbF3dF7DDplPodlmsahz2AWpyoQGziuWXFjxLyoBX6aBzVlROGeNftW4iRdY7w3l6KW-OfMg8Re6508PNJ_vbGCXcJx6jaDVhjWw-t8NyKmux556hRHggFxG5dXjZH6vQtS1-gCMvJ4OMV49GRynPewrgWWdWA3o4Z-0wf42D0Z0p-tvsFhVgmBIwHfLiIZLmAgNHuY&quot;);"></div>
+</nav>
+</header>
+<main class="flex-1 w-full max-w-7xl mx-auto px-6 py-8 md:px-10 md:py-12">
+<section class="mb-10 flex flex-col md:flex-row md:items-end justify-between gap-4">
+<div class="flex flex-col gap-2">
+<h1 class="text-4xl md:text-5xl font-bold leading-tight tracking-tight" style="">Hive Jungle</h1>
+<p class="text-slate-600 dark:text-slate-400 text-lg" style="">Keep track of your leafy friends and their needs.</p>
+</div>
+<div class="flex items-center gap-2 bg-white dark:bg-slate-800/50 p-1 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700">
+<button class="px-4 py-2 rounded-lg bg-primary/10 text-primary font-medium text-sm flex items-center gap-2" style="">
+<span class="material-symbols-outlined text-[20px]" style="">grid_view</span>
+                        Grid
+                    </button>
+<button class="px-4 py-2 rounded-lg text-slate-500 hover:text-slate-900 dark:hover:text-slate-100 font-medium text-sm transition-colors flex items-center gap-2" style="">
+<span class="material-symbols-outlined text-[20px]" style="">view_list</span>
+                        List
+                    </button>
+</div>
+</section>
+<section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 md:gap-8">
+<!-- Plant Card 1 -->
+<article class="flex flex-col bg-white dark:bg-slate-800/40 rounded-2xl overflow-hidden border border-slate-100 dark:border-slate-700/50 shadow-sm hover:shadow-md hover:-translate-y-1 transition-all duration-300">
+<div class="relative h-64 w-full bg-slate-100 dark:bg-slate-800">
+<div class="absolute inset-0 bg-center bg-no-repeat bg-cover transition-transform duration-500 hover:scale-105" data-alt="Potted Monstera Deliciosa plant" style="background-image: url(&quot;https://lh3.googleusercontent.com/aida-public/AB6AXuDCkSYiBjFFf2PpbyC3R6NX2ZDvMQHSzen8gxRHeM2YeNBJsP1pnV-EASDEzQRnLiRBntI3F_aj_d-bWLdI6JNztHlxIfVP-UMhlJh84RhSy95IlcWg5_H1zVio5X-8lvqxFmM6g63eO1d191egIs_p-zAVG7-hhKzf8t_2xYv_rZggAl-Uhaqlu-ND7DqmMscqAAU7o4PkPN6F87d-BG-XTcnDtaZdmxVZ_mxkISSYKxDq4lMt-F6cJLLmxMWztttK617A632Ftjk&quot;);"></div>
+<div class="absolute top-3 right-3 bg-white/90 dark:bg-slate-900/90 backdrop-blur-sm px-3 py-1 rounded-full text-xs font-semibold text-slate-800 dark:text-slate-200 shadow-sm flex items-center gap-1" style="">
+<span class="material-symbols-outlined text-[14px] text-amber-500" style="">light_mode</span>
+                            Medium Light
+                        </div>
+</div>
+<div class="p-5 flex flex-col gap-4">
+<div>
+<h3 class="text-xl font-bold mb-1" style="">Monstera</h3>
+<p class="text-slate-500 dark:text-slate-400 text-sm flex items-center gap-1" style="">
+<span class="material-symbols-outlined text-[16px]" style="">person</span>
+                                Added by Alex
+                            </p>
+</div>
+<div class="flex flex-col gap-2 mt-auto pt-4 border-t border-slate-100 dark:border-slate-700">
+<div class="flex justify-between items-center">
+<span class="text-sm font-medium flex items-center gap-1" style="">
+<span class="material-symbols-outlined text-[18px] text-blue-500" style="">water_drop</span>
+                                    Soil Moisture
+                                </span>
+<span class="text-sm font-bold text-primary" style="">65%</span>
+</div>
+<div class="h-2.5 w-full bg-slate-100 dark:bg-slate-700 rounded-full overflow-hidden">
+<div class="h-full bg-primary rounded-full transition-all duration-1000" style="width: 65%;"></div>
+</div>
+</div>
+</div>
+</article>
+<!-- Plant Card 2 -->
+<article class="flex flex-col bg-white dark:bg-slate-800/40 rounded-2xl overflow-hidden border border-slate-100 dark:border-slate-700/50 shadow-sm hover:shadow-md hover:-translate-y-1 transition-all duration-300">
+<div class="relative h-64 w-full bg-slate-100 dark:bg-slate-800">
+<div class="absolute inset-0 bg-center bg-no-repeat bg-cover transition-transform duration-500 hover:scale-105" data-alt="Potted Snake Plant" style="background-image: url(&quot;https://lh3.googleusercontent.com/aida-public/AB6AXuDAEE54iAbc4xjc-R5o45ICjM2KEX825JIJtQU4p8WY48rUDKPnx5afUo3ajuwQiUSNYZqsPW2fSA9pG7fUwdkCrN2wBSO_pqOVzBg35OOg3w5FMehsq7ZU7MDWAJmrWbMItZC3Pl541bNs-OqnkKYJPSNQm8BS6uVPLKy35XI1-LqpN8BOTGwy1FF105d1Xb6tqJfoqge5GCTFUTc20WeMuJNanmP34g-zlJfWCHDwEHGUJ3O4UGaMjD7SGC9qyOu45_2IabU_RpM&quot;);"></div>
+<div class="absolute top-3 right-3 bg-white/90 dark:bg-slate-900/90 backdrop-blur-sm px-3 py-1 rounded-full text-xs font-semibold text-slate-800 dark:text-slate-200 shadow-sm flex items-center gap-1" style="">
+<span class="material-symbols-outlined text-[14px] text-slate-500" style="">bedtime</span>
+                            Low Light
+                        </div>
+</div>
+<div class="p-5 flex flex-col gap-4">
+<div>
+<h3 class="text-xl font-bold mb-1" style="">Snake Plant</h3>
+<p class="text-slate-500 dark:text-slate-400 text-sm flex items-center gap-1" style="">
+<span class="material-symbols-outlined text-[16px]" style="">person</span>
+                                Added by Jamie
+                            </p>
+</div>
+<div class="flex flex-col gap-2 mt-auto pt-4 border-t border-slate-100 dark:border-slate-700">
+<div class="flex justify-between items-center">
+<span class="text-sm font-medium flex items-center gap-1" style="">
+<span class="material-symbols-outlined text-[18px] text-red-500" style="">water_drop</span>
+                                    Soil Moisture
+                                </span>
+<span class="text-sm font-bold text-red-500" style="">30%</span>
+</div>
+<div class="h-2.5 w-full bg-slate-100 dark:bg-slate-700 rounded-full overflow-hidden">
+<div class="h-full bg-red-500 rounded-full transition-all duration-1000" style="width: 30%;"></div>
+</div>
+</div>
+</div>
+</article>
+<!-- Plant Card 3 -->
+<article class="flex flex-col bg-white dark:bg-slate-800/40 rounded-2xl overflow-hidden border border-slate-100 dark:border-slate-700/50 shadow-sm hover:shadow-md hover:-translate-y-1 transition-all duration-300">
+<div class="relative h-64 w-full bg-slate-100 dark:bg-slate-800">
+<div class="absolute inset-0 bg-center bg-no-repeat bg-cover transition-transform duration-500 hover:scale-105" data-alt="Fiddle Leaf Fig in a pot" style="background-image: url(&quot;https://lh3.googleusercontent.com/aida-public/AB6AXuBwZO2vn9tpQto6T6WQwtrMbdeDpy_x_X37-D9CL1SRvPuOfVLjg_ttzC_hku4CRS0Dz7-beGgTHvvdcRymNYOOfXfWhs1sasmbCem1qZf_Vyxqf9UMx1aWXXPKr_n4B7g-4e5nyHr92JYa3jqx3GhjRSjX-rPftL29Kjvt-B7fH0NsCVo3WR9aJk081_hu4-aqIPe1ipgYZYqKIPzQ7P2_Nu1wPfNzXQiPUxUfldhauF8r1OrIaYFrOCsc6ZS1oU1IQooxgtAHa6k&quot;);"></div>
+<div class="absolute top-3 right-3 bg-white/90 dark:bg-slate-900/90 backdrop-blur-sm px-3 py-1 rounded-full text-xs font-semibold text-slate-800 dark:text-slate-200 shadow-sm flex items-center gap-1" style="">
+<span class="material-symbols-outlined text-[14px] text-amber-500" style="">wb_sunny</span>
+                            High Light
+                        </div>
+</div>
+<div class="p-5 flex flex-col gap-4">
+<div>
+<h3 class="text-xl font-bold mb-1" style="">Fiddle Leaf Fig</h3>
+<p class="text-slate-500 dark:text-slate-400 text-sm flex items-center gap-1" style="">
+<span class="material-symbols-outlined text-[16px]" style="">person</span>
+                                Added by Sam
+                            </p>
+</div>
+<div class="flex flex-col gap-2 mt-auto pt-4 border-t border-slate-100 dark:border-slate-700">
+<div class="flex justify-between items-center">
+<span class="text-sm font-medium flex items-center gap-1" style="">
+<span class="material-symbols-outlined text-[18px] text-blue-500" style="">water_drop</span>
+                                    Soil Moisture
+                                </span>
+<span class="text-sm font-bold text-primary" style="">85%</span>
+</div>
+<div class="h-2.5 w-full bg-slate-100 dark:bg-slate-700 rounded-full overflow-hidden">
+<div class="h-full bg-primary rounded-full transition-all duration-1000" style="width: 85%;"></div>
+</div>
+</div>
+</div>
+</article>
+<!-- Plant Card 4 -->
+<article class="flex flex-col bg-white dark:bg-slate-800/40 rounded-2xl overflow-hidden border border-slate-100 dark:border-slate-700/50 shadow-sm hover:shadow-md hover:-translate-y-1 transition-all duration-300">
+<div class="relative h-64 w-full bg-slate-100 dark:bg-slate-800">
+<div class="absolute inset-0 bg-center bg-no-repeat bg-cover transition-transform duration-500 hover:scale-105" data-alt="Trailing Pothos plant" style="background-image: url(&quot;https://lh3.googleusercontent.com/aida-public/AB6AXuA9n0BaNHE3b_aeVMB18ZKCOc1CTCYikqaqlsOjksUpEfOJJ3FIG0QSQYjmxtdzZSkXC0ZuIy-gRZkAh1AuwwfwLMhlHqxcM-vD2a5IT75v9bv2JL4GDFw6KjDhlsob-VdVOEidaX5MAkmb5W3e0ReaedfkYQaoo6JtYVrG2IueHj9h1JbWmqol89L_JNN-W5LRNHB_VP5lBhdEiOT0BgkCcRDRwwNRVmqJP8EJ1l2grZGqqfpjYiPp9_3adsTNTAHnDjXMR0w2ONo&quot;);"></div>
+<div class="absolute top-3 right-3 bg-white/90 dark:bg-slate-900/90 backdrop-blur-sm px-3 py-1 rounded-full text-xs font-semibold text-slate-800 dark:text-slate-200 shadow-sm flex items-center gap-1" style="">
+<span class="material-symbols-outlined text-[14px] text-slate-500" style="">bedtime</span>
+                            Low Light
+                        </div>
+</div>
+<div class="p-5 flex flex-col gap-4">
+<div>
+<h3 class="text-xl font-bold mb-1" style="">Pothos</h3>
+<p class="text-slate-500 dark:text-slate-400 text-sm flex items-center gap-1" style="">
+<span class="material-symbols-outlined text-[16px]" style="">person</span>
+                                Added by Alex
+                            </p>
+</div>
+<div class="flex flex-col gap-2 mt-auto pt-4 border-t border-slate-100 dark:border-slate-700">
+<div class="flex justify-between items-center">
+<span class="text-sm font-medium flex items-center gap-1" style="">
+<span class="material-symbols-outlined text-[18px] text-amber-500" style="">water_drop</span>
+                                    Soil Moisture
+                                </span>
+<span class="text-sm font-bold text-amber-500" style="">45%</span>
+</div>
+<div class="h-2.5 w-full bg-slate-100 dark:bg-slate-700 rounded-full overflow-hidden">
+<div class="h-full bg-amber-500 rounded-full transition-all duration-1000" style="width: 45%;"></div>
+</div>
+</div>
+</div>
+</article>
+<!-- Plant Card 5 -->
+<article class="flex flex-col bg-white dark:bg-slate-800/40 rounded-2xl overflow-hidden border border-slate-100 dark:border-slate-700/50 shadow-sm hover:shadow-md hover:-translate-y-1 transition-all duration-300">
+<div class="relative h-64 w-full bg-slate-100 dark:bg-slate-800">
+<div class="absolute inset-0 bg-center bg-no-repeat bg-cover transition-transform duration-500 hover:scale-105" data-alt="Rubber Plant in a pot" style="background-image: url(&quot;https://lh3.googleusercontent.com/aida-public/AB6AXuCM1PdG76W-E1uVHJi7f_QMZqB61qO9OgHieNzA6OFQDms5dTDZdvd_YnyijO22iH7G3ya4KnvJf0sY9QJBo0zRCZSt7bMZR0_PtGwwQKaFFj-D1ormWnFQTeJOTIPIdTWwU8_gQW-SmTdJzdDASGGjutkUtzpo1APm62gIuKg3lF947zn7aIyGXVzA_pEoboXbDrKMyhwMGahQT46o9iZDTJxcc4BYjMGsuqvNvcZ4QdXvy0-v0VQgecWvdvsfEqM84DxPyyIkD3o&quot;);"></div>
+<div class="absolute top-3 right-3 bg-white/90 dark:bg-slate-900/90 backdrop-blur-sm px-3 py-1 rounded-full text-xs font-semibold text-slate-800 dark:text-slate-200 shadow-sm flex items-center gap-1" style="">
+<span class="material-symbols-outlined text-[14px] text-amber-500" style="">wb_sunny</span>
+                            High Light
+                        </div>
+</div>
+<div class="p-5 flex flex-col gap-4">
+<div>
+<h3 class="text-xl font-bold mb-1" style="">Rubber Plant</h3>
+<p class="text-slate-500 dark:text-slate-400 text-sm flex items-center gap-1" style="">
+<span class="material-symbols-outlined text-[16px]" style="">person</span>
+                                Added by Sarah
+                            </p>
+</div>
+<div class="flex flex-col gap-2 mt-auto pt-4 border-t border-slate-100 dark:border-slate-700">
+<div class="flex justify-between items-center">
+<span class="text-sm font-medium flex items-center gap-1" style="">
+<span class="material-symbols-outlined text-[18px] text-blue-500" style="">water_drop</span>
+                                    Soil Moisture
+                                </span>
+<span class="text-sm font-bold text-primary" style="">70%</span>
+</div>
+<div class="h-2.5 w-full bg-slate-100 dark:bg-slate-700 rounded-full overflow-hidden">
+<div class="h-full bg-primary rounded-full transition-all duration-1000" style="width: 70%;"></div>
+</div>
+</div>
+</div>
+</article><!-- Plant Card 6 -->
+<article class="flex flex-col bg-white dark:bg-slate-800/40 rounded-2xl overflow-hidden border border-slate-100 dark:border-slate-700/50 shadow-sm hover:shadow-md hover:-translate-y-1 transition-all duration-300">
+<div class="relative h-64 w-full bg-slate-100 dark:bg-slate-800">
+<div class="absolute inset-0 bg-center bg-no-repeat bg-cover transition-transform duration-500 hover:scale-105" data-alt="Peace Lily plant" style="background-image: url(&quot;https://lh3.googleusercontent.com/aida-public/AB6AXuBFlKTLeyQKK4aHRvlMoDtH93QmujLTYULXEF4V1SxafTDfMinOomqgx2rqqOIPqG5ITRz2mUNiB1S0p9R8UmwT-iplqz3wN2B5pRrz9yk30dlhJgfLse-Cu_Yg0EiuTYsUWfMn-677keSIX-dTPFmFN0yEv1ZJ68YBB_GkftBeM0TdM5tAJ6040FvXdokE7EKsdtflTL_NdOr-wSl4cGvbbS6upCjXSYhAZvs9C_P9WqCcunk3wb7GLX_8OMRhchh54tDgoMMZOgU&quot;);"></div>
+<div class="absolute top-3 right-3 bg-white/90 dark:bg-slate-900/90 backdrop-blur-sm px-3 py-1 rounded-full text-xs font-semibold text-slate-800 dark:text-slate-200 shadow-sm flex items-center gap-1" style="">
+<span class="material-symbols-outlined text-[14px] text-slate-500" style="">bedtime</span>
+                            Low Light
+                        </div>
+</div>
+<div class="p-5 flex flex-col gap-4">
+<div>
+<h3 class="text-xl font-bold mb-1" style="">Peace Lily</h3>
+<p class="text-slate-500 dark:text-slate-400 text-sm flex items-center gap-1" style="">
+<span class="material-symbols-outlined text-[16px]" style="">person</span>
+                                Added by Chris
+                            </p>
+</div>
+<div class="flex flex-col gap-2 mt-auto pt-4 border-t border-slate-100 dark:border-slate-700">
+<div class="flex justify-between items-center">
+<span class="text-sm font-medium flex items-center gap-1" style="">
+<span class="material-symbols-outlined text-[18px] text-blue-500" style="">water_drop</span>
+                                    Soil Moisture
+                                </span>
+<span class="text-sm font-bold text-primary" style="">90%</span>
+</div>
+<div class="h-2.5 w-full bg-slate-100 dark:bg-slate-700 rounded-full overflow-hidden">
+<div class="h-full bg-primary rounded-full transition-all duration-1000" style="width: 90%;"></div>
+</div>
+</div>
+</div>
+</article><!-- Plant Card 7 -->
+<article class="flex flex-col bg-white dark:bg-slate-800/40 rounded-2xl overflow-hidden border border-slate-100 dark:border-slate-700/50 shadow-sm hover:shadow-md hover:-translate-y-1 transition-all duration-300">
+<div class="relative h-64 w-full bg-slate-100 dark:bg-slate-800">
+<div class="absolute inset-0 bg-center bg-no-repeat bg-cover transition-transform duration-500 hover:scale-105" data-alt="Aloe Vera plant" style="background-image: url(&quot;https://lh3.googleusercontent.com/aida-public/AB6AXuApCvWhWnFQOHfaM1CWsYAHfyAm_NQS2hSb-noWg_3owv8wzdfy3uNV3y4es3eXrenmGWwLhCkuu-CSaIDJzfOh-KccvLS-TJGhOHmUW24F_CY37cdilucQN3RmQ_qijUgjrx1eUlRw_jVxBQEkFOjrpVoumtlO3uz7IDwoQLst4e3A2V_0lKNEw4Fp0WHUPUQUH6czpiuA8t9Aj_5YS0aQtCK50NoPtHMmIuAkEZPvp7tmRddHT5g7PqnGabHoqBkr3zk9n3aj2fc&quot;);"></div>
+<div class="absolute top-3 right-3 bg-white/90 dark:bg-slate-900/90 backdrop-blur-sm px-3 py-1 rounded-full text-xs font-semibold text-slate-800 dark:text-slate-200 shadow-sm flex items-center gap-1" style="">
+<span class="material-symbols-outlined text-[14px] text-amber-500" style="">wb_sunny</span>
+                            High Light
+                        </div>
+</div>
+<div class="p-5 flex flex-col gap-4">
+<div>
+<h3 class="text-xl font-bold mb-1" style="">Aloe Vera</h3>
+<p class="text-slate-500 dark:text-slate-400 text-sm flex items-center gap-1" style="">
+<span class="material-symbols-outlined text-[16px]" style="">person</span>
+                                Added by Taylor
+                            </p>
+</div>
+<div class="flex flex-col gap-2 mt-auto pt-4 border-t border-slate-100 dark:border-slate-700">
+<div class="flex justify-between items-center">
+<span class="text-sm font-medium flex items-center gap-1" style="">
+<span class="material-symbols-outlined text-[18px] text-red-500" style="">water_drop</span>
+                                    Soil Moisture
+                                </span>
+<span class="text-sm font-bold text-red-500" style="">20%</span>
+</div>
+<div class="h-2.5 w-full bg-slate-100 dark:bg-slate-700 rounded-full overflow-hidden">
+<div class="h-full bg-red-500 rounded-full transition-all duration-1000" style="width: 20%;"></div>
+</div>
+</div>
+</div>
+</article><!-- Plant Card 8 -->
+<article class="flex flex-col bg-white dark:bg-slate-800/40 rounded-2xl overflow-hidden border border-slate-100 dark:border-slate-700/50 shadow-sm hover:shadow-md hover:-translate-y-1 transition-all duration-300">
+<div class="relative h-64 w-full bg-slate-100 dark:bg-slate-800">
+<div class="absolute inset-0 bg-center bg-no-repeat bg-cover transition-transform duration-500 hover:scale-105" data-alt="Spider Plant" style="background-image: url(&quot;https://lh3.googleusercontent.com/aida-public/AB6AXuC2fV6CYz56reblDzNq-BIaR17wIYhgo8WzwVH2_9V0BiLsPs42ScYvokloUd2KLoD5pcvhFx6BskY4FTef7RF-BkJFHgcxYdFtyIpD1AmbRlBwcAsrHT1cXBXOWEAIzm06rrrISN0putthQSCpLRb2erpT-lHrnhm9ww7cLIsVmBTdhJ7efsuxQzWD_w_hfS36fbDasjLM1CDaqJRfjU1ckUKUg1HRZOQzDl21kuoq1gJx5c4nxmZWB2eR5Hzrn58Gi2xZubgfzTw&quot;);"></div>
+<div class="absolute top-3 right-3 bg-white/90 dark:bg-slate-900/90 backdrop-blur-sm px-3 py-1 rounded-full text-xs font-semibold text-slate-800 dark:text-slate-200 shadow-sm flex items-center gap-1" style="">
+<span class="material-symbols-outlined text-[14px] text-amber-500" style="">light_mode</span>
+                            Medium Light
+                        </div>
+</div>
+<div class="p-5 flex flex-col gap-4">
+<div>
+<h3 class="text-xl font-bold mb-1" style="">Spider Plant</h3>
+<p class="text-slate-500 dark:text-slate-400 text-sm flex items-center gap-1" style="">
+<span class="material-symbols-outlined text-[16px]" style="">person</span>
+                                Added by Jordan
+                            </p>
+</div>
+<div class="flex flex-col gap-2 mt-auto pt-4 border-t border-slate-100 dark:border-slate-700">
+<div class="flex justify-between items-center">
+<span class="text-sm font-medium flex items-center gap-1" style="">
+<span class="material-symbols-outlined text-[18px] text-amber-500" style="">water_drop</span>
+                                    Soil Moisture
+                                </span>
+<span class="text-sm font-bold text-amber-500" style="">55%</span>
+</div>
+<div class="h-2.5 w-full bg-slate-100 dark:bg-slate-700 rounded-full overflow-hidden">
+<div class="h-full bg-amber-500 rounded-full transition-all duration-1000" style="width: 55%;"></div>
+</div>
+</div>
+</div>
+</article></section>
+</main>
+</div>
+</div>
+</body></html>

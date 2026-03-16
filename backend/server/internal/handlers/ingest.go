@@ -2,11 +2,12 @@ package handlers
 
 import (
 	"encoding/json"
-	"esp32-server/internal/models"
 	"fmt"
 	"net/http"
 	"strings"
 	"time"
+
+	"esp32-server/internal/models"
 )
 
 func (h *Handler) IngestData(w http.ResponseWriter, r *http.Request) {
@@ -24,7 +25,7 @@ func (h *Handler) IngestData(w http.ResponseWriter, r *http.Request) {
 	reading := models.SensorReading{
 		SensorID:   raw.SensorID,
 		Moisture:   raw.Moisture,
-		WakeTime:   float64(raw.DurationMs) / 1000.0, // Ms -> second 
+		WakeTime:   float64(raw.DurationMs) / 1000.0, // Ms -> second
 		RecordedAt: time.Now(),
 	}
 
@@ -39,15 +40,21 @@ func (h *Handler) IngestData(w http.ResponseWriter, r *http.Request) {
 	}
 
 	w.WriteHeader(http.StatusOK)
-	w.Write([]byte("Ack"))
+	if _, err := w.Write([]byte("Ack")); err != nil {
+		fmt.Printf("failed to write response: %v\n", err)
+	}
 }
 
 func printLog(t models.SensorReading) {
 	barLen := t.Moisture / 10
-	if barLen > 10 { barLen = 10 }
-	if barLen < 0 { barLen = 0 }
+	if barLen > 10 {
+		barLen = 10
+	}
+	if barLen < 0 {
+		barLen = 0
+	}
 	bar := strings.Repeat("█", barLen) + strings.Repeat("░", 10-barLen)
 
-	fmt.Printf("\n📦 [%s] PACKET: ID=%s | Time=%.2fs | Moisture=%s %d%%\n", 
+	fmt.Printf("\n📦 [%s] PACKET: ID=%s | Time=%.2fs | Moisture=%s %d%%\n",
 		t.RecordedAt.Format("15:04:05"), t.SensorID, t.WakeTime, bar, t.Moisture)
 }

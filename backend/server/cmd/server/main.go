@@ -1,12 +1,13 @@
 package main
 
 import (
-	"esp32-server/internal/config"
-	"esp32-server/internal/handlers"
-	"esp32-server/internal/storage"
 	"fmt"
 	"log"
 	"net/http"
+
+	"esp32-server/internal/config"
+	"esp32-server/internal/handlers"
+	"esp32-server/internal/storage"
 )
 
 func main() {
@@ -39,7 +40,9 @@ func main() {
 
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", "text/html")
-		fmt.Fprintf(w, "<h1>PlantBee Server Online!</h1><p>System is running.</p>")
+		if _, err := fmt.Fprint(w, "<h1>PlantBee Server Online!</h1><p>System is running.</p>"); err != nil {
+			log.Printf("failed to write root response: %v", err)
+		}
 	})
 
 	log.Printf("Server starting on port %s", cfg.Port)
