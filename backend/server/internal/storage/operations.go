@@ -7,12 +7,13 @@ import (
 // User operations
 func (d *DB) UpsertUser(user *models.User) error {
 	query := `
-		INSERT INTO users (intra_id, email, login, image_url, intend_to_help, first_visit, water_count)
-		VALUES ($1, $2, $3, $4, $5, $6, $7)
+		INSERT INTO users (intra_id, email, login, image_url, intend_to_help, first_visit, water_count, logged_in)
+		VALUES ($1, $2, $3, $4, $5, $6, $7, true)
 		ON CONFLICT (intra_id) DO UPDATE
 		SET email = EXCLUDED.email,
 			login = EXCLUDED.login,
-			image_url = EXCLUDED.image_url
+			image_url = EXCLUDED.image_url,
+			logged_in = true
 		RETURNING id, intend_to_help, first_visit, water_count;
 	`
 	return d.QueryRow(
@@ -41,6 +42,12 @@ func (d *DB) SetUserIntention(userID int, help bool) error {
 
 func (d *DB) IncrementWaterCount(userID int) error {
 	query := `UPDATE users SET water_count = water_count + 1 WHERE id = $1`
+	_, err := d.Exec(query, userID)
+	return err
+}
+
+func (d *DB) SetUserLoggedOut(userID int) error {
+	query := `UPDATE users SET logged_in = false WHERE id = $1`
 	_, err := d.Exec(query, userID)
 	return err
 }
@@ -75,17 +82,17 @@ func (d *DB) CreatePlant(plant *models.Plant) error {
 }
 
 func (d *DB) GetPlantBySensorID(sensorID string) (*models.Plant, error) {
-    query := `SELECT id, name, target_moisture, pot_volume_liters FROM plants WHERE sensor_id = $1`
-    
-    var plant models.Plant
-    err := d.QueryRow(query, sensorID).Scan(
-        &plant.ID, 
-        &plant.Name, 
-        &plant.TargetMoisture, 
-        &plant.PotVolumeLiters,
-    )
-    
-    return &plant, err
+	query := `SELECT id, name, target_moisture, pot_volume_liters FROM plants WHERE sensor_id = $1`
+
+	var plant models.Plant
+	err := d.QueryRow(query, sensorID).Scan(
+		&plant.ID,
+		&plant.Name,
+		&plant.TargetMoisture,
+		&plant.PotVolumeLiters,
+	)
+
+	return &plant, err
 }
 
 func (d *DB) GetPlantByOwnerID(ownerID int) (*models.Plant, error) {
@@ -97,19 +104,19 @@ func (d *DB) GetPlantByOwnerID(ownerID int) (*models.Plant, error) {
 
 // Task Operations
 func (d *DB) CreateTask(task *models.Task) error {
-    query := `
+	query := `
         INSERT INTO tasks (plant_id, type, water_amount, status, scheduled_at)
         VALUES ($1, $2, $3, $4, $5)
         RETURNING id;
     `
-    // We only insert the fields we know when creating a new task (no volenteer_id) it will be set later
-    return d.QueryRow(query,
-        task.PlantID,
-        task.Type,
-        task.WaterAmount,
-        task.Status,
-        task.ScheduledAt,
-    ).Scan(&task.ID)
+	// We only insert the fields we know when creating a new task (no volenteer_id) it will be set later
+	return d.QueryRow(query,
+		task.PlantID,
+		task.Type,
+		task.WaterAmount,
+		task.Status,
+		task.ScheduledAt,
+	).Scan(&task.ID)
 }
 
 func (d *DB) AcceptTask(task *models.Task) error {
@@ -123,4 +130,3 @@ func (d *DB) CancelTask(task *models.Task) error {
 	_, err := d.Exec(query, task.ID, task.VolenteeID)
 	return err
 }
-

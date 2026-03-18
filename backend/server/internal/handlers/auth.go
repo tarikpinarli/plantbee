@@ -100,6 +100,12 @@ func (h *Handler) HandleCallback(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *Handler) HandleLogout(w http.ResponseWriter, r *http.Request) {
+	if userID, ok := r.Context().Value(UserIDKey).(int); ok {
+		if err := h.DB.SetUserLoggedOut(userID); err != nil {
+			fmt.Printf("Error setting user logged out: %v\n", err)
+		}
+	}
+
 	http.SetCookie(w, &http.Cookie{
 		Name:     "auth_token",
 		Value:    "",

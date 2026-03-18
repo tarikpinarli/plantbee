@@ -41,6 +41,7 @@ type Plant struct {
 	SensorID         string    `json:"sensor_id"`
 	CreatedAt        time.Time `json:"created_at"`
 	ImageURL         string    `json:"image_url"`
+	LoggedIn         bool      `json:"logged_in"`
 }
 
 type Task struct {
