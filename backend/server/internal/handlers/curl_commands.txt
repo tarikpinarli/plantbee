@@ -1,0 +1,47 @@
+create plant:
+curl -X POST http://localhost:8080/plants/add \
+  -H "Content-Type: application/json" \
+  -b "auth_token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NzM5MjY5NTYsImxvZ2luIjoidHBpbmFybGkiLCJ1c2VyX2lkIjoxfQ.wDyq3Rt-JP_ox6T2mg5rMYt-tSLhlTfGbUhZ_JQvTKc" \
+  -d '{                
+    "name": "plant_00",             
+    "species": "Basic Plant",       
+    "category": "Tropical",
+    "pot_volume_l": 2.2,            
+    "light_need": "high",           
+    "target_moisture": 45,        
+    "sensor_id": "sensor_00",                                     
+    "image_url": "https://example.com/images/monstera.jpg"
+  }'
+
+  sensor reading:
+  curl -X POST http://localhost:8080/api/reading \
+  -H "Content-Type: application/json" \
+  -d '{
+    "sensor_id": "sensor_00",
+    "moisture": 20,
+    "duration_ms": 1500
+  }'
+
+  accept task:
+curl -X POST http://localhost:8080/api/tasks/accept \
+  -H "Content-Type: application/json" \
+  -b "auth_token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NzM5MjY5NTYsImxvZ2luIjoidHBpbmFybGkiLCJ1c2VyX2lkIjoxfQ.wDyq3Rt-JP_ox6T2mg5rMYt-tSLhlTfGbUhZ_JQvTKc" \
+  -d '{
+    "id": 1
+  }'
+
+  cancel task:
+  curl -X POST http://localhost:8080/tasks/cancel \
+  -H "Content-Type: application/json" \
+  -b "auth_token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NzM5MjY5NTYsImxvZ2luIjoidHBpbmFybGkiLCJ1c2VyX2lkIjoxfQ.wDyq3Rt-JP_ox6T2mg5rMYt-tSLhlTfGbUhZ_JQvTKc" \
+  -d '{
+    "id": 1
+  }'
+
+  set user intention:
+  curl -X POST http://localhost:8080/api/user/welcome \
+  -H "Content-Type: application/json" \
+  -b "auth_token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NzM5MjY5NTYsImxvZ2luIjoidHBpbmFybGkiLCJ1c2VyX2lkIjoxfQ.wDyq3Rt-JP_ox6T2mg5rMYt-tSLhlTfGbUhZ_JQvTKc" \
+  -d '{
+    "intend_to_help": true
+  }'

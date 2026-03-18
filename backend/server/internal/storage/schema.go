@@ -13,6 +13,7 @@ func (d *DB) CreateTables() error {
 		intend_to_help BOOLEAN DEFAULT FALSE,
 		first_visit BOOLEAN DEFAULT TRUE,
 		water_count INT DEFAULT 0,
+		logged_in BOOLEAN DEFAULT FALSE,
 		created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 	);`
 
