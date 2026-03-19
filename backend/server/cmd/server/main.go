@@ -34,7 +34,6 @@ func main() {
 	h := handlers.New(db, cfg)
 
 	http.HandleFunc("/api/reading", h.IngestData)
-	http.HandleFunc("/api/test-proxy", h.HandleTestProxy)
 	http.HandleFunc("/auth/login", h.HandleLogin)
 	http.HandleFunc("/auth/callback", h.HandleCallback)
 	http.HandleFunc("/auth/logout", h.RequireAuth(h.HandleLogout))
