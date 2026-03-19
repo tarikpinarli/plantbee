@@ -3,6 +3,7 @@ import { useQuery } from '@tanstack/react-query';
 import { Sprout } from 'lucide-react';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
+import { Link } from 'react-router-dom';
 import { z } from 'zod';
 
 const waitlistSchema = z.object({
@@ -60,6 +61,14 @@ export function HomePage() {
               query caching, form validation, linting, formatting, and build
               checks ready for the first real feature branch.
             </p>
+            <div className="pt-4">
+              <Link
+                to="/test-proxy"
+                className="inline-flex items-center gap-2 rounded-2xl bg-stone-900 px-6 py-4 text-sm font-semibold text-white transition-opacity hover:opacity-90 shadow-xl shadow-stone-950/20"
+              >
+                Test Proxy Connection →
+              </Link>
+            </div>
           </div>
         </div>
 
