@@ -20,9 +20,9 @@ export default defineConfig({
       interval: 500,
     },
     proxy: {
-      '/api': 'http://app:8080',
-      '/auth': 'http://app:8080',
-      '/plants': 'http://app:8080',
+      '/api': process.env.VITE_API_URL || 'http://localhost:8080',
+      '/auth': process.env.VITE_API_URL || 'http://localhost:8080',
+      '/plants': process.env.VITE_API_URL || 'http://localhost:8080',
     },
   },
 });

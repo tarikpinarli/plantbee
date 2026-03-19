@@ -40,5 +40,20 @@ services:
     depends_on:
       - db
 
+  frontend:
+    container_name: plantbee-frontend
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - "5173:5173"
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    environment:
+      - VITE_API_URL=http://app:8080
+    depends_on:
+      - app
+
 volumes:
   postgres_data:
