@@ -45,7 +45,6 @@ func (h *Handler) HandleCallback(w http.ResponseWriter, r *http.Request) {
 		ID    int    `json:"id"`
 		Login string `json:"login"`
 		Email string `json:"email"`
-		
 		Image struct {
 			Link string `json:"link"`
 		} `json:"image"`
