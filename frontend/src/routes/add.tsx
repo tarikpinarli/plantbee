@@ -1,5 +1,3 @@
-// /plants/add  Add plant page
-
 import { createFileRoute } from '@tanstack/react-router'
 import { useState } from 'react'
 
@@ -20,9 +18,7 @@ export const Route = createFileRoute('/add')({
   component: AddPlantPage,
 })
 
-function AddPlantPage() {
-
-  // ── One state object for all fields ──
+export function addPlantForm() {
   const [form, setForm] = useState<PlantFormData>({
     name: '',
     species: '',
@@ -127,6 +123,18 @@ function AddPlantPage() {
       setStatus('error')
     }
   }
+
+  return {
+    form,
+    errors,
+    status,
+    handleChange,
+    handleSubmit,
+  }
+}
+
+function AddPlantPage() {
+  const { form, errors, status, handleChange, handleSubmit } = addPlantForm()
 
   return (
     <div className="max-w-lg mx-auto px-4 py-10">

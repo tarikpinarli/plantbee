@@ -1,4 +1,4 @@
-# ── Stage 1: Builder stage → compiles the frontend application.───────────────
+# ── Base: Builder stage → compiles the frontend application.───────────────
 # Node.js is a software platform for scalable server-side and networking applications. 
 FROM node:22-alpine AS base
 
@@ -12,12 +12,20 @@ COPY package.json pnpm-lock.yaml ./
 
 RUN pnpm install --frozen-lockfile
 
-# Copy source and build
+
+# ── Dev: runs Vite dev server with hot reload ──────────────────────────────
+FROM base AS dev
+COPY . .
+EXPOSE 5173
+CMD ["pnpm", "dev", "--host"]
+
+# ── Builder: Copy source and build
+FROM base as builder
 COPY . .
 RUN pnpm build          # outputs to /app/dist
 
-# ── Stage 2: Runtime stage → serves the compiled static files using Nginx ─────
-FROM nginx:alpine
+# ── Production: Runtime stage → serves the compiled static files using Nginx ─────
+FROM nginx:alpine as production
 
 # Copy compiled app
 COPY --from=builder /app/dist /usr/share/nginx/html
