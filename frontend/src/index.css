@@ -1,5 +1,5 @@
-@import "tailwindcss";
-@import "tw-animate-css";
+@import 'tailwindcss';
+@import 'tw-animate-css';
 
 @theme inline {
   --color-background: var(--background);
@@ -53,7 +53,7 @@
 }
 
 html {
-  font-family: "IBM Plex Sans", "Segoe UI", sans-serif;
+  font-family: 'IBM Plex Sans', 'Segoe UI', sans-serif;
   background:
     radial-gradient(circle at top, rgba(123, 172, 126, 0.16), transparent 36%),
     linear-gradient(
