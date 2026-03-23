@@ -33,6 +33,7 @@ func (s *PlantService) ProcessReading(raw models.IncomingPayload) error {
 			s.evaluateTaskLifecycle(plant, &reading)
 		} else {
 			fmt.Printf("🔍 Unrecognized Sensor ID: %s (or DB Error)\n", reading.SensorID)
+			return fmt.Errorf("no plant found matching sensor ID: %s", reading.SensorID)
 		}
 	}
 
