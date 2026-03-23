@@ -1,7 +1,7 @@
 create plant:
 curl -X POST http://localhost:8080/plants/add \
   -H "Content-Type: application/json" \
-  -b "auth_token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NzM5MjY5NTYsImxvZ2luIjoidHBpbmFybGkiLCJ1c2VyX2lkIjoxfQ.wDyq3Rt-JP_ox6T2mg5rMYt-tSLhlTfGbUhZ_JQvTKc" \
+  -b "auth_token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NzQzNDkyNDQsImxvZ2luIjoidHBpbmFybGkiLCJ1c2VyX2lkIjoxfQ.NpPbwwVMqt7qBN3cmnE8q52ItYSUM5VfyHXkm2-Fe2I" \
   -d '{                
     "name": "plant_00",             
     "species": "Basic Plant",       
@@ -25,7 +25,7 @@ curl -X POST http://localhost:8080/plants/add \
   accept task:
 curl -X POST http://localhost:8080/api/tasks/accept \
   -H "Content-Type: application/json" \
-  -b "auth_token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NzM5MjY5NTYsImxvZ2luIjoidHBpbmFybGkiLCJ1c2VyX2lkIjoxfQ.wDyq3Rt-JP_ox6T2mg5rMYt-tSLhlTfGbUhZ_JQvTKc" \
+  -b "auth_token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NzQzNDkyNDQsImxvZ2luIjoidHBpbmFybGkiLCJ1c2VyX2lkIjoxfQ.NpPbwwVMqt7qBN3cmnE8q52ItYSUM5VfyHXkm2-Fe2I" \
   -d '{
     "id": 1
   }'

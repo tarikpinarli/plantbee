@@ -28,8 +28,13 @@ func (h *Handler) HandleAcceptTask(w http.ResponseWriter, r *http.Request) {
 
 	task.VolenteeID = userID
 
-	if err := h.TaskService.AcceptTask(&task); err != nil {
+	accepted, err := h.TaskService.AcceptTask(&task)
+	if err != nil {
 		http.Error(w, "Failed to accept task", http.StatusInternalServerError)
+		return
+	}
+	if !accepted {
+		http.Error(w, "Task is not available for acceptance (it may already be in progress or completed)", http.StatusConflict)
 		return
 	}
 
