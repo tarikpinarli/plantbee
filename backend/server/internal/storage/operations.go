@@ -175,14 +175,18 @@ func (d *DB) CreateTask(task *models.Task) error {
 	).Scan(&task.ID)
 }
 
-func (d *DB) AcceptTask(task *models.Task) error {
-	query := `UPDATE tasks SET status = 'in_progress', volentee_id = $1 WHERE id = $2`
-	_, err := d.Exec(query, task.VolenteeID, task.ID)
-	return err
+func (d *DB) AcceptTask(task *models.Task) (bool, error) {
+	query := `UPDATE tasks SET status = 'in_progress', volentee_id = $1 WHERE id = $2 AND status = 'open'`
+	res, err := d.Exec(query, task.VolenteeID, task.ID)
+	if err != nil {
+		return false, err
+	}
+	rows, _ := res.RowsAffected()
+	return rows > 0, nil
 }
 
 func (d *DB) CancelTask(task *models.Task) error {
-	query := `UPDATE tasks SET status = 'open' WHERE id = $1 AND volentee_id = $2`
+	query := `UPDATE tasks SET status = 'open', volentee_id = NULL, completed_at = NULL WHERE id = $1 AND volentee_id = $2`
 	_, err := d.Exec(query, task.ID, task.VolenteeID)
 	return err
 }
