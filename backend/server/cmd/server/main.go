@@ -39,6 +39,7 @@ func main() {
 	http.HandleFunc("/auth/logout", h.RequireAuth(h.HandleLogout))
 	http.HandleFunc("/plants/add", h.RequireAuth(h.HandleAddPlant))
 	http.HandleFunc("/api/user/welcome", h.RequireAuth(h.HandleWelcome))
+	http.HandleFunc("/api/tasks", h.RequireAuth(h.HandleGetTasks))
 	http.HandleFunc("/api/tasks/accept", h.RequireAuth(h.HandleAcceptTask))
 	http.HandleFunc("/api/tasks/cancel", h.RequireAuth(h.HandleCancelTask))
 	// Serve the frontend static files

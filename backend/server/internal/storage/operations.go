@@ -120,7 +120,7 @@ func (d *DB) CreateTask(task *models.Task) error {
 }
 
 func (d *DB) AcceptTask(task *models.Task) error {
-	query := `UPDATE tasks SET status = 'accepted', volentee_id = $1 WHERE id = $2`
+	query := `UPDATE tasks SET status = 'in_progress', volentee_id = $1 WHERE id = $2`
 	_, err := d.Exec(query, task.VolenteeID, task.ID)
 	return err
 }
@@ -129,4 +129,114 @@ func (d *DB) CancelTask(task *models.Task) error {
 	query := `UPDATE tasks SET status = 'open' WHERE id = $1 AND volentee_id = $2`
 	_, err := d.Exec(query, task.ID, task.VolenteeID)
 	return err
+}
+
+// GetTasksForPlantByStatus fetches tasks matching a specific status for a plant.
+func (d *DB) GetTasksForPlantByStatus(plantID int, taskType, status string) ([]models.Task, error) {
+	query := `SELECT id, plant_id, type, water_amount, status, COALESCE(volentee_id, 0)
+		FROM tasks WHERE plant_id = $1 AND type = $2 AND status = $3`
+	rows, err := d.Query(query, plantID, taskType, status)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	var tasks []models.Task
+	for rows.Next() {
+		var t models.Task
+		if err := rows.Scan(&t.ID, &t.PlantID, &t.Type, &t.WaterAmount, &t.Status, &t.VolenteeID); err != nil {
+			return nil, err
+		}
+		tasks = append(tasks, t)
+	}
+	return tasks, nil
+}
+
+// CompleteTaskWithCredit atomically marks a task as completed and increments the volunteer's water_count.
+func (d *DB) CompleteTaskWithCredit(taskID, volunteerID int) error {
+	tx, err := d.Begin()
+	if err != nil {
+		return err
+	}
+	defer tx.Rollback()
+
+	if _, err := tx.Exec(`UPDATE tasks SET status = 'completed', completed_at = CURRENT_TIMESTAMP WHERE id = $1`, taskID); err != nil {
+		return err
+	}
+	if _, err := tx.Exec(`UPDATE users SET water_count = water_count + 1 WHERE id = $1`, volunteerID); err != nil {
+		return err
+	}
+	return tx.Commit()
+}
+
+// ReopenTask reverts an in_progress task back to open, clears the volunteer, and updates water_amount.
+func (d *DB) ReopenTask(taskID, newWaterAmount int) error {
+	query := `UPDATE tasks SET status = 'open', volentee_id = NULL, water_amount = $1 WHERE id = $2`
+	_, err := d.Exec(query, newWaterAmount, taskID)
+	return err
+}
+
+// AutoCloseOpenTasks completes only open tasks (no volunteer to credit).
+func (d *DB) AutoCloseOpenTasks(plantID int, taskType string) error {
+	query := `UPDATE tasks SET status = 'completed', completed_at = CURRENT_TIMESTAMP WHERE plant_id = $1 AND type = $2 AND status = 'open'`
+	_, err := d.Exec(query, plantID, taskType)
+	return err
+}
+
+// UpdateOpenTaskWaterAmount recalculates the water_amount for open tasks based on new reading.
+func (d *DB) UpdateOpenTaskWaterAmount(plantID int, taskType string, waterAmount int) error {
+	query := `UPDATE tasks SET water_amount = $1 WHERE plant_id = $2 AND type = $3 AND status = 'open'`
+	_, err := d.Exec(query, waterAmount, plantID, taskType)
+	return err
+}
+
+func (d *DB) GetTasks(statusFilter string) ([]models.TaskDTO, error) {
+	query := `
+		SELECT
+			t.id as task_id,
+			p.id as plant_id,
+			t.type,
+			p.name as plant_name,
+			COALESCE(p.image_url, '') as image_url,
+			t.status,
+			p.current_moisture,
+			p.target_moisture,
+			t.water_amount as water_needed_ml
+		FROM tasks t
+		JOIN plants p ON t.plant_id = p.id
+	`
+
+	var args []interface{}
+	if statusFilter != "" {
+		query += " WHERE t.status = $1"
+		args = append(args, statusFilter)
+	}
+
+	query += " ORDER BY t.scheduled_at DESC"
+
+	rows, err := d.Query(query, args...)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	var tasks []models.TaskDTO
+	for rows.Next() {
+		var dto models.TaskDTO
+		if err := rows.Scan(
+			&dto.TaskID,
+			&dto.PlantID,
+			&dto.Type,
+			&dto.PlantName,
+			&dto.ImageURL,
+			&dto.Status,
+			&dto.CurrentMoisture,
+			&dto.TargetMoisture,
+			&dto.WaterNeededML,
+		); err != nil {
+			return nil, err
+		}
+		tasks = append(tasks, dto)
+	}
+	return tasks, nil
 }
