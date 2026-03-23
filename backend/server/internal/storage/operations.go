@@ -52,6 +52,30 @@ func (d *DB) SetUserLoggedOut(userID int) error {
 	return err
 }
 
+// GetRandomAvailableUser retrieves a random user who intends to help
+func (d *DB) GetRandomAvailableUser() (*models.User, error) {
+	query := `
+		SELECT id, intra_id, email, login, image_url, intend_to_help, first_visit, water_count, created_at
+		FROM users
+		WHERE intend_to_help = true
+		ORDER BY RANDOM()
+		LIMIT 1
+	`
+	var user models.User
+	err := d.QueryRow(query).Scan(
+		&user.ID,
+		&user.IntraID,
+		&user.Email,
+		&user.Login,
+		&user.ImageURL,
+		&user.IntendToHelp,
+		&user.FirstVisit,
+		&user.WaterCount,
+		&user.CreatedAt,
+	)
+	return &user, err
+}
+
 // Sensor Operations
 func (d *DB) SaveSensorReadings(reading *models.SensorReading) error {
 	query := `
@@ -104,19 +128,39 @@ func (d *DB) GetPlantByOwnerID(ownerID int) (*models.Plant, error) {
 
 // Task Operations
 func (d *DB) CreateTask(task *models.Task) error {
-	query := `
-        INSERT INTO tasks (plant_id, type, water_amount, status, scheduled_at)
-        VALUES ($1, $2, $3, $4, $5)
-        RETURNING id;
-    `
-	// We only insert the fields we know when creating a new task (no volenteer_id) it will be set later
-	return d.QueryRow(query,
-		task.PlantID,
-		task.Type,
-		task.WaterAmount,
-		task.Status,
-		task.ScheduledAt,
-	).Scan(&task.ID)
+	var query string
+	var err error
+
+	// If a volunteer is assigned, include it in the creation
+	if task.VolenteeID > 0 {
+		query = `
+            INSERT INTO tasks (plant_id, type, water_amount, status, scheduled_at, volentee_id)
+            VALUES ($1, $2, $3, $4, $5, $6)
+            RETURNING id;
+        `
+		err = d.QueryRow(query,
+			task.PlantID,
+			task.Type,
+			task.WaterAmount,
+			task.Status,
+			task.ScheduledAt,
+			task.VolenteeID,
+		).Scan(&task.ID)
+	} else {
+		query = `
+            INSERT INTO tasks (plant_id, type, water_amount, status, scheduled_at)
+            VALUES ($1, $2, $3, $4, $5)
+            RETURNING id;
+        `
+		err = d.QueryRow(query,
+			task.PlantID,
+			task.Type,
+			task.WaterAmount,
+			task.Status,
+			task.ScheduledAt,
+		).Scan(&task.ID)
+	}
+	return err
 }
 
 func (d *DB) AcceptTask(task *models.Task) error {

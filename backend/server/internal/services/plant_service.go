@@ -71,13 +71,29 @@ func (s *PlantService) printLog(t models.SensorReading) {
 func (s *PlantService) triggerLowMoistureProcess(plant *models.Plant, reading *models.SensorReading) {
 	// calculate water need from plant.pot_volume_liters and plant.target_moisture. Convert to ml
 	waterNeed := int(plant.PotVolumeLiters * float64(plant.TargetMoisture-reading.Moisture) / 100.0 * 1000)
+	
+	// Try to assign a random available user to the task
+	var assignedUserID int
+	if s.db != nil {
+		availableUser, err := s.db.GetRandomAvailableUser()
+		if err != nil {
+			fmt.Printf("⚠️ Warning: Could not find available user to assign task: %v\n", err)
+			// Continue without user assignment if no available user
+		} else {
+			assignedUserID = availableUser.ID
+			fmt.Printf("✅ Task assigned to user: %s (ID: %d)\n", availableUser.Login, assignedUserID)
+		}
+	}
+	
 	task := models.Task{
 		PlantID:     plant.ID,
 		Type:        "water",
 		WaterAmount: waterNeed,
 		Status:      "open",
 		ScheduledAt: time.Now(),
+		VolenteeID:  assignedUserID,
 	}
+	
 	if err := s.db.CreateTask(&task); err != nil {
 		fmt.Printf("Failed to create task: %v\n", err)
 	}
