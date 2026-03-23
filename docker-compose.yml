@@ -27,7 +27,7 @@ services:
       POSTGRES_PASSWORD: ${DB_PASSWORD:-postgres}
       POSTGRES_DB: ${DB_NAME:-plantbee}
     ports:
-      - "5432:5432"
+      - "5433:5432"  #change temporary for trang
     volumes:
       - postgres_data:/var/lib/postgresql/data
     healthcheck:
