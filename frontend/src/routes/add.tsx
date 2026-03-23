@@ -19,6 +19,7 @@ export const Route = createFileRoute('/add')({
 })
 
 export function addPlantForm() {
+  // form : create state of form, setform update the form state
   const [form, setForm] = useState<PlantFormData>({
     name: '',
     species: '',
@@ -30,7 +31,7 @@ export function addPlantForm() {
     image_url: '',
   })
 
-  // ── Tracks errors per field ──
+  // ── Tracks errors per field ── record<> create an object type with these keys, each holding a string, partial <> make all keys optiional
   const [errors, setErrors] = useState<Partial<Record<keyof PlantFormData, string>>>({})
 
   // ── Tracks what's happening with the API call ──
@@ -54,14 +55,14 @@ export function addPlantForm() {
     if (!form.pot_volume_l || form.pot_volume_l <= 0)
       newErrors.pot_volume_l = 'Enter a valid pot volume'
 
-    if (!form.light_need)
-      newErrors.light_need = 'Select a light level'
+    if (!form.light_need || (form.light_need != 'low' && form.light_need != 'medium' && form.light_need != 'high'))
+      newErrors.light_need = 'Select a correct light level'
 
     if (!form.sensor_id.trim())
       newErrors.sensor_id = 'Sensor ID is required'
 
-    if (!form.image_url.trim())
-      newErrors.image_url = 'Image URL is required'
+    // if (!form.image_url.trim())
+    //   newErrors.image_url = 'Image URL is required'
 
     setErrors(newErrors)
 

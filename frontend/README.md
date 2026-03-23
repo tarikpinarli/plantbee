@@ -15,7 +15,73 @@ gives us autocompletes / detects errors
 ```pnpm dev```
 
 
-## run docker for frontend
+<!-- ## run docker for frontend
 ```docker build --no-cache -t transcendent-frontend .```
 
-```docker run -d -p 3000:80 --name frontend-test transcendent-frontend```
+```docker run -d -p 3000:80 --name frontend-test transcendent-frontend``` -->
+
+# Plant form flow diagram 
+ ┌─────────────────────────────┐
+ │        User Input           │
+ │ (typing in input fields)    │
+ └─────────────┬───────────────┘
+               │
+               ▼
+ ┌─────────────────────────────┐
+ │       handleChange()        │
+ │ - Updates `form[field]`     │
+ │ - Clears `errors[field]`    │
+ └─────────────┬───────────────┘
+               │
+               ▼
+ ┌─────────────────────────────┐
+ │        form State           │
+ │ {                          │
+ │   name: "",                 │
+ │   species: "",              │
+ │   pot_volume_l: 0,          │
+ │   ...                       │
+ │ }                           │
+ └─────────────┬───────────────┘
+               │
+               ▼
+ ┌─────────────────────────────┐
+ │        handleSubmit()       │
+ │ - Prevents default reload   │
+ │ - Calls validate()          │
+ └─────────────┬───────────────┘
+               │
+       ┌───────┴────────┐
+       ▼                ▼
+ ┌──────────────┐  ┌───────────────┐
+ │ validate()   │  │ buildPayload()│
+ │ - Checks for │  │ - Converts    │
+ │   missing    │  │   form fields │
+ │   required   │  │   to JSON     │
+ │   fields     │  │ - Ensures     │
+ │ - Updates    │  │   correct     │
+ │   errors     │  │   types       │
+ └─────┬────────┘  └───────┬───────┘
+       │                   │
+       ▼                   ▼
+  ┌───────────┐     ┌────────────────┐
+  │ errors[]  │     │ payload JSON   │
+  │ for fields│     │ to send to API │
+  └────┬──────┘     └───────────────┘
+       │                   │
+       ▼                   ▼
+  ┌─────────────────────────────┐
+  │    API Call (fetch POST)    │
+  │ - Sets status='loading'     │
+  │ - Sends payload JSON        │
+  │ - On success → status='success' │
+  │ - On failure → status='error'   │
+  └───────────────┬─────────────┘
+                  │
+                  ▼
+      ┌─────────────────────────┐
+      │ UI Feedback / Rendering │
+      │ - Show success message  │
+      │ - Show error messages   │
+      │ - Reset form if success │
+      └─────────────────────────┘
