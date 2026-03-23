@@ -3,9 +3,8 @@ package handlers
 import (
 	"encoding/json"
 	"fmt"
-	"io" // trang
 	"net/http"
-	"os" // trang
+	"strings"
 
 	"plantbee-backend/internal/models"
 )
@@ -133,6 +132,13 @@ func (h *Handler) HandleAddPlant(w http.ResponseWriter, r *http.Request) {
 
 	if err := h.DB.CreatePlant(plant); err != nil {
 		fmt.Printf("❌ Failed to create plant: %v\n", err)
+		
+		// If Postgres complains about a duplicate key, we intercept it here
+		if strings.Contains(err.Error(), "unique constraint") || strings.Contains(err.Error(), "duplicate key value") {
+			jsonError(w, "A plant is already assigned to this sensor ID", http.StatusConflict)
+			return
+		}
+
 		jsonError(w, "Failed to save plant", http.StatusInternalServerError)
 		return
 	}
@@ -143,66 +149,5 @@ func (h *Handler) HandleAddPlant(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusCreated)
 	if err := json.NewEncoder(w).Encode(plant); err != nil {
 		fmt.Printf("error encoding plant response: %v\n", err)
-	}
-}
-
-// jsonError writes a JSON error response with the given message and status code.
-func jsonError(w http.ResponseWriter, message string, status int) {
-	w.Header().Set("Content-Type", "application/json")
-	w.WriteHeader(status)
-	if err := json.NewEncoder(w).Encode(map[string]string{"error": message}); err != nil {
-		fmt.Printf("error encoding json error response: %v\n", err)
-	}
-}
-
-// trang test image upload
-func (h *Handler) HandleUploadImage(w http.ResponseWriter, r *http.Request) {
-	if r.Method != http.MethodPost {
-		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
-		return
-	}
-
-	if err := r.ParseMultipartForm(10 << 20); err != nil {
-		http.Error(w, "File too large", http.StatusBadRequest)
-		return
-	}
-
-	file, handler, err := r.FormFile("file")
-	if err != nil {
-		http.Error(w, "Invalid file", http.StatusBadRequest)
-		return
-	}
-	defer func() {
-		if err := file.Close(); err != nil {
-			fmt.Printf("error closing file: %v\n", err)
-		}
-	}()
-
-	// Create uploads folder if not exists
-	if err := os.MkdirAll("./uploads", os.ModePerm); err != nil {
-		http.Error(w, "Failed to create folder", http.StatusInternalServerError)
-		return
-	}
-
-	dst, err := os.Create("./uploads/" + handler.Filename)
-	if err != nil {
-		http.Error(w, "Failed to save file", http.StatusInternalServerError)
-		return
-	}
-	defer func() {
-		if err := dst.Close(); err != nil {
-			fmt.Printf("error closing dst file: %v\n", err)
-		}
-	}()
-
-	if _, err := io.Copy(dst, file); err != nil {
-		http.Error(w, "Failed to write file", http.StatusInternalServerError)
-		return
-	}
-
-	url := "/uploads/" + handler.Filename
-	w.Header().Set("Content-Type", "application/json")
-	if err := json.NewEncoder(w).Encode(map[string]string{"url": url}); err != nil {
-		fmt.Printf("error encoding json response: %v\n", err)
 	}
 }

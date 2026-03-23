@@ -24,3 +24,7 @@ func (s *TaskService) AcceptTask(task *models.Task) error {
 func (s *TaskService) CancelTask(task *models.Task) error {
 	return s.db.CancelTask(task)
 }
+
+func (s *TaskService) GetTasks(statusFilter string) ([]models.TaskDTO, error) {
+	return s.db.GetTasks(statusFilter)
+}

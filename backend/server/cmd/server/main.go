@@ -42,6 +42,7 @@ func main() {
 	http.HandleFunc("/api/upload", h.HandleUploadImage) // trang test for image upload
 	http.HandleFunc("/api/plants", h.HandleListPlants)
 	http.HandleFunc("/api/user/welcome", h.RequireAuth(h.HandleWelcome))
+	http.HandleFunc("/api/tasks", h.RequireAuth(h.HandleGetTasks))
 	http.HandleFunc("/api/tasks/accept", h.RequireAuth(h.HandleAcceptTask))
 	http.HandleFunc("/api/tasks/cancel", h.RequireAuth(h.HandleCancelTask))
 

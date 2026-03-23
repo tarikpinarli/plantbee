@@ -66,3 +66,15 @@ type Task struct {
 	ScheduledAt time.Time `json:"scheduled_at"` // when the task was created
 	CompletedAt time.Time `json:"completed_at"` // when the task was completed
 }
+
+type TaskDTO struct {
+	TaskID          int    `json:"task_id"`
+	PlantID         int    `json:"plant_id"`
+	Type            string `json:"type"`
+	PlantName       string `json:"plant_name"`
+	ImageURL        string `json:"image_url"`
+	Status          string `json:"status"`
+	CurrentMoisture int    `json:"current_moisture"`
+	TargetMoisture  int    `json:"target_moisture"`
+	WaterNeededML   int    `json:"water_needed_ml"`
+}
