@@ -90,18 +90,18 @@ docker-compose down
 - The backend uses `air` for hot reload inside the container
 - The frontend uses the Vite dev server with the source directory mounted into the container
 - File changes in `backend/server` restart the Go server automatically
-- File changes in `frontend` are reflected immediately by Vite
+- File changes in `client` are reflected immediately by Vite
 
 Development URLs:
 
-- Frontend: http://localhost:3000
+- Client: http://localhost:5173
 - Backend: http://localhost:8080
 - Adminer: http://localhost:8081
 
 For production-style image validation, CI builds:
 
 - the backend final Docker image
-- the frontend `production` Docker target, which serves the built app through Nginx
+- the client `production` Docker target, which serves the built app through Nginx
 
 ---
 
@@ -109,7 +109,7 @@ For production-style image validation, CI builds:
 
 | Container | URL | Description |
 |-----------|-----|-------------|
-| `plantbee-frontend` | http://localhost:3000 | Vite frontend dev server |
+| `plantbee-client` | http://localhost:5173 | Vite client dev server |
 | `plantbee-app` | http://localhost:8080 | Go REST API |
 | `plantbee-db` | `localhost:5432` | PostgreSQL 15 (internal only) |
 | `plantbee-adminer` | http://localhost:8081 | Database browser UI |
@@ -282,10 +282,10 @@ task ci              # runs lint, test, and build
 plantbee_repo/
 ├── docker-compose.yml          # Orchestrates all services
 ├── Taskfile.yml                # Common lint/test/build commands
-├── frontend/
+├── client/
 │   ├── package.json            # Node dependencies and scripts
 │   ├── vite.config.ts          # Vite bundler and proxy config
-│   ├── index.html              # Frontend entry point
+│   ├── index.html              # Client entry point
 │   └── src/                    # React source code (pages, routing, components)
 └── backend/
     └── server/

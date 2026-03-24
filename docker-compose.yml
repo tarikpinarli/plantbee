@@ -40,8 +40,8 @@ services:
     depends_on:
       - db
 
-  frontend:
-    container_name: plantbee-frontend
+  client:
+    container_name: plantbee-client
     build:
       context: ./client
       dockerfile: Dockerfile
