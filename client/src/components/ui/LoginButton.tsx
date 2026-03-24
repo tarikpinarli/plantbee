@@ -1,4 +1,4 @@
-import { API_BASE } from "@/lib/utils";
+import { API_BASE } from "@/utils/helper";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 

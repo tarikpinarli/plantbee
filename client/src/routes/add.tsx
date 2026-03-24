@@ -274,7 +274,7 @@ function AddPlantPage() {
         {/* Image URL — Required */}
         <div className="flex flex-col gap-1">
           <label className="text-sm font-semibold text-gray-700">
-            Image URL <span className="text-red-500">*</span>
+            Image URL
           </label>
           <input
             className="border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-green-400"
