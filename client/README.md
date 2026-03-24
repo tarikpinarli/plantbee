@@ -1,24 +1,29 @@
-# PlantBee 🌱🐝
+# PlantBee Client 🌱🐝
 
-# React + TypeScript + Vite
+This is the React + TypeScript + Vite frontend client for the PlantBee application.
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## Used Libraries
+- **Tanstack Router:** Type-safe router with autocompletes and error detection.
+- **Tanstack Query:** Powerful data synchronization and state management.
+- **Zod:** TypeScript-first schema validation.
+- **Shadcn/ui:** Accessible, lightweight UI components.
 
-# Used libraries
-- Tanstack router: Type safe router, maybe we might have a learning curve and more initial setup than React router.
-gives us autocompletes / detects errors
-- Tanstack query: used to be called React query.
-- Zod: TS schema validation library
-- Shadcn/ui: Open code for accessible lightweight UI. We can install only exactly what we want, instead of getting a whole library.
+## How to Run
 
-## How to run
-```pnpm dev```
+### Using Docker (Recommended)
+This client is designed to run seamlessly with the Go backend inside Docker.
+From the **root of the project** (not this folder), run:
+```bash
+docker-compose up --build
+```
+Vite will automatically launch on `http://localhost:5173` with hot-reloading enabled, and proxy all API requests natively to the Go backend.
 
-
-<!-- ## run docker for frontend
-```docker build --no-cache -t transcendent-frontend .```
-
-```docker run -d -p 3000:80 --name frontend-test transcendent-frontend``` -->
+### Running Locally (Without Docker)
+If you want to run just the UI without Docker:
+```bash
+pnpm install
+pnpm dev
+```
 
 # Plant form flow diagram 
  ┌─────────────────────────────┐

@@ -25,7 +25,19 @@ export default defineConfig({
     host: true,
     proxy: {
       "/api": {
-        target: "http://app:8080",
+        target: process.env.VITE_API_URL || "http://localhost:8080",
+        changeOrigin: true,
+      },
+      "/auth": {
+        target: process.env.VITE_API_URL || "http://localhost:8080",
+        changeOrigin: true,
+      },
+      "/plants": {
+        target: process.env.VITE_API_URL || "http://localhost:8080",
+        changeOrigin: true,
+      },
+      "/tasks": {
+        target: process.env.VITE_API_URL || "http://localhost:8080",
         changeOrigin: true,
       },
     },

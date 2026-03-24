@@ -2,18 +2,13 @@ services:
   app:
     container_name: plantbee-app
     build:
-      context: ./backend/server
-      dockerfile: Dockerfile
-      target: dev
+      context: .
+      dockerfile: backend/server/Dockerfile
     ports:
       - "8080:8080"
     env_file:
       - path: ./backend/server/.env
         required: false
-    volumes:
-      - ./backend/server:/app
-      - backend_go_pkg:/go/pkg/mod
-      - backend_go_build:/root/.cache/go-build
     restart: on-failure
     depends_on:
       db:
@@ -27,7 +22,7 @@ services:
       POSTGRES_PASSWORD: ${DB_PASSWORD:-postgres}
       POSTGRES_DB: ${DB_NAME:-plantbee}
     ports:
-      - "5433:5432"  #change temporary for trang
+      - "5432:5432"  #change temporary for trang
     volumes:
       - postgres_data:/var/lib/postgresql/data
     healthcheck:
@@ -50,12 +45,13 @@ services:
     build:
       context: ./client
       dockerfile: Dockerfile
-      target: dev
     ports:
       - "5173:5173"
     volumes:
       - ./client:/app
-      - client_node_modules:/app/node_modules
+      - /app/node_modules
+    environment:
+      - VITE_API_URL=http://app:8080
     depends_on:
       - app
 
