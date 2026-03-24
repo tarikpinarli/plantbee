@@ -1,10 +1,11 @@
 # --- Stage 1: Build the React Frontend ---
 FROM node:20-alpine AS frontend-builder
 WORKDIR /app
-COPY frontend/package*.json ./
-RUN npm ci
-COPY frontend ./
-RUN npm run build
+RUN npm install -g pnpm
+COPY client/package.json client/pnpm-lock.yaml ./
+RUN pnpm install --frozen-lockfile
+COPY client ./
+RUN pnpm build
 
 # --- Stage 2: Build the Go Backend ---
 FROM golang:alpine AS base
@@ -44,7 +45,7 @@ WORKDIR /root/
 # Copy Go binary
 COPY --from=builder /app/server .
 # Copy built React frontend
-COPY --from=frontend-builder /app/dist /frontend/dist
+COPY --from=frontend-builder /app/dist /client/dist
 
 EXPOSE 8080
 

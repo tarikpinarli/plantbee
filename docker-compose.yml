@@ -43,12 +43,12 @@ services:
   frontend:
     container_name: plantbee-frontend
     build:
-      context: ./frontend
+      context: ./client
       dockerfile: Dockerfile
     ports:
       - "5173:5173"
     volumes:
-      - ./frontend:/app
+      - ./client:/app
       - /app/node_modules
     environment:
       - VITE_API_URL=http://app:8080

@@ -42,7 +42,7 @@ func main() {
 	http.HandleFunc("/api/tasks/accept", h.RequireAuth(h.HandleAcceptTask))
 	http.HandleFunc("/api/tasks/cancel", h.RequireAuth(h.HandleCancelTask))
 	// Serve the frontend static files
-	fs := http.FileServer(http.Dir("/frontend/dist"))
+	fs := http.FileServer(http.Dir("/client/dist"))
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		// If it's an API route that wasn't caught above, return 404
 		if len(r.URL.Path) >= 5 && r.URL.Path[:5] == "/api/" {
@@ -51,9 +51,9 @@ func main() {
 		}
 
 		// Check if the requested file exists
-		if _, err := os.Stat("/frontend/dist" + r.URL.Path); os.IsNotExist(err) {
+		if _, err := os.Stat("/client/dist" + r.URL.Path); os.IsNotExist(err) {
 			// If file not found, serve index.html for React Router
-			http.ServeFile(w, r, "/frontend/dist/index.html")
+			http.ServeFile(w, r, "/client/dist/index.html")
 			return
 		}
 
