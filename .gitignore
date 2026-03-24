@@ -1,6 +1,5 @@
 .bin/
 .cache/
-client/node_modules/
-client/dist/
-client/*.tsbuildinfo
-client/node_modules/
+frontend/node_modules/
+frontend/dist/
+frontend/*.tsbuildinfo

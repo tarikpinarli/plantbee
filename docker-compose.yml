@@ -22,7 +22,7 @@ services:
       POSTGRES_PASSWORD: ${DB_PASSWORD:-postgres}
       POSTGRES_DB: ${DB_NAME:-plantbee}
     ports:
-      - "5432:5432"  #change temporary for trang
+      - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
     healthcheck:
@@ -43,12 +43,12 @@ services:
   frontend:
     container_name: plantbee-frontend
     build:
-      context: ./client
+      context: ./frontend
       dockerfile: Dockerfile
     ports:
       - "5173:5173"
     volumes:
-      - ./client:/app
+      - ./frontend:/app
       - /app/node_modules
     environment:
       - VITE_API_URL=http://app:8080
@@ -57,6 +57,3 @@ services:
 
 volumes:
   postgres_data:
-  backend_go_pkg:
-  backend_go_build:
-  client_node_modules:
