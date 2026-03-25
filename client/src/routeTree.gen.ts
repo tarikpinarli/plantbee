@@ -12,7 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as TasksRouteImport } from './routes/tasks'
 import { Route as PlantsRouteImport } from './routes/plants'
 import { Route as LoginRouteImport } from './routes/login'
-import { Route as AddRouteImport } from './routes/add'
+import { Route as AddPlantPageRouteImport } from './routes/addPlantPage'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
 
@@ -31,9 +31,9 @@ const LoginRoute = LoginRouteImport.update({
   path: '/login',
   getParentRoute: () => rootRouteImport,
 } as any)
-const AddRoute = AddRouteImport.update({
-  id: '/add',
-  path: '/add',
+const AddPlantPageRoute = AddPlantPageRouteImport.update({
+  id: '/addPlantPage',
+  path: '/addPlantPage',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AboutRoute = AboutRouteImport.update({
@@ -50,7 +50,7 @@ const IndexRoute = IndexRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
-  '/add': typeof AddRoute
+  '/addPlantPage': typeof AddPlantPageRoute
   '/login': typeof LoginRoute
   '/plants': typeof PlantsRoute
   '/tasks': typeof TasksRoute
@@ -58,7 +58,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
-  '/add': typeof AddRoute
+  '/addPlantPage': typeof AddPlantPageRoute
   '/login': typeof LoginRoute
   '/plants': typeof PlantsRoute
   '/tasks': typeof TasksRoute
@@ -67,23 +67,30 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
-  '/add': typeof AddRoute
+  '/addPlantPage': typeof AddPlantPageRoute
   '/login': typeof LoginRoute
   '/plants': typeof PlantsRoute
   '/tasks': typeof TasksRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/about' | '/add' | '/login' | '/plants' | '/tasks'
+  fullPaths: '/' | '/about' | '/addPlantPage' | '/login' | '/plants' | '/tasks'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/about' | '/add' | '/login' | '/plants' | '/tasks'
-  id: '__root__' | '/' | '/about' | '/add' | '/login' | '/plants' | '/tasks'
+  to: '/' | '/about' | '/addPlantPage' | '/login' | '/plants' | '/tasks'
+  id:
+    | '__root__'
+    | '/'
+    | '/about'
+    | '/addPlantPage'
+    | '/login'
+    | '/plants'
+    | '/tasks'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AboutRoute: typeof AboutRoute
-  AddRoute: typeof AddRoute
+  AddPlantPageRoute: typeof AddPlantPageRoute
   LoginRoute: typeof LoginRoute
   PlantsRoute: typeof PlantsRoute
   TasksRoute: typeof TasksRoute
@@ -112,11 +119,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LoginRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/add': {
-      id: '/add'
-      path: '/add'
-      fullPath: '/add'
-      preLoaderRoute: typeof AddRouteImport
+    '/addPlantPage': {
+      id: '/addPlantPage'
+      path: '/addPlantPage'
+      fullPath: '/addPlantPage'
+      preLoaderRoute: typeof AddPlantPageRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/about': {
@@ -139,7 +146,7 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AboutRoute: AboutRoute,
-  AddRoute: AddRoute,
+  AddPlantPageRoute: AddPlantPageRoute,
   LoginRoute: LoginRoute,
   PlantsRoute: PlantsRoute,
   TasksRoute: TasksRoute,

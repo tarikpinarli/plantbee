@@ -1,0 +1,6 @@
+client/node_modules
+client/dist
+dist
+.git
+Dockerfile
+docker-compose.yml
