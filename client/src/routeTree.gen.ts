@@ -10,21 +10,15 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as TasksRouteImport } from './routes/tasks'
-import { Route as RegisterRouteImport } from './routes/register'
 import { Route as PlantsRouteImport } from './routes/plants'
 import { Route as LoginRouteImport } from './routes/login'
-import { Route as AddRouteImport } from './routes/add'
+import { Route as AddPlantPageRouteImport } from './routes/addPlantPage'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
 
 const TasksRoute = TasksRouteImport.update({
   id: '/tasks',
   path: '/tasks',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const RegisterRoute = RegisterRouteImport.update({
-  id: '/register',
-  path: '/register',
   getParentRoute: () => rootRouteImport,
 } as any)
 const PlantsRoute = PlantsRouteImport.update({
@@ -37,9 +31,9 @@ const LoginRoute = LoginRouteImport.update({
   path: '/login',
   getParentRoute: () => rootRouteImport,
 } as any)
-const AddRoute = AddRouteImport.update({
-  id: '/add',
-  path: '/add',
+const AddPlantPageRoute = AddPlantPageRouteImport.update({
+  id: '/addPlantPage',
+  path: '/addPlantPage',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AboutRoute = AboutRouteImport.update({
@@ -56,61 +50,49 @@ const IndexRoute = IndexRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
-  '/add': typeof AddRoute
+  '/addPlantPage': typeof AddPlantPageRoute
   '/login': typeof LoginRoute
   '/plants': typeof PlantsRoute
-  '/register': typeof RegisterRoute
   '/tasks': typeof TasksRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
-  '/add': typeof AddRoute
+  '/addPlantPage': typeof AddPlantPageRoute
   '/login': typeof LoginRoute
   '/plants': typeof PlantsRoute
-  '/register': typeof RegisterRoute
   '/tasks': typeof TasksRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
-  '/add': typeof AddRoute
+  '/addPlantPage': typeof AddPlantPageRoute
   '/login': typeof LoginRoute
   '/plants': typeof PlantsRoute
-  '/register': typeof RegisterRoute
   '/tasks': typeof TasksRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths:
-    | '/'
-    | '/about'
-    | '/add'
-    | '/login'
-    | '/plants'
-    | '/register'
-    | '/tasks'
+  fullPaths: '/' | '/about' | '/addPlantPage' | '/login' | '/plants' | '/tasks'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/about' | '/add' | '/login' | '/plants' | '/register' | '/tasks'
+  to: '/' | '/about' | '/addPlantPage' | '/login' | '/plants' | '/tasks'
   id:
     | '__root__'
     | '/'
     | '/about'
-    | '/add'
+    | '/addPlantPage'
     | '/login'
     | '/plants'
-    | '/register'
     | '/tasks'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AboutRoute: typeof AboutRoute
-  AddRoute: typeof AddRoute
+  AddPlantPageRoute: typeof AddPlantPageRoute
   LoginRoute: typeof LoginRoute
   PlantsRoute: typeof PlantsRoute
-  RegisterRoute: typeof RegisterRoute
   TasksRoute: typeof TasksRoute
 }
 
@@ -121,13 +103,6 @@ declare module '@tanstack/react-router' {
       path: '/tasks'
       fullPath: '/tasks'
       preLoaderRoute: typeof TasksRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/register': {
-      id: '/register'
-      path: '/register'
-      fullPath: '/register'
-      preLoaderRoute: typeof RegisterRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/plants': {
@@ -144,11 +119,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LoginRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/add': {
-      id: '/add'
-      path: '/add'
-      fullPath: '/add'
-      preLoaderRoute: typeof AddRouteImport
+    '/addPlantPage': {
+      id: '/addPlantPage'
+      path: '/addPlantPage'
+      fullPath: '/addPlantPage'
+      preLoaderRoute: typeof AddPlantPageRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/about': {
@@ -171,10 +146,9 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AboutRoute: AboutRoute,
-  AddRoute: AddRoute,
+  AddPlantPageRoute: AddPlantPageRoute,
   LoginRoute: LoginRoute,
   PlantsRoute: PlantsRoute,
-  RegisterRoute: RegisterRoute,
   TasksRoute: TasksRoute,
 }
 export const routeTree = rootRouteImport

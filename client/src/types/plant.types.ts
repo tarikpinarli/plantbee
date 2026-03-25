@@ -16,3 +16,5 @@ export const addPlantSchema = z.object({
 
 // TypeScript type — auto derived, no duplication
 export type AddPlantPayload = z.infer<typeof addPlantSchema>
+
+// @trang check again?

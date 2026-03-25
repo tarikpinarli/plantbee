@@ -54,7 +54,7 @@ export function Navbar() {
 
 				{/* CTA */}
 				<Link
-					to="/add"
+					to="/addPlantPage"
 					className="ml-4 rounded-full bg-[#13ec5b] px-5 py-2 text-sm font-semibold text-[#102216] shadow-md hover:bg-[#13ec5b]/90 transition"
 				>
 					Add Plant

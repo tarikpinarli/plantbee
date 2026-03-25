@@ -8,3 +8,6 @@ export const getCurrentUser = () => {
     if (!currentUser) return null; // if no user is logged in, return null
     return JSON.parse(currentUser); // parse and return the user object
 }
+
+// @Minji check again? // check with lib/utils.ts
+export const API_BASE = "http://app:8080"
