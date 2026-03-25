@@ -1,36 +1,36 @@
-{
-  "$schema": "https://biomejs.dev/schemas/2.4.7/schema.json",
-  "files": {
-    "includes": ["**", "!dist", "!node_modules"]
-  },
-  "formatter": {
-    "enabled": true,
-    "indentStyle": "space"
-  },
-  "linter": {
-    "enabled": true,
-    "rules": {
-      "recommended": true
-    }
-  },
-  "assist": {
-    "enabled": true,
-    "actions": {
-      "source": {
-        "organizeImports": "on"
-      }
-    }
-  },
-  "javascript": {
-    "formatter": {
-      "quoteStyle": "single",
-      "semicolons": "always",
-      "trailingCommas": "all"
-    }
-  },
-  "css": {
-    "parser": {
-      "tailwindDirectives": true
-    }
-  }
-}
+// {
+//   "$schema": "https://biomejs.dev/schemas/2.4.7/schema.json",
+//   "files": {
+//     "includes": ["**", "!dist", "!node_modules"]
+//   },
+//   "formatter": {
+//     "enabled": true,
+//     "indentStyle": "space"
+//   },
+//   "linter": {
+//     "enabled": true,
+//     "rules": {
+//       "recommended": true
+//     }
+//   },
+//   "assist": {
+//     "enabled": true,
+//     "actions": {
+//       "source": {
+//         "organizeImports": "on"
+//       }
+//     }
+//   },
+//   "javascript": {
+//     "formatter": {
+//       "quoteStyle": "single",
+//       "semicolons": "always",
+//       "trailingCommas": "all"
+//     }
+//   },
+//   "css": {
+//     "parser": {
+//       "tailwindDirectives": true
+//     }
+//   }
+// }
