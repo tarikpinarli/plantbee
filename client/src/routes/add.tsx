@@ -55,7 +55,7 @@ export function addPlantForm() {
     if (!form.pot_volume_l || form.pot_volume_l <= 0)
       newErrors.pot_volume_l = 'Enter a valid pot volume'
 
-    if (!form.light_need || (form.light_need != 'low' && form.light_need != 'medium' && form.light_need != 'high'))
+    if (!form.light_need)
       newErrors.light_need = 'Select a correct light level'
 
     if (!form.sensor_id.trim())
@@ -85,7 +85,7 @@ export function addPlantForm() {
   }
 
   // ── Submit handler — FormEvent<HTMLFormElement> fixes the deprecation ──
-  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+  async function handleSubmit(e: React.SubmitEvent) {
     e.preventDefault()   // stop browser page reload
 
     // Step 1: validate — stop here if anything is wrong
