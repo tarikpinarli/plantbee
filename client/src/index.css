@@ -62,8 +62,6 @@ a:hover {
 
 body {
   margin: 0;
-  /* display: flex; */
-  /* place-items: center; */
   min-width: 320px;
   min-height: 100vh;
 }
@@ -101,7 +99,12 @@ button:focus-visible {
     color: #747bff;
   }
   button {
-    background-color: #f9f9f9;
+    font-family: inherit;
+    background-color: #88da88;
+  }
+  button:hover {
+    background-color: #3a753a;
+    color: white;
   }
 }
 

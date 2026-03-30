@@ -1,3 +1,24 @@
+import { type ComponentProps } from "react"
+
+/** The children prop is a unique feature in React components. It allows developers to pass JSX elements as children to a component, enabling more flexible and reusable code. 
+ * By extending ButtonProps with ComponentProps<"button">, you’re automatically inheriting all the standard props that a native HTML button element can accept, such as onClick, type, disabled, and more.
+ */
+
+interface ButtonProps extends ComponentProps<"button">{}
+
+export const SharedButton = ({ className , ...rest }: ButtonProps) => {
+	return (
+		<button
+			className={`mt-2 bg-green-600 hover:bg-green-700 disabled:bg-green-300 text-black font-semibold py-3 rounded-lg transition-colors  ${className || ""}`}
+			{...rest}
+		>
+			
+		</button>
+	);
+}
+
+
+
 // import * as React from "react"
 // import { cva, type VariantProps } from "class-variance-authority"
 // import { Slot } from "radix-ui"

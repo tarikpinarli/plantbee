@@ -1,5 +1,6 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { usePlantForm } from '@/hooks/usePlantFormFunc'
+import { SharedButton } from '@/components/ui/button'
 
 function AddPlantPage() {
   const { form, errors, status, handleChange, handleSubmit } = usePlantForm()
@@ -153,13 +154,9 @@ function AddPlantPage() {
         </div>
 
         {/* Submit */}
-        <button
-          type="submit"
-          disabled={status === 'loading'}
-          className="mt-2 bg-green-600 hover:bg-green-700 disabled:bg-green-300 text-white font-semibold py-3 rounded-lg transition-colors"
-        >
+        <SharedButton type="submit" disabled={status === 'loading'}>
           {status === 'loading' ? 'Saving...' : 'Add Plant 🌿'}
-        </button>
+        </SharedButton>
 
       </form>
     </div>
