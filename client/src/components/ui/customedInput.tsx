@@ -1,3 +1,19 @@
+
+import { type ComponentProps } from "react";
+
+interface InputProps extends ComponentProps<"input"> {}
+
+export const CustomedInput = ({className, type, ...props}: InputProps) => {
+	return (
+		<input
+			className={`${className || ""}`}
+			type={type}
+			{...props}
+		/>
+		
+	);
+} 
+
 // import * as React from "react"
 
 // import { cn } from "@/lib/utils"

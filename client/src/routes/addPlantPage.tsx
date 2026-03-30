@@ -1,6 +1,7 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { usePlantForm } from '@/hooks/usePlantFormFunc'
-import { SharedButton } from '@/components/ui/button'
+import { SharedButton } from '@/components/ui/customedButton'
+import { CustomedSlider } from '@/components/ui/customedSlider'
 
 function AddPlantPage() {
   const { form, errors, status, handleChange, handleSubmit } = usePlantForm()
@@ -105,25 +106,11 @@ function AddPlantPage() {
         </div>
 
         {/* Target Moisture — slider */}
-        <div className="flex flex-col gap-1">
-          <label className="text-sm font-semibold text-gray-700">
-            Target Moisture — {form.target_moisture}%
-          </label>
-          <input
-            type="range"
-            min="0"
-            max="100"
-            step="1"
-            className="accent-green-600"
-            value={form.target_moisture}
-            onChange={e => handleChange('target_moisture', Number(e.target.value))}
-          />
-          <div className="flex justify-between text-xs text-gray-400">
-            <span>0% Dry</span>
-            <span>50%</span>
-            <span>100% Wet</span>
-          </div>
-        </div>
+        <CustomedSlider
+          label={`Target Moisture - ${form.target_moisture}%`}
+          value={form.target_moisture}
+          onChange={value => handleChange("target_moisture", value)}
+        />
 
         {/* Sensor ID — Required */}
         <div className="flex flex-col gap-1">

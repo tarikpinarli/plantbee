@@ -2,7 +2,7 @@
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
 
-@custom-variant dark (&:is(.dark *));
+/* @custom-variant dark (&:is(.dark *)); */
 
 :root {
   font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
@@ -71,24 +71,42 @@ h1 {
   line-height: 1.1;
 }
 
-button {
+
+/* better way for inline tailwind CSS to override, inline styling is not working atm ?? */
+button, input[type="range"]  {
   border-radius: 8px;
   border: 1px solid transparent;
   padding: 0.6em 1.2em;
   font-size: 1em;
   font-weight: 500;
   font-family: inherit;
-  background-color: #1a1a1a;
+  background-color: #4ADE80;
   cursor: pointer;
   transition: border-color 0.25s;
 }
-button:hover {
+
+button:hover, input[type="range"]:hover {
+    background-color: #3a753a;
+    color: white;
+}
+
+/* input[type="range"] {
+  background-color: #4ADE80;
+}
+
+input[type="range"]:hover {
+  background-color:#3a753a;
+} */
+
+/* button:hover {
   border-color: #646cff;
 }
 button:focus,
 button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
-}
+} */
+
+
 
 @media (prefers-color-scheme: light) {
   :root {
@@ -98,17 +116,17 @@ button:focus-visible {
   a:hover {
     color: #747bff;
   }
-  button {
+  /* button {
     font-family: inherit;
-    background-color: #88da88;
-  }
-  button:hover {
+    background-color: #4ADE80;
+  } */
+  /* button:hover {
     background-color: #3a753a;
     color: white;
-  }
+  } */
 }
 
-@theme inline {
+/* @theme inline {
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
@@ -147,7 +165,7 @@ button:focus-visible {
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-ring: var(--sidebar-ring);
-}
+} */
 
 .dark {
   --background: oklch(0.145 0 0);
@@ -162,11 +180,11 @@ button:focus-visible {
   --secondary-foreground: oklch(0.985 0 0);
   --muted: oklch(0.269 0 0);
   --muted-foreground: oklch(0.708 0 0);
-  --accent: oklch(0.269 0 0);
-  --accent-foreground: oklch(0.985 0 0);
+  /* --accent: oklch(0.269 0 0); */
+  /* --accent-foreground: oklch(0.985 0 0); */
   --destructive: oklch(0.704 0.191 22.216);
   --border: oklch(1 0 0 / 10%);
-  --input: oklch(1 0 0 / 15%);
+  /* --input: oklch(1 0 0 / 15%); */
   --ring: oklch(0.556 0 0);
   --chart-1: oklch(0.488 0.243 264.376);
   --chart-2: oklch(0.696 0.17 162.48);
@@ -183,11 +201,11 @@ button:focus-visible {
   --sidebar-ring: oklch(0.556 0 0);
 }
 
-@layer base {
+/* @layer base {
   * {
     @apply border-border outline-ring/50;
   }
   body {
     @apply bg-background text-foreground;
   }
-}
+} */
