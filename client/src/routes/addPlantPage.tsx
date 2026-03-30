@@ -2,6 +2,7 @@ import { createFileRoute } from '@tanstack/react-router'
 import { usePlantForm } from '@/hooks/usePlantFormFunc'
 import { SharedButton } from '@/components/ui/customedButton'
 import { CustomedSlider } from '@/components/ui/customedSlider'
+import { CustomedInput } from '@/components/ui/customedInput'
 
 function AddPlantPage() {
   const { form, errors, status, handleChange, handleSubmit } = usePlantForm()
@@ -28,29 +29,21 @@ function AddPlantPage() {
       <form onSubmit={handleSubmit} className="bg-white rounded-xl shadow p-6 flex flex-col gap-5">
 
         {/* Name — Required */}
-        <div className="flex flex-col gap-1">
-          <label className="text-sm font-semibold text-gray-700">
-            Plant Name <span className="text-red-500">*</span>
-          </label>
-          <input
-            className="border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-green-400"
-            value={form.name}
-            onChange={e => handleChange('name', e.target.value)}
-            placeholder="e.g. Monstera"
-          />
-          {errors.name && <span className="text-xs text-red-500">{errors.name}</span>}
-        </div>
+        <CustomedInput
+          label={ <> Plant Name <span className="text-red-500">*</span> </> }
+          value={form.name}
+          onChange={e => handleChange("name", e.target.value)}
+          placeholder='e.g. Monstera'
+          error={errors.name}
+        />
 
         {/* Species — Optional */}
-        <div className="flex flex-col gap-1">
-          <label className="text-sm font-semibold text-gray-700">Species</label>
-          <input
-            className="border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-green-400"
-            value={form.species}
-            onChange={e => handleChange('species', e.target.value)}
-            placeholder="e.g. Monstera deliciosa (optional)"
-          />
-        </div>
+        <CustomedInput
+          label={ "Species" }
+          value={form.species}
+          onChange={e => handleChange('species', e.target.value)}
+          placeholder='e.g. Monstera deliciosa (optional)'
+        />
 
         {/* Category — Optional */}
         <div className="flex flex-col gap-1">
@@ -113,32 +106,22 @@ function AddPlantPage() {
         />
 
         {/* Sensor ID — Required */}
-        <div className="flex flex-col gap-1">
-          <label className="text-sm font-semibold text-gray-700">
-            Sensor ID <span className="text-red-500">*</span>
-          </label>
-          <input
-            className="border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-green-400"
-            value={form.sensor_id}
-            onChange={e => handleChange('sensor_id', e.target.value)}
-            placeholder="e.g. sensor-001"
-          />
-          {errors.sensor_id && <span className="text-xs text-red-500">{errors.sensor_id}</span>}
-        </div>
+        <CustomedInput
+          label={ <> Sensor ID <span className="text-red-500">*</span> </> }
+          value={form.sensor_id}
+          onChange={e => handleChange('sensor_id', e.target.value)}
+          placeholder='e.g. sensor-001'
+          error={errors.sensor_id}
+        />
+        
 
         {/* Image URL — Required */}
-        <div className="flex flex-col gap-1">
-          <label className="text-sm font-semibold text-gray-700">
-            Image URL <span className="text-red-500">*</span>
-          </label>
-          <input
-            className="border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-green-400"
-            value={form.image_url}
-            onChange={e => handleChange('image_url', e.target.value)}
-            placeholder="https://example.com/plant.jpg"
-          />
-          {errors.image_url && <span className="text-xs text-red-500">{errors.image_url}</span>}
-        </div>
+        <CustomedInput
+          label={ "Image URL" }
+          value={form.image_url}
+          onChange={e => handleChange('image_url', e.target.value)}
+          placeholder='https://example.com/plant.jpg (optional)'
+        />
 
         {/* Submit */}
         <SharedButton type="submit" disabled={status === 'loading'}>

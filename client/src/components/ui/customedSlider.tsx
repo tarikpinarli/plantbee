@@ -2,7 +2,7 @@ import type { ComponentProps } from "react"
 import { CustomedInput } from "./customedInput"
 
 interface SliderProps extends Omit<ComponentProps<"input">, "onChange"> {
-	label?: string;
+	label?: string,
 	min?: number;
 	max?: number;
 	value: number;
@@ -11,12 +11,10 @@ interface SliderProps extends Omit<ComponentProps<"input">, "onChange"> {
 
 export const CustomedSlider = ({label, min = 0, max = 100, value, onChange, className, ...props}: SliderProps) => {
 	return (
-		<div className="flex flex-col">
-			<label className="text-sm font-semibold text-gray-700">
-				{label}
-          	</label>
-
+		<div>
+			
 			<CustomedInput
+				label={label}
 				type="range"
 				min={min}
 				max={max}
