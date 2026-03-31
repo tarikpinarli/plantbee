@@ -124,10 +124,13 @@ func (h *Handler) Me(w http.ResponseWriter, r *http.Request) {
 	}
 
 	w.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(w).Encode(map[string]any{
+	if err := json.NewEncoder(w).Encode(map[string]any{
 		"user_id": claims["user_id"],
-		"login": claims["login"],
-	})
+		"login":   claims["login"],
+	}); err != nil {
+		http.Error(w, "Failed to encode response", http.StatusInternalServerError)
+		return
+	}
 }
 
 func (h *Handler) HandleLogout(w http.ResponseWriter, r *http.Request) {
