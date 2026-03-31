@@ -3,6 +3,7 @@ import { usePlantForm } from '@/hooks/usePlantFormFunc'
 import { SharedButton } from '@/components/ui/customedButton'
 import { CustomedSlider } from '@/components/ui/customedSlider'
 import { CustomedInput } from '@/components/ui/customedInput'
+import { CustomedDropdown } from '@/components/ui/customedDropdown'
 
 function AddPlantPage() {
   const { form, errors, status, handleChange, handleSubmit } = usePlantForm()
@@ -46,22 +47,21 @@ function AddPlantPage() {
         />
 
         {/* Category — Optional */}
-        <div className="flex flex-col gap-1">
-          <label className="text-sm font-semibold text-gray-700">Category</label>
-          <select
-            className="border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-green-400"
-            value={form.category}
-            onChange={e => handleChange('category', e.target.value)}
-          >
-            <option value="">Select a category (optional)</option>
-            <option value="Succulent">Succulent</option>
-            <option value="Tropical">Tropical</option>
-            <option value="Herb">Herb</option>
-            <option value="Fern">Fern</option>
-            <option value="Cactus">Cactus</option>
-            <option value="Flowering">Flowering</option>
-          </select>
-        </div>
+        <CustomedDropdown
+          label='Category'
+          value={form.category}
+          onChange={(e) => handleChange('category', e.target.value)}
+          options={[
+            { label: "Select a category (optional)", value: "" },
+            { label: "Succulent", value: "Succulent" },
+            { label: "Tropical", value: "Tropical" },
+            { label: "Herb", value: "Herb" },
+            { label: "Fern", value: "Fern" },
+            { label: "Cactus", value: "Cactus" },
+            { label: "Flowering", value: "Flowering" },
+          ]}
+        >
+        </CustomedDropdown>
 
         {/* Pot Volume — Required */}
         <div className="flex flex-col gap-1">
@@ -81,22 +81,19 @@ function AddPlantPage() {
         </div>
 
         {/* Light Need — Required */}
-        <div className="flex flex-col gap-1">
-          <label className="text-sm font-semibold text-gray-700">
-            Light Need <span className="text-red-500">*</span>
-          </label>
-          <select
-            className="border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-green-400"
-            value={form.light_need}
-            onChange={e => handleChange('light_need', e.target.value)}
-          >
-            <option value="">Select light level</option>
-            <option value="Low">🌑 Low — Shade tolerant</option>
-            <option value="Medium">⛅ Medium — Indirect light</option>
-            <option value="High">☀️ High — Full sun</option>
-          </select>
-          {errors.light_need && <span className="text-xs text-red-500">{errors.light_need}</span>}
-        </div>
+        <CustomedDropdown
+          label='Light Need'
+          value={form.light_need}
+          onChange={(e) => handleChange('light_need', e.target.value)}
+          options={[
+            { label: "Select light level", value: "" },
+            { label: "🌑 Low — Shade tolerant", value: "Low" },
+            { label: "⛅ Medium — Indirect light", value: "Medium" },
+            { label: "☀️ High — Full sun", value: "High" },
+          ]}
+          error={errors.light_need}
+        >
+        </CustomedDropdown>
 
         {/* Target Moisture — slider */}
         <CustomedSlider

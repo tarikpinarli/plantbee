@@ -2,7 +2,7 @@ import type { ComponentProps } from "react"
 import { CustomedInput } from "./customedInput"
 
 interface SliderProps extends Omit<ComponentProps<"input">, "onChange"> {
-	label?: string,
+	label?: string;
 	min?: number;
 	max?: number;
 	value: number;
@@ -33,4 +33,4 @@ export const CustomedSlider = ({label, min = 0, max = 100, value, onChange, clas
 			</div>
 		</div>
 	);
-}
+};

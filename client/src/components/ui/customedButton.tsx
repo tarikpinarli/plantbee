@@ -15,4 +15,4 @@ export const SharedButton = ({ className , ...rest }: ButtonProps) => {
 			
 		</button>
 	);
-}
+};
