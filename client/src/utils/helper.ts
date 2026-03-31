@@ -10,4 +10,4 @@ export const getCurrentUser = () => {
 }
 
 // @Minji check again? // check with lib/utils.ts
-export const API_BASE = "http://app:8080"
+// export const API_BASE = "http://app:8080"

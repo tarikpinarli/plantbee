@@ -187,6 +187,7 @@ curl -X POST http://localhost:8080/api/reading \
 |----------|-------------|
 | `GET /auth/login` | Redirects to 42 Intra login page |
 | `GET /auth/callback` | Handles OAuth return, saves user to DB, sets session cookie |
+| `GET /auth/me` | Validate auth token from client |
 
 ---
 
