@@ -130,6 +130,39 @@ Navigate to http://localhost:8081 and use:
 
 ## 6 · API Reference
 
+### `GET /api/plants` — List all plants
+
+Returns a lightweight JSON array of all plants, designed specifically for the plant dashboard cards. This endpoint is public (no authentication required).
+
+**Features:**
+- **Lightweight Model:** Returns only the data necessary for UI list cards, omitting heavy metrics like sensor configurations or pot volume details. This keeps the network payload small.
+- **Owner Resolution:** Automatically joins with the `users` database table to provide a flat `owner_name` field (e.g. "Added by tpinarli") instead of a raw `owner_id`.
+- **Null-Safe:** Plants with no associated owner still elegantly appear in the list with an empty `owner_name`.
+- **Chronological ordering:** Returns the most recently added plants first.
+
+**Responses:**
+
+| Status | When | Body |
+|--------|------|------|
+| `200 OK` | Always | JSON array of plant objects (returns `[]` if empty) |
+
+**Example Response:**
+```json
+[
+  {
+    "id": 1,
+    "name": "Office Monstera",
+    "light_need": "Medium",
+    "target_moisture": 50,
+    "current_moisture": 65,
+    "image_url": "https://example.com/monstera.jpg",
+    "owner_name": "tpinarli"
+  }
+]
+```
+
+---
+
 ### `POST /plants/add` — Create a plant
 
 **Request fields** (only `name` is required):

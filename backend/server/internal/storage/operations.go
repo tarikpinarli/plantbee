@@ -102,6 +102,42 @@ func (d *DB) GetPlantByOwnerID(ownerID int) (*models.Plant, error) {
 	return &plant, err
 }
 
+// GetAllPlants returns all plants with owner names for the plant list page.
+func (d *DB) GetAllPlants() ([]models.PlantListItem, error) {
+	query := `
+		SELECT p.id, p.name, p.light_need, p.target_moisture, p.current_moisture, p.image_url, COALESCE(u.login, '') AS owner_name
+		FROM plants p
+		LEFT JOIN users u ON p.owner_id = u.id
+		ORDER BY p.created_at DESC
+	`
+
+	rows, err := d.Query(query)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	var plants []models.PlantListItem
+	for rows.Next() {
+		var p models.PlantListItem
+		if err := rows.Scan(&p.ID, &p.Name, &p.LightRequirement, &p.TargetMoisture, &p.CurrentMoisture, &p.ImageURL, &p.OwnerName); err != nil {
+			return nil, err
+		}
+		plants = append(plants, p)
+	}
+
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+
+	// Return empty slice instead of nil so JSON encodes as [] not null
+	if plants == nil {
+		plants = []models.PlantListItem{}
+	}
+
+	return plants, nil
+}
+
 // Task Operations
 func (d *DB) CreateTask(task *models.Task) error {
 	query := `
