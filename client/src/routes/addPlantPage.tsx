@@ -64,25 +64,22 @@ function AddPlantPage() {
         </CustomedDropdown>
 
         {/* Pot Volume — Required */}
-        <div className="flex flex-col gap-1">
-          <label className="text-sm font-semibold text-gray-700">
-            Pot Volume (Liters) <span className="text-red-500">*</span>
-          </label>
-          <input
-            type="number"
-            step="0.1"
-            min="0"
-            className="border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-green-400"
-            value={form.pot_volume_l || ''}
-            onChange={e => handleChange('pot_volume_l', e.target.value)}
-            placeholder="e.g. 2.5"
-          />
-          {errors.pot_volume_l && <span className="text-xs text-red-500">{errors.pot_volume_l}</span>}
-        </div>
+        <CustomedInput
+          label={<>Pot Volume (Liters) <span className="text-red-500">*</span></>}
+          type='number'
+          step='0.1'
+          min='0'
+          value={form.pot_volume_l || ''}
+          onChange={e => handleChange('pot_volume_l', e.target.value)}
+          placeholder='e.g. 2.5'
+          error={errors.pot_volume_l}
+        >
+
+        </CustomedInput>
 
         {/* Light Need — Required */}
         <CustomedDropdown
-          label='Light Need'
+          label={ <> Light Need <span className="text-red-500">*</span> </> }
           value={form.light_need}
           onChange={(e) => handleChange('light_need', e.target.value)}
           options={[
@@ -119,6 +116,9 @@ function AddPlantPage() {
           onChange={e => handleChange('image_url', e.target.value)}
           placeholder='https://example.com/plant.jpg (optional)'
         />
+        
+
+
 
         {/* Submit */}
         <SharedButton type="submit" disabled={status === 'loading'}>

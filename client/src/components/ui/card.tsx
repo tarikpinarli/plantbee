@@ -1,6 +1,10 @@
 import * as React from "react"
 
-interface CardProps extends 
+// use for plants list
+
+function cn(...classes: (string | undefined | false)[]) {
+  return classes.filter(Boolean).join(" ");
+}
 
 function Card({ className, ...props }: React.ComponentProps<"div">) {
   return (

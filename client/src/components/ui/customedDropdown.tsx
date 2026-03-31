@@ -1,4 +1,4 @@
-import type { ComponentProps } from "react";
+import type { ComponentProps, ReactNode } from "react";
 
 type Option = {
 	label: string;
@@ -6,7 +6,7 @@ type Option = {
 }
 
 interface SelectProps extends ComponentProps<"select"> {
-	label?: string;
+	label?: ReactNode;
 	options: Option[];
 	error?: string;
 }
