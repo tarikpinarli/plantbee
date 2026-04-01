@@ -1,5 +1,5 @@
 .env
-server
+/server
 *.exe
 *.o
 tmp/

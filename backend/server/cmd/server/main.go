@@ -39,6 +39,7 @@ func main() {
 	http.HandleFunc("/auth/me", h.Me)
 	http.HandleFunc("/auth/logout", h.RequireAuth(h.HandleLogout))
 	http.HandleFunc("/api/plants/add", h.RequireAuth(h.HandleAddPlant))
+	http.HandleFunc("/api/plants", h.HandleListPlants)
 	http.HandleFunc("/api/user/welcome", h.RequireAuth(h.HandleWelcome))
 	http.HandleFunc("/api/tasks/accept", h.RequireAuth(h.HandleAcceptTask))
 	http.HandleFunc("/api/tasks/cancel", h.RequireAuth(h.HandleCancelTask))

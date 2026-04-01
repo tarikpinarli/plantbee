@@ -44,6 +44,18 @@ type Plant struct {
 	LoggedIn         bool      `json:"logged_in"`
 }
 
+// PlantListItem is the response DTO for the plant list endpoint.
+// Contains only the fields needed for plant cards on the list page.
+type PlantListItem struct {
+	ID               int    `json:"id"`
+	Name             string `json:"name"`
+	LightRequirement string `json:"light_need"`
+	TargetMoisture   int    `json:"target_moisture"`
+	CurrentMoisture  int    `json:"current_moisture"`
+	ImageURL         string `json:"image_url"`
+	OwnerName        string `json:"owner_name"`
+}
+
 type Task struct {
 	ID          int       `json:"id"`           // task id
 	PlantID     int       `json:"plant_id"`     // plant id
