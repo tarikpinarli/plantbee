@@ -4,9 +4,11 @@ import { SharedButton } from '@/components/ui/customedButton'
 import { CustomedSlider } from '@/components/ui/customedSlider'
 import { CustomedInput } from '@/components/ui/customedInput'
 import { CustomedDropdown } from '@/components/ui/customedDropdown'
+import { useImageDrop } from '@/hooks/useImageDrop'
 
 function AddPlantPage() {
-  const { form, errors, status, handleChange, handleSubmit } = usePlantForm()
+  const { form, errors, status, handleChange, handleSubmit } = usePlantForm();
+  const { image, handleDrop, handleChangeImage, handleDragOver } = useImageDrop();
 
   return (
     <div className="max-w-lg mx-auto px-4 py-10">
@@ -116,9 +118,15 @@ function AddPlantPage() {
           onChange={e => handleChange('image_url', e.target.value)}
           placeholder='https://example.com/plant.jpg (optional)'
         />
-        
 
-
+        <CustomedInput
+          label='Drag & drop an image or click to upload'
+          type='file'
+          accept='image/*'
+          onChange={handleChangeImage}
+          onDrop={handleDrop}
+          onDragOver={handleDragOver}
+        />
 
         {/* Submit */}
         <SharedButton type="submit" disabled={status === 'loading'}>
