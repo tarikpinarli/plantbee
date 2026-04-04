@@ -99,6 +99,40 @@ func (h *Handler) HandleCallback(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+func (h *Handler) Me(w http.ResponseWriter, r *http.Request) {
+	cookie, err := r.Cookie("auth_token")
+	if err != nil {
+		http.Error(w, "Unauthorized", http.StatusUnauthorized)
+		return
+	}
+
+	token, err := jwt.Parse(cookie.Value, func(token *jwt.Token) (any, error) {
+		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
+			return nil, fmt.Errorf("unexpected signing method")
+		}
+		return []byte(os.Getenv("SESSION_SECRET")), nil
+	})
+	if err != nil || !token.Valid {
+		http.Error(w, "Unauthorized", http.StatusUnauthorized)
+		return
+	}
+
+	claims, ok := token.Claims.(jwt.MapClaims)
+	if !ok {
+		http.Error(w, "Unauthorized", http.StatusUnauthorized)
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	if err := json.NewEncoder(w).Encode(map[string]any{
+		"user_id": claims["user_id"],
+		"login":   claims["login"],
+	}); err != nil {
+		http.Error(w, "Failed to encode response", http.StatusInternalServerError)
+		return
+	}
+}
+
 func (h *Handler) HandleLogout(w http.ResponseWriter, r *http.Request) {
 	if userID, ok := r.Context().Value(UserIDKey).(int); ok {
 		if err := h.DB.SetUserLoggedOut(userID); err != nil {
