@@ -1,10 +1,6 @@
 // (already exists) get logged-in user
+import type { User } from "@/types/user.types";
 import { useState, useEffect } from "react";
-
-interface User {
-  user_id: string;
-  login: string;
-}
 
 export const useCurrentUser = () => {
   const [user, setUser] = useState<User | null>(null);
