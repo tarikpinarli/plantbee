@@ -1,23 +1,28 @@
 // Top navigation bar
 
-import { Link } from "@tanstack/react-router";
-import { useCurrentUser } from "@/hooks/useCurrentUser";
+import { Link, useNavigate, useRouterState } from "@tanstack/react-router";
+import { useAuth } from "@/hooks/useAuth";
 
 export function Navbar() {
-  const { user: currentUSer } = useCurrentUser();
+  const { user, setUser } = useAuth();
+  const navigate = useNavigate();
+  const router = useRouterState();
+  const currentPath = router.location.pathname;
+  const hideNavbarRoutes = ["/login", "/welcome"];
+
+  if (hideNavbarRoutes.includes(currentPath)) return null; // Don't render the navbar on these route
+  
   return (
     <>
-      <header className="sticky top-0 z-50 border-b border-[#09431c]/20 bg-[#88da88]/80 dark:bg-[#09431c]/80 backdrop-blur-md">
+      <header className="sticky top-0 z-50 border-b border-[#09431c]/20 dark:bg-[#09431c]/80 backdrop-blur-md">
         <div className="max-w-7xl mx-auto flex items-center justify-between px-6 py-4">
-          {/* Logo */}
           <Link to="/" className="flex items-center gap-3 text-[#13ec5b]">
-            <span className="text-xl font-bold tracking-tight text-slate-900 dark:text-slate-100">
+            <span className="text-3xl font-bold -tracking-wide text-[#09431c] dark:text-slate-100 md:text-3xl leading-tight max-w-180">
               PlantBee
             </span>
           </Link>
-          {/* Navigation */}
           <nav className="flex items-center gap-6">
-            {currentUSer && (
+            {user && (
               <>
                 <Link
                   to="/plants"
@@ -46,7 +51,21 @@ export function Navbar() {
                 </Link>
               </>
             )}
-            {!currentUSer ? <Link to="/login">LOG IN</Link> : <button>LOG OUT</button>}
+            {!user ? (
+              <Link to="/login">LOG IN</Link>
+            ) : (
+              <button
+                onClick={() => {
+                  fetch("/auth/logout", {
+                    credentials: "include",
+                  });
+                  setUser(null);
+                  navigate({ to: "/" });
+                }}
+              >
+                LOG OUT
+              </button>
+            )}
           </nav>
         </div>
       </header>

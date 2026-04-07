@@ -28,6 +28,24 @@ func (d *DB) UpsertUser(user *models.User) error {
 	).Scan(&user.ID, &user.IntendToHelp, &user.FirstVisit, &user.WaterCount)
 }
 
+func (d *DB) GetUserByID(userID int) (*models.User, error) {
+	query := `SELECT id, email, login, image_url, intend_to_help, first_visit, water_count FROM users WHERE id = $1`
+	var user models.User
+	err := d.QueryRow(query, userID).Scan(
+		&user.ID,
+		&user.Email,
+		&user.Login,
+		&user.ImageURL,
+		&user.IntendToHelp,
+		&user.FirstVisit,
+		&user.WaterCount,
+	)
+	if err != nil {
+		return nil, err
+	}
+	return &user, nil
+}
+
 func (d *DB) CompleteWelcome(userID int, intendToHelp bool) error {
 	query := `UPDATE users SET intend_to_help = $1, first_visit = false WHERE id = $2`
 	_, err := d.Exec(query, intendToHelp, userID)
