@@ -9,14 +9,19 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as WelcomeRouteImport } from './routes/welcome'
 import { Route as TasksRouteImport } from './routes/tasks'
 import { Route as PlantsRouteImport } from './routes/plants'
-import { Route as OnboardingRouteImport } from './routes/onboarding'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as AddPlantPageRouteImport } from './routes/addPlantPage'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
 
+const WelcomeRoute = WelcomeRouteImport.update({
+  id: '/welcome',
+  path: '/welcome',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const TasksRoute = TasksRouteImport.update({
   id: '/tasks',
   path: '/tasks',
@@ -25,11 +30,6 @@ const TasksRoute = TasksRouteImport.update({
 const PlantsRoute = PlantsRouteImport.update({
   id: '/plants',
   path: '/plants',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const OnboardingRoute = OnboardingRouteImport.update({
-  id: '/onboarding',
-  path: '/onboarding',
   getParentRoute: () => rootRouteImport,
 } as any)
 const LoginRoute = LoginRouteImport.update({
@@ -58,18 +58,18 @@ export interface FileRoutesByFullPath {
   '/about': typeof AboutRoute
   '/addPlantPage': typeof AddPlantPageRoute
   '/login': typeof LoginRoute
-  '/onboarding': typeof OnboardingRoute
   '/plants': typeof PlantsRoute
   '/tasks': typeof TasksRoute
+  '/welcome': typeof WelcomeRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/addPlantPage': typeof AddPlantPageRoute
   '/login': typeof LoginRoute
-  '/onboarding': typeof OnboardingRoute
   '/plants': typeof PlantsRoute
   '/tasks': typeof TasksRoute
+  '/welcome': typeof WelcomeRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -77,9 +77,9 @@ export interface FileRoutesById {
   '/about': typeof AboutRoute
   '/addPlantPage': typeof AddPlantPageRoute
   '/login': typeof LoginRoute
-  '/onboarding': typeof OnboardingRoute
   '/plants': typeof PlantsRoute
   '/tasks': typeof TasksRoute
+  '/welcome': typeof WelcomeRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -88,27 +88,27 @@ export interface FileRouteTypes {
     | '/about'
     | '/addPlantPage'
     | '/login'
-    | '/onboarding'
     | '/plants'
     | '/tasks'
+    | '/welcome'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/about'
     | '/addPlantPage'
     | '/login'
-    | '/onboarding'
     | '/plants'
     | '/tasks'
+    | '/welcome'
   id:
     | '__root__'
     | '/'
     | '/about'
     | '/addPlantPage'
     | '/login'
-    | '/onboarding'
     | '/plants'
     | '/tasks'
+    | '/welcome'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -116,13 +116,20 @@ export interface RootRouteChildren {
   AboutRoute: typeof AboutRoute
   AddPlantPageRoute: typeof AddPlantPageRoute
   LoginRoute: typeof LoginRoute
-  OnboardingRoute: typeof OnboardingRoute
   PlantsRoute: typeof PlantsRoute
   TasksRoute: typeof TasksRoute
+  WelcomeRoute: typeof WelcomeRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/welcome': {
+      id: '/welcome'
+      path: '/welcome'
+      fullPath: '/welcome'
+      preLoaderRoute: typeof WelcomeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/tasks': {
       id: '/tasks'
       path: '/tasks'
@@ -135,13 +142,6 @@ declare module '@tanstack/react-router' {
       path: '/plants'
       fullPath: '/plants'
       preLoaderRoute: typeof PlantsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/onboarding': {
-      id: '/onboarding'
-      path: '/onboarding'
-      fullPath: '/onboarding'
-      preLoaderRoute: typeof OnboardingRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/login': {
@@ -180,9 +180,9 @@ const rootRouteChildren: RootRouteChildren = {
   AboutRoute: AboutRoute,
   AddPlantPageRoute: AddPlantPageRoute,
   LoginRoute: LoginRoute,
-  OnboardingRoute: OnboardingRoute,
   PlantsRoute: PlantsRoute,
   TasksRoute: TasksRoute,
+  WelcomeRoute: WelcomeRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
