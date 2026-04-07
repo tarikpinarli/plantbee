@@ -67,9 +67,10 @@ func (s *PlantService) printLog(t models.SensorReading) {
 		t.RecordedAt.Format("15:04:05"), t.SensorID, t.WakeTime, bar, t.Moisture)
 }
 
-// triggerLowMoistureProcess isolates the reaction logic when a plant drops below threshold.
-func (s *PlantService) triggerLowMoistureProcess(plant *models.Plant, reading *models.SensorReading) {
-	// calculate water need from plant.pot_volume_liters and plant.target_moisture. Convert to ml
+// CreateAndAssignWateringTask creates a watering task and assigns it to the first available volunteer.
+// It returns the task ID if successful, or an error if the process fails.
+func (s *PlantService) CreateAndAssignWateringTask(plant *models.Plant, reading *models.SensorReading) error {
+	// Calculate water need from plant.pot_volume_liters and plant.target_moisture. Convert to ml
 	waterNeed := int(plant.PotVolumeLiters * float64(plant.TargetMoisture-reading.Moisture) / 100.0 * 1000)
 	task := models.Task{
 		PlantID:     plant.ID,
@@ -78,8 +79,39 @@ func (s *PlantService) triggerLowMoistureProcess(plant *models.Plant, reading *m
 		Status:      "open",
 		ScheduledAt: time.Now(),
 	}
+
+	// Create the task in the database
 	if err := s.db.CreateTask(&task); err != nil {
-		fmt.Printf("Failed to create task: %v\n", err)
+		return fmt.Errorf("failed to create task: %w", err)
 	}
-	// from here Yutong needs to find a way to inform available users about the task
+
+	// Find the first available volunteer (user with intend_to_help = true)
+	volunteer, err := s.db.GetFirstAvailableVolunteer()
+	if err != nil {
+		// Fallback: assign to first available user if no volunteer is found
+		volunteer, err = s.db.GetFirstAvailableUser()
+		if err != nil {
+			fmt.Printf("⚠️ No users available to assign task ID %d: %v\n", task.ID, err)
+			return nil
+		}
+		fmt.Printf("ℹ️ No volunteers found, assigning to first available user '%s'\n", volunteer.Login)
+	}
+
+	// Assign the task to the volunteer/user
+	if err := s.db.AssignTaskToVolunteer(task.ID, volunteer.ID); err != nil {
+		fmt.Printf("Failed to assign task %d to user %d: %v\n", task.ID, volunteer.ID, err)
+		return fmt.Errorf("failed to assign task to user: %w", err)
+	}
+
+	fmt.Printf("✅ Task ID %d assigned to user '%s' for plant '%s' - Water needed: %d ml\n",
+		task.ID, volunteer.Login, plant.Name, waterNeed)
+
+	return nil
+}
+
+// triggerLowMoistureProcess isolates the reaction logic when a plant drops below threshold.
+func (s *PlantService) triggerLowMoistureProcess(plant *models.Plant, reading *models.SensorReading) {
+	if err := s.CreateAndAssignWateringTask(plant, reading); err != nil {
+		fmt.Printf("Error in watering task process: %v\n", err)
+	}
 }

@@ -17,4 +17,17 @@ export const addPlantSchema = z.object({
 // TypeScript type — auto derived, no duplication
 export type AddPlantPayload = z.infer<typeof addPlantSchema>
 
+// Task types
+export type Task = {
+  id: number
+  plant_id: number
+  type: 'water' | 'error'
+  water_amount?: number
+  status: 'open' | 'assigned' | 'accepted' | 'in_progress' | 'completed'  // Add 'accepted' here
+  volentee_id?: number
+  scheduled_at: string
+  completed_at?: string
+}
+
 // @trang check again?
+

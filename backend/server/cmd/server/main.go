@@ -43,6 +43,8 @@ func main() {
 	http.HandleFunc("/api/user/welcome", h.RequireAuth(h.HandleWelcome))
 	http.HandleFunc("/api/tasks/accept", h.RequireAuth(h.HandleAcceptTask))
 	http.HandleFunc("/api/tasks/cancel", h.RequireAuth(h.HandleCancelTask))
+	http.HandleFunc("/api/tasks/my-tasks", h.RequireAuth(h.HandleGetMyTasks))
+	http.HandleFunc("/api/tasks/open", h.HandleGetOpenTasks)
 	// Serve the frontend static files
 	fs := http.FileServer(http.Dir("/client/dist"))
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {

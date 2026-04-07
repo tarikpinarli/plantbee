@@ -168,3 +168,102 @@ func (d *DB) CancelTask(task *models.Task) error {
 	_, err := d.Exec(query, task.ID, task.VolenteeID)
 	return err
 }
+
+// GetFirstAvailableVolunteer returns the first user with intend_to_help = true
+// ordered by user_id to ensure consistent assignment
+func (d *DB) GetFirstAvailableVolunteer() (*models.User, error) {
+	query := `SELECT id, intra_id, email, login FROM users WHERE intend_to_help = true ORDER BY id LIMIT 1`
+	
+	var user models.User
+	err := d.QueryRow(query).Scan(&user.ID, &user.IntraID, &user.Email, &user.Login)
+	
+	return &user, err
+}
+
+// GetFirstAvailableUser returns the first user in the system (fallback for assignment)
+// This ensures tasks get assigned even if no one has explicitly opted in
+func (d *DB) GetFirstAvailableUser() (*models.User, error) {
+	query := `SELECT id, intra_id, email, login FROM users ORDER BY id LIMIT 1`
+	
+	var user models.User
+	err := d.QueryRow(query).Scan(&user.ID, &user.IntraID, &user.Email, &user.Login)
+	
+	return &user, err
+}
+
+// AssignTaskToVolunteer updates a task with a volunteer ID and sets its status to 'assigned'
+func (d *DB) AssignTaskToVolunteer(taskID int, volunteerID int) error {
+	query := `UPDATE tasks SET volentee_id = $1, status = 'assigned' WHERE id = $2`
+	_, err := d.Exec(query, volunteerID, taskID)
+	return err
+}
+
+// GetTasksByUserID returns all tasks assigned to a specific user (volunteer)
+func (d *DB) GetTasksByUserID(userID int) ([]models.Task, error) {
+	query := `
+		SELECT id, plant_id, type, water_amount, status, volentee_id, scheduled_at, completed_at
+		FROM tasks
+		WHERE volentee_id = $1
+		ORDER BY scheduled_at DESC
+	`
+	rows, err := d.Query(query, userID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	var tasks []models.Task
+	for rows.Next() {
+		var task models.Task
+		if err := rows.Scan(&task.ID, &task.PlantID, &task.Type, &task.WaterAmount,
+			&task.Status, &task.VolenteeID, &task.ScheduledAt, &task.CompletedAt); err != nil {
+			return nil, err
+		}
+		tasks = append(tasks, task)
+	}
+
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+
+	if tasks == nil {
+		tasks = []models.Task{}
+	}
+
+	return tasks, nil
+}
+
+// GetOpenTasks returns all unassigned tasks (open status)
+func (d *DB) GetOpenTasks() ([]models.Task, error) {
+	query := `
+		SELECT id, plant_id, type, water_amount, status, volentee_id, scheduled_at, completed_at
+		FROM tasks
+		WHERE status = 'open'
+		ORDER BY scheduled_at DESC
+	`
+	rows, err := d.Query(query)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	var tasks []models.Task
+	for rows.Next() {
+		var task models.Task
+		if err := rows.Scan(&task.ID, &task.PlantID, &task.Type, &task.WaterAmount,
+			&task.Status, &task.VolenteeID, &task.ScheduledAt, &task.CompletedAt); err != nil {
+			return nil, err
+		}
+		tasks = append(tasks, task)
+	}
+
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+
+	if tasks == nil {
+		tasks = []models.Task{}
+	}
+
+	return tasks, nil
+}
