@@ -3,9 +3,10 @@ package models
 import "time"
 
 type IncomingPayload struct {
-	SensorID   string `json:"sensor_id"`
-	Moisture   int    `json:"moisture"`
-	DurationMs int    `json:"duration_ms"`
+	SensorID     string `json:"sensor_id"`
+	Moisture     int    `json:"moisture"`
+	DurationMs   int    `json:"duration_ms"`
+	BatteryLevel int    `json:"battery_level"`
 }
 
 type User struct {
@@ -21,11 +22,12 @@ type User struct {
 }
 
 type SensorReading struct {
-	ID         int       `json:"id"`
-	SensorID   string    `json:"sensor_id"`
-	Moisture   int       `json:"moisture"`
-	WakeTime   float64   `json:"wake_time"`
-	RecordedAt time.Time `json:"recorded_at"`
+	ID           int       `json:"id"`
+	SensorID     string    `json:"sensor_id"`
+	Moisture     int       `json:"moisture"`
+	WakeTime     float64   `json:"wake_time"`
+	BatteryLevel int       `json:"battery_level"`
+	RecordedAt   time.Time `json:"recorded_at"`
 }
 
 type Plant struct {
@@ -59,8 +61,9 @@ type PlantListItem struct {
 type Task struct {
 	ID          int       `json:"id"`           // task id
 	PlantID     int       `json:"plant_id"`     // plant id
-	Type        string    `json:"type"`         // "water" or "error"
+	Type        string    `json:"type"`         // "water" or "battery_error"
 	WaterAmount int       `json:"water_amount"` // ml
+	Message     string    `json:"message"`      // task details or error message
 	Status      string    `json:"status"`       // "open", "in_progress", "completed"
 	VolenteeID  int       `json:"volentee_id"`  // who is doing the task
 	ScheduledAt time.Time `json:"scheduled_at"` // when the task was created
@@ -77,4 +80,5 @@ type TaskDTO struct {
 	CurrentMoisture int    `json:"current_moisture"`
 	TargetMoisture  int    `json:"target_moisture"`
 	WaterNeededML   int    `json:"water_needed_ml"`
+	Message         string `json:"message"`
 }

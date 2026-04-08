@@ -1,8 +1,14 @@
 package storage
 
 import (
+	"database/sql"
+	"errors"
+
 	"plantbee-backend/internal/models"
+	"github.com/lib/pq"
 )
+
+var ErrTaskAlreadyActive = errors.New("a task of this type is already active for this plant")
 
 // User operations
 func (d *DB) UpsertUser(user *models.User) error {
@@ -73,8 +79,8 @@ func (d *DB) SetUserLoggedOut(userID int) error {
 // Sensor Operations
 func (d *DB) SaveSensorReadings(reading *models.SensorReading) error {
 	query := `
-		INSERT INTO sensor_readings (sensor_id, moisture, wake_time)
-		VALUES ($1, $2, $3)
+		INSERT INTO sensor_readings (sensor_id, moisture, wake_time, battery_level)
+		VALUES ($1, $2, $3, $4)
 		RETURNING id, recorded_at;
 	`
 	return d.QueryRow(
@@ -82,6 +88,7 @@ func (d *DB) SaveSensorReadings(reading *models.SensorReading) error {
 		reading.SensorID,
 		reading.Moisture,
 		reading.WakeTime,
+		reading.BatteryLevel,
 	).Scan(&reading.ID, &reading.RecordedAt)
 }
 
@@ -161,18 +168,27 @@ func (d *DB) GetAllPlants() ([]models.PlantListItem, error) {
 // Task Operations
 func (d *DB) CreateTask(task *models.Task) error {
 	query := `
-        INSERT INTO tasks (plant_id, type, water_amount, status, scheduled_at)
-        VALUES ($1, $2, $3, $4, $5)
+        INSERT INTO tasks (plant_id, type, water_amount, message, status, scheduled_at)
+        VALUES ($1, $2, $3, $4, $5, $6)
         RETURNING id;
     `
 	// We only insert the fields we know when creating a new task (no volenteer_id) it will be set later
-	return d.QueryRow(query,
+	err := d.QueryRow(query,
 		task.PlantID,
 		task.Type,
 		task.WaterAmount,
+		task.Message,
 		task.Status,
 		task.ScheduledAt,
 	).Scan(&task.ID)
+
+	if err != nil {
+		if pqErr, ok := err.(*pq.Error); ok && pqErr.Code == "23505" {
+			return ErrTaskAlreadyActive
+		}
+		return err
+	}
+	return nil
 }
 
 func (d *DB) AcceptTask(task *models.Task) (bool, error) {
@@ -191,25 +207,19 @@ func (d *DB) CancelTask(task *models.Task) error {
 	return err
 }
 
-// GetTasksForPlantByStatus fetches tasks matching a specific status for a plant.
-func (d *DB) GetTasksForPlantByStatus(plantID int, taskType, status string) ([]models.Task, error) {
-	query := `SELECT id, plant_id, type, water_amount, status, COALESCE(volentee_id, 0)
-		FROM tasks WHERE plant_id = $1 AND type = $2 AND status = $3`
-	rows, err := d.Query(query, plantID, taskType, status)
+// GetTaskForPlantByStatus fetches the single task matching a specific type and status for a plant.
+func (d *DB) GetTaskForPlantByStatus(plantID int, taskType, status string) (*models.Task, error) {
+	query := `SELECT id, plant_id, type, water_amount, message, status, COALESCE(volentee_id, 0)
+		FROM tasks WHERE plant_id = $1 AND type = $2 AND status = $3 LIMIT 1`
+	var t models.Task
+	err := d.QueryRow(query, plantID, taskType, status).Scan(&t.ID, &t.PlantID, &t.Type, &t.WaterAmount, &t.Message, &t.Status, &t.VolenteeID)
 	if err != nil {
+		if err == sql.ErrNoRows {
+			return nil, nil // No task found
+		}
 		return nil, err
 	}
-	defer rows.Close()
-
-	var tasks []models.Task
-	for rows.Next() {
-		var t models.Task
-		if err := rows.Scan(&t.ID, &t.PlantID, &t.Type, &t.WaterAmount, &t.Status, &t.VolenteeID); err != nil {
-			return nil, err
-		}
-		tasks = append(tasks, t)
-	}
-	return tasks, nil
+	return &t, nil
 }
 
 // CompleteTaskWithCredit atomically marks a task as completed and increments the volunteer's water_count.
@@ -236,17 +246,24 @@ func (d *DB) ReopenTask(taskID, newWaterAmount int) error {
 	return err
 }
 
-// AutoCloseOpenTasks completes only open tasks (no volunteer to credit).
-func (d *DB) AutoCloseOpenTasks(plantID int, taskType string) error {
+// AutoCloseOpenTask completes the single open task (no volunteer to credit).
+func (d *DB) AutoCloseOpenTask(plantID int, taskType string) error {
 	query := `UPDATE tasks SET status = 'completed', completed_at = CURRENT_TIMESTAMP WHERE plant_id = $1 AND type = $2 AND status = 'open'`
 	_, err := d.Exec(query, plantID, taskType)
 	return err
 }
 
-// UpdateOpenTaskWaterAmount recalculates the water_amount for open tasks based on new reading.
+// UpdateOpenTaskWaterAmount recalculates the water_amount for open task based on new reading.
 func (d *DB) UpdateOpenTaskWaterAmount(plantID int, taskType string, waterAmount int) error {
 	query := `UPDATE tasks SET water_amount = $1 WHERE plant_id = $2 AND type = $3 AND status = 'open'`
 	_, err := d.Exec(query, waterAmount, plantID, taskType)
+	return err
+}
+
+// UpdateOpenTaskMessage updates the message of an open task (e.g. for battery level drops).
+func (d *DB) UpdateOpenTaskMessage(plantID int, taskType string, message string) error {
+	query := `UPDATE tasks SET message = $1 WHERE plant_id = $2 AND type = $3 AND status = 'open'`
+	_, err := d.Exec(query, message, plantID, taskType)
 	return err
 }
 
@@ -261,7 +278,8 @@ func (d *DB) GetTasks(statusFilter string) ([]models.TaskDTO, error) {
 			t.status,
 			p.current_moisture,
 			p.target_moisture,
-			t.water_amount as water_needed_ml
+			t.water_amount as water_needed_ml,
+			COALESCE(t.message, '') as message
 		FROM tasks t
 		JOIN plants p ON t.plant_id = p.id
 	`
@@ -293,6 +311,7 @@ func (d *DB) GetTasks(statusFilter string) ([]models.TaskDTO, error) {
 			&dto.CurrentMoisture,
 			&dto.TargetMoisture,
 			&dto.WaterNeededML,
+			&dto.Message,
 		); err != nil {
 			return nil, err
 		}
