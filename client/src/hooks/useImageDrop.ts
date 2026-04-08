@@ -11,8 +11,12 @@ export function useImageDrop () {
 		}
 	};
 
-	const handleChangeImage = (e: React.ChangeEvent<HTMLInputElement>) => {
-		if (e.target.files) {
+	const handleChangeImage = (e: React.ChangeEvent<HTMLInputElement> | null) => {
+		if (!e) {
+			setImage(null);
+			return;
+		}
+		if (e.target.files && e.target.files[0]) {
 			setImage(e.target.files[0]);
 		}
 	};

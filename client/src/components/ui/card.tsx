@@ -1,6 +1,6 @@
 import * as React from "react"
 
-// use for plants list
+// is this in use? automatically created by shadcn
 
 function cn(...classes: (string | undefined | false)[]) {
   return classes.filter(Boolean).join(" ");
