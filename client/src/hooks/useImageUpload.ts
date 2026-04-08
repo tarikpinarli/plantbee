@@ -11,7 +11,7 @@ export function useImageUpload() {
 		try {
 			const url = await uploadImage(file);
 			return url;
-		} catch (err) {
+		} catch {
 			setError("Upload failed");
 			return null;
 		} finally {

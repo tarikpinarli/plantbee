@@ -157,49 +157,52 @@ func jsonError(w http.ResponseWriter, message string, status int) {
 
 //trang test image upload
 func (h *Handler) HandleUploadImage(w http.ResponseWriter, r *http.Request) {
-	// Only allow POST
-	if r.Method != http.MethodPost {
-		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
-		return
-	}
+    if r.Method != http.MethodPost {
+        http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
+        return
+    }
 
-	// Parse multipart form (10MB max)
-	err := r.ParseMultipartForm(10 << 20)
-	if err != nil {
-		http.Error(w, "File too large", http.StatusBadRequest)
-		return
-	}
+    if err := r.ParseMultipartForm(10 << 20); err != nil {
+        http.Error(w, "File too large", http.StatusBadRequest)
+        return
+    }
 
-	// Get file
-	file, handler, err := r.FormFile("file")
-	if err != nil {
-		http.Error(w, "Invalid file", http.StatusBadRequest)
-		return
-	}
-	defer file.Close()
+    file, handler, err := r.FormFile("file")
+    if err != nil {
+        http.Error(w, "Invalid file", http.StatusBadRequest)
+        return
+    }
+    defer func() {
+        if err := file.Close(); err != nil {
+            fmt.Printf("error closing file: %v\n", err)
+        }
+    }()
 
-	// Create uploads folder if not exists
-	os.MkdirAll("./uploads", os.ModePerm)
+    // Create uploads folder if not exists
+    if err := os.MkdirAll("./uploads", os.ModePerm); err != nil {
+        http.Error(w, "Failed to create folder", http.StatusInternalServerError)
+        return
+    }
 
-	// Save file locally
-	dst, err := os.Create("./uploads/" + handler.Filename)
-	if err != nil {
-		http.Error(w, "Failed to save file", http.StatusInternalServerError)
-		return
-	}
-	defer dst.Close()
+    dst, err := os.Create("./uploads/" + handler.Filename)
+    if err != nil {
+        http.Error(w, "Failed to save file", http.StatusInternalServerError)
+        return
+    }
+    defer func() {
+        if err := dst.Close(); err != nil {
+            fmt.Printf("error closing dst file: %v\n", err)
+        }
+    }()
 
-	_, err = io.Copy(dst, file)
-	if err != nil {
-		http.Error(w, "Failed to write file", http.StatusInternalServerError)
-		return
-	}
+    if _, err := io.Copy(dst, file); err != nil {
+        http.Error(w, "Failed to write file", http.StatusInternalServerError)
+        return
+    }
 
-	// Return URL (adjust for your setup)
-	url := "/uploads/" + handler.Filename
-
-	w.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(w).Encode(map[string]string{
-		"url": url,
-	})
+    url := "/uploads/" + handler.Filename
+    w.Header().Set("Content-Type", "application/json")
+    if err := json.NewEncoder(w).Encode(map[string]string{"url": url}); err != nil {
+        fmt.Printf("error encoding json response: %v\n", err)
+    }
 }
