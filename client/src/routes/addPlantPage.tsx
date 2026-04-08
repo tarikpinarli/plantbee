@@ -5,10 +5,29 @@ import { CustomedSlider } from '@/components/ui/customedSlider'
 import { CustomedInput } from '@/components/ui/customedInput'
 import { CustomedDropdown } from '@/components/ui/customedDropdown'
 import { useImageDrop } from '@/hooks/useImageDrop'
+import { useImageUpload } from '@/hooks/useImageUpload'
 
 function AddPlantPage() {
   const { form, errors, status, handleChange, handleSubmit } = usePlantForm();
   const { image, handleDrop, handleChangeImage, handleDragOver } = useImageDrop();
+  const { upload} = useImageUpload();
+
+  //recheck submitevent?
+  const handleSubmitWithImage = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    let imageUrl = form.image_url;
+
+    // upload file if exists
+    if (image) {
+      const uploaded = await upload(image);
+      if (!uploaded) return; // stop if failed
+      imageUrl = uploaded;
+    }
+
+    // submit form
+    await handleSubmit(e, { image_url: imageUrl });
+  };
 
   return (
     <div className="max-w-lg mx-auto px-4 py-10">
@@ -29,7 +48,7 @@ function AddPlantPage() {
         </div>
       )}
 
-      <form onSubmit={handleSubmit} className="bg-white rounded-xl shadow p-6 flex flex-col gap-5">
+      <form onSubmit={handleSubmitWithImage} className="bg-white rounded-xl shadow p-6 flex flex-col gap-5">
 
         {/* Name — Required */}
         <CustomedInput
@@ -112,12 +131,12 @@ function AddPlantPage() {
         
 
         {/* Image URL — Required */}
-        <CustomedInput
+        {/* <CustomedInput
           label={ "Image URL" }
           value={form.image_url}
           onChange={e => handleChange('image_url', e.target.value)}
           placeholder='https://example.com/plant.jpg (optional)'
-        />
+        /> */}
 
         <CustomedInput
           label='Drag & drop an image or click to upload'
