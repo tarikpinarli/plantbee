@@ -80,14 +80,20 @@ export function usePlantForm() {
   }
 
   // ── Submit handler — FormEvent<HTMLFormElement> fixes the deprecation ──
-  async function handleSubmit(e: React.SubmitEvent) {
+  async function handleSubmit(
+    e: React.FormEvent<HTMLFormElement>,
+    override?: Partial<PlantFormData>) 
+  {
     e.preventDefault()   // stop browser page reload
 
     // Step 1: validate — stop here if anything is wrong
-    if (!validate()) return
+    if (!validate()) return;
 
     // Step 2: build the JSON payload
-    const payload = buildPayload()
+    const payload : PlantFormData = { 
+    ...buildPayload(),
+    ...override,
+    };
 
     // Step 3: log it so you can see exactly what would be sent
     console.log('Sending to backend:', JSON.stringify(payload, null, 2))
