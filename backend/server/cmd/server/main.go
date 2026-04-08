@@ -45,8 +45,7 @@ func main() {
 	http.HandleFunc("/api/tasks/accept", h.RequireAuth(h.HandleAcceptTask))
 	http.HandleFunc("/api/tasks/cancel", h.RequireAuth(h.HandleCancelTask))
 
-	http.Handle("/uploads/", http.StripPrefix("/uploads/", 
-		http.FileServer(http.Dir("./uploads"))))
+	http.Handle("/uploads/", http.StripPrefix("/uploads/", http.FileServer(http.Dir("./uploads")))) // trang test for image upload
 	// Serve the frontend static files
 	fs := http.FileServer(http.Dir("/client/dist"))
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
@@ -65,7 +64,6 @@ func main() {
 
 		fs.ServeHTTP(w, r)
 	})
-
 
 	log.Printf("Server starting on port %s", cfg.Port)
 	log.Fatal(http.ListenAndServe(cfg.Port, nil))

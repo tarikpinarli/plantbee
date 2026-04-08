@@ -155,7 +155,7 @@ func jsonError(w http.ResponseWriter, message string, status int) {
 	}
 }
 
-//trang test image upload
+// trang test image upload
 func (h *Handler) HandleUploadImage(w http.ResponseWriter, r *http.Request) {
     if r.Method != http.MethodPost {
         http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
