@@ -28,6 +28,24 @@ func (d *DB) UpsertUser(user *models.User) error {
 	).Scan(&user.ID, &user.IntendToHelp, &user.FirstVisit, &user.WaterCount)
 }
 
+func (d *DB) GetUserByID(userID int) (*models.User, error) {
+	query := `SELECT id, email, login, image_url, intend_to_help, first_visit, water_count FROM users WHERE id = $1`
+	var user models.User
+	err := d.QueryRow(query, userID).Scan(
+		&user.ID,
+		&user.Email,
+		&user.Login,
+		&user.ImageURL,
+		&user.IntendToHelp,
+		&user.FirstVisit,
+		&user.WaterCount,
+	)
+	if err != nil {
+		return nil, err
+	}
+	return &user, nil
+}
+
 func (d *DB) CompleteWelcome(userID int, intendToHelp bool) error {
 	query := `UPDATE users SET intend_to_help = $1, first_visit = false WHERE id = $2`
 	_, err := d.Exec(query, intendToHelp, userID)
@@ -100,6 +118,44 @@ func (d *DB) GetPlantByOwnerID(ownerID int) (*models.Plant, error) {
 	var plant models.Plant
 	err := d.QueryRow(query, ownerID).Scan(&plant.ID, &plant.Name, &plant.TargetMoisture)
 	return &plant, err
+}
+
+// GetAllPlants returns all plants with owner names for the plant list page.
+func (d *DB) GetAllPlants() ([]models.PlantListItem, error) {
+	query := `
+		SELECT p.id, p.name, p.light_need, p.target_moisture, p.current_moisture, p.image_url, COALESCE(u.login, '') AS owner_name
+		FROM plants p
+		LEFT JOIN users u ON p.owner_id = u.id
+		ORDER BY p.created_at DESC
+	`
+
+	rows, err := d.Query(query)
+	if err != nil {
+		return nil, err
+	}
+	defer func() {
+		_ = rows.Close()
+	}()
+
+	var plants []models.PlantListItem
+	for rows.Next() {
+		var p models.PlantListItem
+		if err := rows.Scan(&p.ID, &p.Name, &p.LightRequirement, &p.TargetMoisture, &p.CurrentMoisture, &p.ImageURL, &p.OwnerName); err != nil {
+			return nil, err
+		}
+		plants = append(plants, p)
+	}
+
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+
+	// Return empty slice instead of nil so JSON encodes as [] not null
+	if plants == nil {
+		plants = []models.PlantListItem{}
+	}
+
+	return plants, nil
 }
 
 // Task Operations

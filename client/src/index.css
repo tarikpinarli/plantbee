@@ -4,8 +4,19 @@
 
 /* @custom-variant dark (&:is(.dark *)); */
 
+
+/* .geist-<uniquifier> {
+  font-family: "Geist", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: <weight>;
+  font-style: normal;
+} */
+
 :root {
-  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+   font-family: "Geist", sans-serif;
+  font-optical-sizing: auto;
+  font-style: normal;
+  /* font-family: system-ui, Avenir, Helvetica, Arial, sans-serif; */
   line-height: 1.5;
   font-weight: 400;
 

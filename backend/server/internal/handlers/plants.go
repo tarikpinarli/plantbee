@@ -20,6 +20,43 @@ type addPlantRequest struct {
 	ImageURL         string  `json:"image_url"`
 }
 
+// HandleListPlants returns a JSON array of all plants for the plant list page.
+func (h *Handler) HandleListPlants(w http.ResponseWriter, r *http.Request) {
+	// CORS headers
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	w.Header().Set("Access-Control-Allow-Methods", "GET, OPTIONS")
+	w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
+
+	// Handle preflight
+	if r.Method == http.MethodOptions {
+		w.WriteHeader(http.StatusOK)
+		return
+	}
+
+	if r.Method != http.MethodGet {
+		jsonError(w, "Method not allowed", http.StatusMethodNotAllowed)
+		return
+	}
+
+	if h.DB == nil {
+		jsonError(w, "Database not available", http.StatusServiceUnavailable)
+		return
+	}
+
+	plants, err := h.DB.GetAllPlants()
+	if err != nil {
+		fmt.Printf("❌ Failed to fetch plants: %v\n", err)
+		jsonError(w, "Failed to fetch plants", http.StatusInternalServerError)
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
+	if err := json.NewEncoder(w).Encode(plants); err != nil {
+		fmt.Printf("error encoding plants response: %v\n", err)
+	}
+}
+
 func (h *Handler) HandleAddPlant(w http.ResponseWriter, r *http.Request) {
 	// CORS headers
 	w.Header().Set("Access-Control-Allow-Origin", "*")
