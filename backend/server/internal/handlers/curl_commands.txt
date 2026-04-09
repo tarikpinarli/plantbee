@@ -45,3 +45,6 @@ curl -X POST http://localhost:8080/api/tasks/accept \
   -d '{
     "intend_to_help": true
   }'
+
+  get all plants:
+  curl -X GET http://localhost:8080/api/plants
