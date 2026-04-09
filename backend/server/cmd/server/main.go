@@ -39,10 +39,13 @@ func main() {
 	http.HandleFunc("/auth/me", h.Me)
 	http.HandleFunc("/auth/logout", h.RequireAuth(h.HandleLogout))
 	http.HandleFunc("/api/plants/add", h.RequireAuth(h.HandleAddPlant))
+	http.HandleFunc("/api/upload", h.HandleUploadImage) // trang test for image upload
 	http.HandleFunc("/api/plants", h.HandleListPlants)
 	http.HandleFunc("/api/user/welcome", h.RequireAuth(h.HandleWelcome))
 	http.HandleFunc("/api/tasks/accept", h.RequireAuth(h.HandleAcceptTask))
 	http.HandleFunc("/api/tasks/cancel", h.RequireAuth(h.HandleCancelTask))
+
+	http.Handle("/uploads/", http.StripPrefix("/uploads/", http.FileServer(http.Dir("./uploads")))) // trang test for image upload
 	// Serve the frontend static files
 	fs := http.FileServer(http.Dir("/client/dist"))
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
