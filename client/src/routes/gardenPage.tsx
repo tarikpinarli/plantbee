@@ -33,23 +33,15 @@ function GardenPage() {
             {plant.name}
           </h2>
           <p className="text-sm text-slate-600 dark:text-slate-300">
-            Species: {plant.species ?? 'Unknown'}
+            Current Moisture: {plant.current_moisture ?? 'N/A'}
           </p>
           <p className="text-sm text-slate-600 dark:text-slate-300">
-            Category: {plant.category ?? 'N/A'}
+            Light requirement: {plant.light_need ?? 'Unknown'}
           </p>
           <p className="text-sm text-slate-600 dark:text-slate-300">
-            Pot Volume: {plant.pot_volume_liters ?? 'N/A'} L
+            Owner name: {plant.owner_name ?? 'Unknown'} 
           </p>
-          <p className="text-sm text-slate-600 dark:text-slate-300">
-            Light Need: {plant.light_need ?? 'Unknown'}
-          </p>
-          <p className="text-sm text-slate-600 dark:text-slate-300">
-            Target Moisture: {plant.target_moisture ?? 'N/A'}%
-          </p>
-          <p className="text-sm text-slate-600 dark:text-slate-300">
-            Sensor ID: {plant.sensor_id ?? 'N/A'}
-          </p>
+          
           {plant.image_url && (
             <img
               src={plant.image_url}
