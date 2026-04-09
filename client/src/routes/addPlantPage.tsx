@@ -1,4 +1,4 @@
-import { createFileRoute } from '@tanstack/react-router'
+import { createFileRoute, useNavigate } from '@tanstack/react-router'
 import { usePlantForm } from '@/hooks/usePlantForm'
 import { SharedButton } from '@/components/ui/customedButton'
 import { CustomedSlider } from '@/components/ui/customedSlider'
@@ -6,16 +6,14 @@ import { CustomedInput } from '@/components/ui/customedInput'
 import { CustomedDropdown } from '@/components/ui/customedDropdown'
 import { useImageDrop } from '@/hooks/useImageDrop'
 import { useImageUpload } from '@/hooks/useImageUpload'
-import { useRef } from 'react'
+import { useEffect, useRef } from 'react'
 // import PlantImageCard from '@/components/ui/plantImageCard'
 
 function AddPlantPage() {
   const { form, errors, status, handleChange, handleSubmit } = usePlantForm();
   const { image, handleDrop, handleChangeImage, handleDragOver } = useImageDrop();
   const { upload} = useImageUpload();
-
   const fileInputRef = useRef<HTMLInputElement | null>(null);
-  //recheck submitevent?
   const handleSubmitWithImage = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
@@ -36,6 +34,18 @@ function AddPlantPage() {
       fileInputRef.current.value = '';
     }
   };
+
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (status === 'success') {
+      const timer = setTimeout(() => {
+        navigate({ to: '/gardenPage' });
+      }, 600);
+
+      return () => clearTimeout(timer);
+    }
+  }, [status, navigate]);
 
   return (
     <div className="w-full sm:max-w-xl md:max-w-2xl lg:max-w-3xl xl:max-w-4xl mx-auto px-4 py-10">

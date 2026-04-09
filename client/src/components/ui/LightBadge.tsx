@@ -4,22 +4,22 @@ const getLightStyle = (level: LightLevel) => {
   switch (level) {
     case "Low":
       return {
-        color: "text-black",
+        color: "bg-white text-black",
         icon: "🌙",
       }
     case "Medium":
       return {
-        color: "text-black",
+        color: "bg-white text-black",
         icon: "⛅",
       }
     case "High":
       return {
-        color: "text-black",
+        color: "bg-white text-black",
         icon: "☀️",
       }
     default:
       return {
-        color: "text-black",
+        color: "bg-white text-black",
         icon: "🌱",
       }
   }

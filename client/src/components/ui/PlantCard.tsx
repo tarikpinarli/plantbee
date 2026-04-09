@@ -13,16 +13,15 @@ export const PlantCard: React.FC<PlantCardProps> = ({
 	owner_name,
 	image_url
 }) => {
-
-	// const [moisture, setMoisture] = useState(current_moisture ?? 0)
-
+	const BASE_URL = "http://localhost:8080"
+	// console.log("moisture:", current_moisture)
 	return (
-		<article className="flex flex-col bg-accent border border-slate-300 rounded-2xl">
+		<article className="flex flex-col bg-white border border-slate-300 rounded-2xl">
 			{/* Image / Placeholder */}
 			<div className="relative w-full h-40 rounded-t-2xl overflow-hidden bg-slate-200">
 				{image_url ? (
 					<img
-					src={image_url}
+					src={`${BASE_URL}${image_url}`}
 					className="w-full h-full object-cover"
 					/>
 				) : (
