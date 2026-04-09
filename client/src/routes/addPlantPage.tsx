@@ -42,20 +42,6 @@ function AddPlantPage() {
       <h1 className="flex flex-col text-2xl font-bold text-green-800 mb-2">Add a New Plant 🌱</h1>
       <p className="text-gray-500 mb-8">Expand your garden by registering a new plant.</p>
 
-      {/* Success message */}
-      {status === 'success' && (
-        <div className="mb-6 p-4 bg-green-50 border border-green-200 rounded-lg text-green-700">
-          ✅ Plant added successfully!
-        </div>
-      )}
-
-      {/* Error message */}
-      {status === 'error' && (
-        <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg text-red-700">
-          ❌ Something went wrong. Please try again.
-        </div>
-      )}
-
       <form onSubmit={handleSubmitWithImage}>
 
         {/* Basic information */}
@@ -126,7 +112,7 @@ function AddPlantPage() {
               onChange={(e) => handleChange('light_need', e.target.value)}
               options={[
                 { label: "Select light level", value: "" },
-                { label: "🌑 Low — Shade tolerant", value: "Low" },
+                { label: "🌙 Low — Shade tolerant", value: "Low" },
                 { label: "⛅ Medium — Indirect light", value: "Medium" },
                 { label: "☀️ High — Full sun", value: "High" },
               ]}
@@ -150,6 +136,11 @@ function AddPlantPage() {
             value={form.target_moisture}
             onChange={value => handleChange("target_moisture", value)}
           />
+            <div className="flex justify-between text-xs text-gray-500">
+              <span>0% Dry</span>
+              <span>50%</span>
+              <span>100% Wet</span>
+            </div>
 
         </div>
 
@@ -200,8 +191,21 @@ function AddPlantPage() {
           </SharedButton>
 
         </div>
-
       </form>
+
+      {/* Success message */}
+      {status === 'success' && (
+        <div className="mb-6 p-4 bg-green-50 border border-green-200 rounded-lg text-green-700">
+          ✅ Plant added successfully!
+        </div>
+      )}
+
+      {/* Error message */}
+      {status === 'error' && (
+        <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg text-red-700">
+          ❌ Something went wrong. Please try again.
+        </div>
+      )}
     </div>
   )
 }
