@@ -10,8 +10,8 @@ export function Navbar() {
   const currentPath = router.location.pathname;
   const hideNavbarRoutes = ["/login", "/welcome"];
 
-  if (hideNavbarRoutes.includes(currentPath)) return null; // Don't render the navbar on these route
-  
+  if (hideNavbarRoutes.includes(currentPath)) return null;
+
   return (
     <>
       <header className="sticky top-0 z-50 border-b border-[#09431c]/20 dark:bg-[#09431c]/80 backdrop-blur-md">
@@ -55,6 +55,17 @@ export function Navbar() {
                 </Link>
               </div>
             )}
+
+            {user && (
+              <Link to="/profile">
+                <img
+                  src={user.imageUrl}
+                  alt="Profile"
+                  className="w-10 h-10 rounded-full"
+                />
+              </Link>
+            )}
+
             {!user ? (
               <Link to="/login">LOG IN</Link>
             ) : (

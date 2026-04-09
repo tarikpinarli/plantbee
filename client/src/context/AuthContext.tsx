@@ -2,11 +2,9 @@ import type { User } from "@/types/user.types";
 import { getCurrentUser } from "@/utils/helper";
 import { createContext, useEffect, useState } from "react";
 
-//  token, isLoggedIn, setToken, logout
-
 interface AuthContextType {
   user: User | null;
-  setUser: React.Dispatch<React.SetStateAction<User | null>>
+  setUser: React.Dispatch<React.SetStateAction<User | null>>;
   loading: boolean;
 }
 

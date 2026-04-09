@@ -5,8 +5,15 @@ export const getCurrentUser = async (): Promise<User | null> => {
   try {
     const res = await fetch("/auth/me", { credentials: "include" });
     if (!res.ok) return null;
-    const user = await res.json();
-    // console.log("Fetched current user:", user);
+    const data = await res.json();
+    const user: User = {
+      id: data.id,
+      login: data.login,
+      email: data.email,
+      imageUrl: data.image_url,
+      intendToHelp: data.intend_to_help,
+      firstVisit: data.first_visit,
+    };
     return user;
   } catch (error) {
     console.error(error);

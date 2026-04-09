@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as WelcomeRouteImport } from './routes/welcome'
 import { Route as TasksRouteImport } from './routes/tasks'
+import { Route as ProfileRouteImport } from './routes/profile'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as GardenPageRouteImport } from './routes/gardenPage'
 import { Route as AddPlantPageRouteImport } from './routes/addPlantPage'
@@ -25,6 +26,11 @@ const WelcomeRoute = WelcomeRouteImport.update({
 const TasksRoute = TasksRouteImport.update({
   id: '/tasks',
   path: '/tasks',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ProfileRoute = ProfileRouteImport.update({
+  id: '/profile',
+  path: '/profile',
   getParentRoute: () => rootRouteImport,
 } as any)
 const LoginRoute = LoginRouteImport.update({
@@ -59,6 +65,7 @@ export interface FileRoutesByFullPath {
   '/addPlantPage': typeof AddPlantPageRoute
   '/gardenPage': typeof GardenPageRoute
   '/login': typeof LoginRoute
+  '/profile': typeof ProfileRoute
   '/tasks': typeof TasksRoute
   '/welcome': typeof WelcomeRoute
 }
@@ -68,6 +75,7 @@ export interface FileRoutesByTo {
   '/addPlantPage': typeof AddPlantPageRoute
   '/gardenPage': typeof GardenPageRoute
   '/login': typeof LoginRoute
+  '/profile': typeof ProfileRoute
   '/tasks': typeof TasksRoute
   '/welcome': typeof WelcomeRoute
 }
@@ -78,6 +86,7 @@ export interface FileRoutesById {
   '/addPlantPage': typeof AddPlantPageRoute
   '/gardenPage': typeof GardenPageRoute
   '/login': typeof LoginRoute
+  '/profile': typeof ProfileRoute
   '/tasks': typeof TasksRoute
   '/welcome': typeof WelcomeRoute
 }
@@ -89,6 +98,7 @@ export interface FileRouteTypes {
     | '/addPlantPage'
     | '/gardenPage'
     | '/login'
+    | '/profile'
     | '/tasks'
     | '/welcome'
   fileRoutesByTo: FileRoutesByTo
@@ -98,6 +108,7 @@ export interface FileRouteTypes {
     | '/addPlantPage'
     | '/gardenPage'
     | '/login'
+    | '/profile'
     | '/tasks'
     | '/welcome'
   id:
@@ -107,6 +118,7 @@ export interface FileRouteTypes {
     | '/addPlantPage'
     | '/gardenPage'
     | '/login'
+    | '/profile'
     | '/tasks'
     | '/welcome'
   fileRoutesById: FileRoutesById
@@ -117,6 +129,7 @@ export interface RootRouteChildren {
   AddPlantPageRoute: typeof AddPlantPageRoute
   GardenPageRoute: typeof GardenPageRoute
   LoginRoute: typeof LoginRoute
+  ProfileRoute: typeof ProfileRoute
   TasksRoute: typeof TasksRoute
   WelcomeRoute: typeof WelcomeRoute
 }
@@ -135,6 +148,13 @@ declare module '@tanstack/react-router' {
       path: '/tasks'
       fullPath: '/tasks'
       preLoaderRoute: typeof TasksRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/profile': {
+      id: '/profile'
+      path: '/profile'
+      fullPath: '/profile'
+      preLoaderRoute: typeof ProfileRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/login': {
@@ -181,6 +201,7 @@ const rootRouteChildren: RootRouteChildren = {
   AddPlantPageRoute: AddPlantPageRoute,
   GardenPageRoute: GardenPageRoute,
   LoginRoute: LoginRoute,
+  ProfileRoute: ProfileRoute,
   TasksRoute: TasksRoute,
   WelcomeRoute: WelcomeRoute,
 }
