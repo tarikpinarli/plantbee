@@ -1,4 +1,3 @@
-
 import { z } from "zod"
 
 export const plantSchema = z.object({
@@ -6,14 +5,14 @@ export const plantSchema = z.object({
   name: z.string(),
   species: z.string().optional(),
   category: z.string().optional(),
-  pot_volume_l: z.number(),
-  light_need: z.enum(["Low", "Medium", "High"]),
-  target_moisture: z.number(),
-  sensor_id: z.string(),
+  pot_volume_liters: z.preprocess((val) => {
+    if (typeof val === "string") return parseFloat(val)
+    return val
+  }, z.number().optional()),
+  light_need: z.enum(["Low","Medium","High"]).optional(),
+  target_moisture: z.number().optional(),
+  sensor_id: z.string().optional(),
   image_url: z.string().optional(),
 })
 
 export const plantsArraySchema = z.array(plantSchema)
-
-// auto type
-export type Plant = z.infer<typeof plantSchema>
