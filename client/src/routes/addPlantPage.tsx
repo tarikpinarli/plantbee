@@ -1,5 +1,5 @@
 import { createFileRoute } from '@tanstack/react-router'
-import { usePlantForm } from '@/hooks/usePlantFormFunc'
+import { usePlantForm } from '@/hooks/usePlantForm'
 import { SharedButton } from '@/components/ui/customedButton'
 import { CustomedSlider } from '@/components/ui/customedSlider'
 import { CustomedInput } from '@/components/ui/customedInput'

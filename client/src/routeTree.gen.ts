@@ -11,8 +11,8 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as WelcomeRouteImport } from './routes/welcome'
 import { Route as TasksRouteImport } from './routes/tasks'
-import { Route as PlantsRouteImport } from './routes/plants'
 import { Route as LoginRouteImport } from './routes/login'
+import { Route as GardenPageRouteImport } from './routes/gardenPage'
 import { Route as AddPlantPageRouteImport } from './routes/addPlantPage'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
@@ -27,14 +27,14 @@ const TasksRoute = TasksRouteImport.update({
   path: '/tasks',
   getParentRoute: () => rootRouteImport,
 } as any)
-const PlantsRoute = PlantsRouteImport.update({
-  id: '/plants',
-  path: '/plants',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const LoginRoute = LoginRouteImport.update({
   id: '/login',
   path: '/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const GardenPageRoute = GardenPageRouteImport.update({
+  id: '/gardenPage',
+  path: '/gardenPage',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AddPlantPageRoute = AddPlantPageRouteImport.update({
@@ -57,8 +57,8 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/addPlantPage': typeof AddPlantPageRoute
+  '/gardenPage': typeof GardenPageRoute
   '/login': typeof LoginRoute
-  '/plants': typeof PlantsRoute
   '/tasks': typeof TasksRoute
   '/welcome': typeof WelcomeRoute
 }
@@ -66,8 +66,8 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/addPlantPage': typeof AddPlantPageRoute
+  '/gardenPage': typeof GardenPageRoute
   '/login': typeof LoginRoute
-  '/plants': typeof PlantsRoute
   '/tasks': typeof TasksRoute
   '/welcome': typeof WelcomeRoute
 }
@@ -76,8 +76,8 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/addPlantPage': typeof AddPlantPageRoute
+  '/gardenPage': typeof GardenPageRoute
   '/login': typeof LoginRoute
-  '/plants': typeof PlantsRoute
   '/tasks': typeof TasksRoute
   '/welcome': typeof WelcomeRoute
 }
@@ -87,8 +87,8 @@ export interface FileRouteTypes {
     | '/'
     | '/about'
     | '/addPlantPage'
+    | '/gardenPage'
     | '/login'
-    | '/plants'
     | '/tasks'
     | '/welcome'
   fileRoutesByTo: FileRoutesByTo
@@ -96,8 +96,8 @@ export interface FileRouteTypes {
     | '/'
     | '/about'
     | '/addPlantPage'
+    | '/gardenPage'
     | '/login'
-    | '/plants'
     | '/tasks'
     | '/welcome'
   id:
@@ -105,8 +105,8 @@ export interface FileRouteTypes {
     | '/'
     | '/about'
     | '/addPlantPage'
+    | '/gardenPage'
     | '/login'
-    | '/plants'
     | '/tasks'
     | '/welcome'
   fileRoutesById: FileRoutesById
@@ -115,8 +115,8 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AboutRoute: typeof AboutRoute
   AddPlantPageRoute: typeof AddPlantPageRoute
+  GardenPageRoute: typeof GardenPageRoute
   LoginRoute: typeof LoginRoute
-  PlantsRoute: typeof PlantsRoute
   TasksRoute: typeof TasksRoute
   WelcomeRoute: typeof WelcomeRoute
 }
@@ -137,18 +137,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof TasksRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/plants': {
-      id: '/plants'
-      path: '/plants'
-      fullPath: '/plants'
-      preLoaderRoute: typeof PlantsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/login': {
       id: '/login'
       path: '/login'
       fullPath: '/login'
       preLoaderRoute: typeof LoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/gardenPage': {
+      id: '/gardenPage'
+      path: '/gardenPage'
+      fullPath: '/gardenPage'
+      preLoaderRoute: typeof GardenPageRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/addPlantPage': {
@@ -179,8 +179,8 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AboutRoute: AboutRoute,
   AddPlantPageRoute: AddPlantPageRoute,
+  GardenPageRoute: GardenPageRoute,
   LoginRoute: LoginRoute,
-  PlantsRoute: PlantsRoute,
   TasksRoute: TasksRoute,
   WelcomeRoute: WelcomeRoute,
 }

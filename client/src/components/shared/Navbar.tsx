@@ -23,33 +23,37 @@ export function Navbar() {
           </Link>
           <nav className="flex items-center gap-6">
             {user && (
-              <>
+              <div className="flex items-center gap-6">
                 <Link
-                  to="/plants"
+                  to="/gardenPage"
                   className="ml text-sm font-medium text-slate-600 hover:text-[#13ec5b] dark:text-slate-400 dark:hover:text-[#13ec5b] transition"
                   activeProps={{
-                    className: "text-[#13ec5b] font-semibold",
+                    className: "!text-[#13ec5b] font-semibold",
                   }}
                 >
                   Plants
                 </Link>
+                
                 <Link
                   to="/tasks"
                   className="text-sm font-medium text-slate-600 hover:text-[#13ec5b] dark:text-slate-400 dark:hover:text-[#13ec5b] transition"
                   activeProps={{
-                    className: "text-[#13ec5b] font-semibold",
+                    className: "!text-[#13ec5b] font-semibold",
                   }}
                 >
                   Tasks
                 </Link>
-                {/* CTA */}
+  
                 <Link
                   to="/addPlantPage"
-                  className="ml-4 rounded-full bg-[#13ec5b] px-5 py-2 text-sm font-semibold text-[#102216] shadow-md hover:bg-[#13ec5b]/90 transition"
+                  className="text-sm font-medium text-slate-600 hover:text-[#13ec5b] dark:text-slate-400 dark:hover:text-[#13ec5b] transition"
+                  activeProps={{
+                    className: "!text-[#13ec5b] font-semibold dark:text-[#13ec5b]",
+                  }}
                 >
                   Add Plant
                 </Link>
-              </>
+              </div>
             )}
             {!user ? (
               <Link to="/login">LOG IN</Link>
