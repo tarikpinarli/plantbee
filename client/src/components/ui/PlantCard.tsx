@@ -3,18 +3,18 @@ import type { plantSchema } from "@/types/plant.schema";
 import type React from "react";
 
 type Plant = z.infer<typeof plantSchema>
-type PlantCardProps = Pick<Plant, "id" | "name" | "current_moisture" | "light_need" | "owner_name" | "image_url">
+type PlantCardProps = Pick<Plant, "name" | "current_moisture" | "light_need" | "owner_name" | "image_url">
 
 export const PlantCard: React.FC<PlantCardProps> = ({
-	// id,
 	name,
 	current_moisture,
 	light_need,
 	owner_name,
 	image_url
 }) => {
+
 	return (
-		<div>
+		<article className="flex flex-col bg-white border border-slate-200 rounded-2xl">
 			<h3 className="text-xl font-bold mb-1"> {name} </h3>
 			
 			{owner_name &&
@@ -36,8 +36,11 @@ export const PlantCard: React.FC<PlantCardProps> = ({
 			}
 
 			{image_url &&
-				<img src={image_url} alt={name}/>
+				<img
+				    className="mt-2 w-full h-40 object-cover rounded"
+					src={image_url} alt={name}/>
 			}
-		</div>
+		</article>
+		
 	);
 };

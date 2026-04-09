@@ -7,8 +7,8 @@ export async function fetchPlants() {
   if (!res.ok) throw new Error("Failed to fetch")
 
   const data = await res.json()
-  console.log("API response:", data);
-  console.log(data[0]);
+  // console.log("API response:", data); //debug
+  // console.log(data[0]); //debug
 
   const result = plantsArraySchema.safeParse(data)
   

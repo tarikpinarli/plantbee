@@ -1,56 +1,48 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { useQuery } from '@tanstack/react-query'
 import { fetchPlants } from '@/api/plants.api'
+import { PlantCard } from '@/components/ui/PlantCard'
 
-// Route definition
 export const Route = createFileRoute('/gardenPage')({
   component: GardenPage,
 })
-
 function GardenPage() {
   const { data, isLoading, error } = useQuery({
     queryKey: ['plants'],
     queryFn: fetchPlants,
   })
 
-  if (isLoading) return <p>Loading...</p>
+  {/* Loading/Error */}
+  if (isLoading) return <p>Loading...</p>;
+  if (error) return <p>Error loading plants</p>;
 
-  if (error) {
-    console.error(error)
-    return <p>Error loading plants</p>
-  }
-
-  if (!data || data.length === 0) return <p>No plants found</p>
+  {/* No plants */}
+  if (!data || data.length === 0) return <p>No plants found</p>;
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-      {data.map((plant) => (
-        <div
-          key={plant.id}
-          className="border p-4 rounded-lg shadow-sm bg-white dark:bg-[#09431c]"
-        >
-          <h2 className="text-lg font-semibold text-[#13ec5b] dark:text-slate-100">
-            {plant.name}
-          </h2>
-          <p className="text-sm text-slate-600 dark:text-slate-300">
-            Current Moisture: {plant.current_moisture ?? 'N/A'}
-          </p>
-          <p className="text-sm text-slate-600 dark:text-slate-300">
-            Light requirement: {plant.light_need ?? 'Unknown'}
-          </p>
-          <p className="text-sm text-slate-600 dark:text-slate-300">
-            Owner name: {plant.owner_name ?? 'Unknown'} 
-          </p>
-          
-          {plant.image_url && (
-            <img
-              src={plant.image_url}
-              alt={plant.name}
-              className="mt-2 w-full h-40 object-cover rounded"
-            />
-          )}
-        </div>
-      ))}
+    <div className="w-full sm:max-w-xl md:max-w-2xl lg:max-w-3xl xl:max-w-4xl mx-auto px-4 py-10">
+      <header className="mb-8">
+        <h1 className="flex flex-col text-2xl font-bold mb-2">
+          My Indoor Jungle
+        </h1>
+
+        <p className="text-slate-600 dark:text-slate-400 text-sm">
+          Keep track of your leafy friends and their needs.
+        </p>
+      </header>
+      
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+        {data.map((plant) => (
+          <PlantCard
+            key={plant.id}
+            name={plant.name}
+            current_moisture={plant.current_moisture}
+            light_need={plant.light_need}
+            owner_name={plant.owner_name}
+            image_url={plant.image_url}
+          />
+        ))}
+      </div>
     </div>
   )
 }
