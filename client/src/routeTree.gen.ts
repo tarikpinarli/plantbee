@@ -13,8 +13,8 @@ import { Route as WelcomeRouteImport } from './routes/welcome'
 import { Route as TasksRouteImport } from './routes/tasks'
 import { Route as ProfileRouteImport } from './routes/profile'
 import { Route as LoginRouteImport } from './routes/login'
-import { Route as GardenPageRouteImport } from './routes/gardenPage'
-import { Route as AddPlantPageRouteImport } from './routes/addPlantPage'
+import { Route as GardenRouteImport } from './routes/garden'
+import { Route as AddPlantRouteImport } from './routes/addPlant'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
 
@@ -38,14 +38,14 @@ const LoginRoute = LoginRouteImport.update({
   path: '/login',
   getParentRoute: () => rootRouteImport,
 } as any)
-const GardenPageRoute = GardenPageRouteImport.update({
-  id: '/gardenPage',
-  path: '/gardenPage',
+const GardenRoute = GardenRouteImport.update({
+  id: '/garden',
+  path: '/garden',
   getParentRoute: () => rootRouteImport,
 } as any)
-const AddPlantPageRoute = AddPlantPageRouteImport.update({
-  id: '/addPlantPage',
-  path: '/addPlantPage',
+const AddPlantRoute = AddPlantRouteImport.update({
+  id: '/addPlant',
+  path: '/addPlant',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AboutRoute = AboutRouteImport.update({
@@ -62,8 +62,8 @@ const IndexRoute = IndexRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
-  '/addPlantPage': typeof AddPlantPageRoute
-  '/gardenPage': typeof GardenPageRoute
+  '/addPlant': typeof AddPlantRoute
+  '/garden': typeof GardenRoute
   '/login': typeof LoginRoute
   '/profile': typeof ProfileRoute
   '/tasks': typeof TasksRoute
@@ -72,8 +72,8 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
-  '/addPlantPage': typeof AddPlantPageRoute
-  '/gardenPage': typeof GardenPageRoute
+  '/addPlant': typeof AddPlantRoute
+  '/garden': typeof GardenRoute
   '/login': typeof LoginRoute
   '/profile': typeof ProfileRoute
   '/tasks': typeof TasksRoute
@@ -83,8 +83,8 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
-  '/addPlantPage': typeof AddPlantPageRoute
-  '/gardenPage': typeof GardenPageRoute
+  '/addPlant': typeof AddPlantRoute
+  '/garden': typeof GardenRoute
   '/login': typeof LoginRoute
   '/profile': typeof ProfileRoute
   '/tasks': typeof TasksRoute
@@ -95,8 +95,8 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/about'
-    | '/addPlantPage'
-    | '/gardenPage'
+    | '/addPlant'
+    | '/garden'
     | '/login'
     | '/profile'
     | '/tasks'
@@ -105,8 +105,8 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/about'
-    | '/addPlantPage'
-    | '/gardenPage'
+    | '/addPlant'
+    | '/garden'
     | '/login'
     | '/profile'
     | '/tasks'
@@ -115,8 +115,8 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/about'
-    | '/addPlantPage'
-    | '/gardenPage'
+    | '/addPlant'
+    | '/garden'
     | '/login'
     | '/profile'
     | '/tasks'
@@ -126,8 +126,8 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AboutRoute: typeof AboutRoute
-  AddPlantPageRoute: typeof AddPlantPageRoute
-  GardenPageRoute: typeof GardenPageRoute
+  AddPlantRoute: typeof AddPlantRoute
+  GardenRoute: typeof GardenRoute
   LoginRoute: typeof LoginRoute
   ProfileRoute: typeof ProfileRoute
   TasksRoute: typeof TasksRoute
@@ -164,18 +164,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LoginRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/gardenPage': {
-      id: '/gardenPage'
-      path: '/gardenPage'
-      fullPath: '/gardenPage'
-      preLoaderRoute: typeof GardenPageRouteImport
+    '/garden': {
+      id: '/garden'
+      path: '/garden'
+      fullPath: '/garden'
+      preLoaderRoute: typeof GardenRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/addPlantPage': {
-      id: '/addPlantPage'
-      path: '/addPlantPage'
-      fullPath: '/addPlantPage'
-      preLoaderRoute: typeof AddPlantPageRouteImport
+    '/addPlant': {
+      id: '/addPlant'
+      path: '/addPlant'
+      fullPath: '/addPlant'
+      preLoaderRoute: typeof AddPlantRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/about': {
@@ -198,8 +198,8 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AboutRoute: AboutRoute,
-  AddPlantPageRoute: AddPlantPageRoute,
-  GardenPageRoute: GardenPageRoute,
+  AddPlantRoute: AddPlantRoute,
+  GardenRoute: GardenRoute,
   LoginRoute: LoginRoute,
   ProfileRoute: ProfileRoute,
   TasksRoute: TasksRoute,
