@@ -12,8 +12,8 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as WelcomeRouteImport } from './routes/welcome'
 import { Route as TasksRouteImport } from './routes/tasks'
 import { Route as ProfileRouteImport } from './routes/profile'
-import { Route as PlantsRouteImport } from './routes/plants'
 import { Route as LoginRouteImport } from './routes/login'
+import { Route as GardenPageRouteImport } from './routes/gardenPage'
 import { Route as AddPlantPageRouteImport } from './routes/addPlantPage'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
@@ -33,14 +33,14 @@ const ProfileRoute = ProfileRouteImport.update({
   path: '/profile',
   getParentRoute: () => rootRouteImport,
 } as any)
-const PlantsRoute = PlantsRouteImport.update({
-  id: '/plants',
-  path: '/plants',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const LoginRoute = LoginRouteImport.update({
   id: '/login',
   path: '/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const GardenPageRoute = GardenPageRouteImport.update({
+  id: '/gardenPage',
+  path: '/gardenPage',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AddPlantPageRoute = AddPlantPageRouteImport.update({
@@ -63,8 +63,8 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/addPlantPage': typeof AddPlantPageRoute
+  '/gardenPage': typeof GardenPageRoute
   '/login': typeof LoginRoute
-  '/plants': typeof PlantsRoute
   '/profile': typeof ProfileRoute
   '/tasks': typeof TasksRoute
   '/welcome': typeof WelcomeRoute
@@ -73,8 +73,8 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/addPlantPage': typeof AddPlantPageRoute
+  '/gardenPage': typeof GardenPageRoute
   '/login': typeof LoginRoute
-  '/plants': typeof PlantsRoute
   '/profile': typeof ProfileRoute
   '/tasks': typeof TasksRoute
   '/welcome': typeof WelcomeRoute
@@ -84,8 +84,8 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/addPlantPage': typeof AddPlantPageRoute
+  '/gardenPage': typeof GardenPageRoute
   '/login': typeof LoginRoute
-  '/plants': typeof PlantsRoute
   '/profile': typeof ProfileRoute
   '/tasks': typeof TasksRoute
   '/welcome': typeof WelcomeRoute
@@ -96,8 +96,8 @@ export interface FileRouteTypes {
     | '/'
     | '/about'
     | '/addPlantPage'
+    | '/gardenPage'
     | '/login'
-    | '/plants'
     | '/profile'
     | '/tasks'
     | '/welcome'
@@ -106,8 +106,8 @@ export interface FileRouteTypes {
     | '/'
     | '/about'
     | '/addPlantPage'
+    | '/gardenPage'
     | '/login'
-    | '/plants'
     | '/profile'
     | '/tasks'
     | '/welcome'
@@ -116,8 +116,8 @@ export interface FileRouteTypes {
     | '/'
     | '/about'
     | '/addPlantPage'
+    | '/gardenPage'
     | '/login'
-    | '/plants'
     | '/profile'
     | '/tasks'
     | '/welcome'
@@ -127,8 +127,8 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AboutRoute: typeof AboutRoute
   AddPlantPageRoute: typeof AddPlantPageRoute
+  GardenPageRoute: typeof GardenPageRoute
   LoginRoute: typeof LoginRoute
-  PlantsRoute: typeof PlantsRoute
   ProfileRoute: typeof ProfileRoute
   TasksRoute: typeof TasksRoute
   WelcomeRoute: typeof WelcomeRoute
@@ -157,18 +157,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ProfileRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/plants': {
-      id: '/plants'
-      path: '/plants'
-      fullPath: '/plants'
-      preLoaderRoute: typeof PlantsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/login': {
       id: '/login'
       path: '/login'
       fullPath: '/login'
       preLoaderRoute: typeof LoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/gardenPage': {
+      id: '/gardenPage'
+      path: '/gardenPage'
+      fullPath: '/gardenPage'
+      preLoaderRoute: typeof GardenPageRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/addPlantPage': {
@@ -199,8 +199,8 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AboutRoute: AboutRoute,
   AddPlantPageRoute: AddPlantPageRoute,
+  GardenPageRoute: GardenPageRoute,
   LoginRoute: LoginRoute,
-  PlantsRoute: PlantsRoute,
   ProfileRoute: ProfileRoute,
   TasksRoute: TasksRoute,
   WelcomeRoute: WelcomeRoute,

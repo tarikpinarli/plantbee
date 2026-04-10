@@ -1,21 +1,22 @@
-import { createFileRoute } from '@tanstack/react-router'
-import { usePlantForm } from '@/hooks/usePlantFormFunc'
-import { SharedButton } from '@/components/ui/customedButton'
-import { CustomedSlider } from '@/components/ui/customedSlider'
-import { CustomedInput } from '@/components/ui/customedInput'
-import { CustomedDropdown } from '@/components/ui/customedDropdown'
+import { createFileRoute, useNavigate } from '@tanstack/react-router'
+import { usePlantForm } from '@/hooks/usePlantForm'
+import { SharedButton } from '@/components/ui/CustomedButton'
+import { CustomedSlider } from '@/components/ui/CustomedSlider'
+import { CustomedInput } from '@/components/ui/CustomedInput'
+import { CustomedDropdown } from '@/components/ui/CustomedDropdown'
 import { useImageDrop } from '@/hooks/useImageDrop'
 import { useImageUpload } from '@/hooks/useImageUpload'
-import { useRef } from 'react'
-// import PlantImageCard from '@/components/ui/plantImageCard'
+import { useEffect, useRef } from 'react'
 
 function AddPlantPage() {
-  const { form, errors, status, handleChange, handleSubmit } = usePlantForm();
+  const { form, errors, status, apiError, handleChange, handleSubmit } = usePlantForm();
+  
   const { image, handleDrop, handleChangeImage, handleDragOver } = useImageDrop();
+  
   const { upload} = useImageUpload();
-
+  
   const fileInputRef = useRef<HTMLInputElement | null>(null);
-  //recheck submitevent?
+
   const handleSubmitWithImage = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
@@ -37,24 +38,22 @@ function AddPlantPage() {
     }
   };
 
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (status === 'success') {
+      const timer = setTimeout(() => {
+        navigate({ to: '/gardenPage' });
+      }, 600);
+
+      return () => clearTimeout(timer);
+    }
+  }, [status, navigate]);
+
   return (
     <div className="w-full sm:max-w-xl md:max-w-2xl lg:max-w-3xl xl:max-w-4xl mx-auto px-4 py-10">
       <h1 className="flex flex-col text-2xl font-bold text-green-800 mb-2">Add a New Plant 🌱</h1>
       <p className="text-gray-500 mb-8">Expand your garden by registering a new plant.</p>
-
-      {/* Success message */}
-      {status === 'success' && (
-        <div className="mb-6 p-4 bg-green-50 border border-green-200 rounded-lg text-green-700">
-          ✅ Plant added successfully!
-        </div>
-      )}
-
-      {/* Error message */}
-      {status === 'error' && (
-        <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg text-red-700">
-          ❌ Something went wrong. Please try again.
-        </div>
-      )}
 
       <form onSubmit={handleSubmitWithImage}>
 
@@ -126,7 +125,7 @@ function AddPlantPage() {
               onChange={(e) => handleChange('light_need', e.target.value)}
               options={[
                 { label: "Select light level", value: "" },
-                { label: "🌑 Low — Shade tolerant", value: "Low" },
+                { label: "🌙 Low — Shade tolerant", value: "Low" },
                 { label: "⛅ Medium — Indirect light", value: "Medium" },
                 { label: "☀️ High — Full sun", value: "High" },
               ]}
@@ -150,6 +149,11 @@ function AddPlantPage() {
             value={form.target_moisture}
             onChange={value => handleChange("target_moisture", value)}
           />
+            <div className="flex justify-between text-xs text-gray-500">
+              <span>0% Dry</span>
+              <span>50%</span>
+              <span>100% Wet</span>
+            </div>
 
         </div>
 
@@ -200,8 +204,21 @@ function AddPlantPage() {
           </SharedButton>
 
         </div>
-
       </form>
+
+      {/* Success message */}
+      {status === 'success' && (
+        <div className="mb-6 p-4 bg-green-50 border border-green-200 rounded-lg text-green-700">
+          ✅ Plant added successfully!
+        </div>
+      )}
+
+      {/* Error message */}
+      {status === 'error' && (
+        <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg text-red-700">
+          ❌ {apiError || 'Something went wrong'}
+        </div>
+      )}
     </div>
   )
 }

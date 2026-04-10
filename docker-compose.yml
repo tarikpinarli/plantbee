@@ -6,6 +6,8 @@ services:
       dockerfile: backend/server/Dockerfile
     ports:
       - "8080:8080"
+    volumes:
+    - ./uploads:/app/uploads 
     env_file:
       - path: ./backend/server/.env
         required: false
