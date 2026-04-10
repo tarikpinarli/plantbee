@@ -1,19 +1,22 @@
 import { createFileRoute, useNavigate } from '@tanstack/react-router'
 import { usePlantForm } from '@/hooks/usePlantForm'
-import { SharedButton } from '@/components/ui/customedButton'
-import { CustomedSlider } from '@/components/ui/customedSlider'
-import { CustomedInput } from '@/components/ui/customedInput'
-import { CustomedDropdown } from '@/components/ui/customedDropdown'
+import { SharedButton } from '@/components/ui/CustomedButton'
+import { CustomedSlider } from '@/components/ui/CustomedSlider'
+import { CustomedInput } from '@/components/ui/CustomedInput'
+import { CustomedDropdown } from '@/components/ui/CustomedDropdown'
 import { useImageDrop } from '@/hooks/useImageDrop'
 import { useImageUpload } from '@/hooks/useImageUpload'
 import { useEffect, useRef } from 'react'
-// import PlantImageCard from '@/components/ui/plantImageCard'
 
 function AddPlantPage() {
   const { form, errors, status, apiError, handleChange, handleSubmit } = usePlantForm();
+  
   const { image, handleDrop, handleChangeImage, handleDragOver } = useImageDrop();
+  
   const { upload} = useImageUpload();
+  
   const fileInputRef = useRef<HTMLInputElement | null>(null);
+
   const handleSubmitWithImage = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 

@@ -1,5 +1,5 @@
 import type { ComponentProps } from "react"
-import { CustomedInput } from "./customedInput"
+import { CustomedInput } from "./CustomedInput"
 
 interface SliderProps extends Omit<ComponentProps<"input">, "onChange"> {
 	label?: string;
@@ -23,15 +23,8 @@ export const CustomedSlider = ({label, min = 0, max = 100, value, onChange, clas
 				onChange={e => onChange?.(Number(e.target.value))}
 				className={`accent-green-400 ${className || ""}`}
 				// style={{ accentColor: "#22c55e"}}
-				// disabled={!onchange}
 				{...props}
 			/>
-
-			{/* <div className="flex justify-between text-xs text-gray-400">
-				<span>0% Dry</span>
-				<span>50%</span>
-				<span>100% Wet</span>
-			</div> */}
 		</div>
 	);
 };
