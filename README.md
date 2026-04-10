@@ -17,14 +17,14 @@
 - [8 · Dev Tooling](#8--dev-tooling)
 - [9 · Project Structure](#9--project-structure)
 
-All services are orchestrated with a single `docker-compose.yml` at the project root.
+All services are orchestrated with Docker Compose files at the project root (`docker-compose.yml` for production, `docker-compose.dev.yml` as a development override).
 
 ---
 
 ## Prerequisites
 Docker and Docker Compose are required to run the stack.
 
-> **No Go or Node.js installation is required on your machine** to run the stack. If you want to use the local lint/format tasks, you also need `Go` and `Task`.
+> **No Go or Node.js installation is required on your machine** to run the stack. If you want to use the local lint/format tasks, you also need `Go` and `make`.
 
 ---
 
@@ -43,7 +43,7 @@ Since the backend uses 42 Intra OAuth2 to authenticate users, you need to create
 
 ## 2 · Environment Variables
 
-Create the file `backend/server/.env` (already in `.gitignore` — **never commit it**):
+Create a `.env` file **in the project root directory** (already in `.gitignore` — **never commit it**):
 
 ```bash
 # 42 OAuth credentials (from step 1)
@@ -55,66 +55,77 @@ REDIRECT_URI=http://localhost:8080/auth/callback
 PORT=8080
 SESSION_SECRET=change-me-to-something-random
 
-# Database — copy this exactly, it works for everyone locally
+# Database
+DB_USER=postgres
+DB_PASSWORD=postgres
+DB_NAME=plantbee
 DATABASE_URL=postgres://postgres:postgres@db:5432/plantbee?sslmode=disable
 ```
 
 > The `db` hostname works inside Docker because Compose creates an internal network linking all containers. **Do not change it to `localhost`.**
+>
+> A legacy `backend/server/.env` file is also loaded as a fallback for backward compatibility.
 
 ---
 
 ## 3 · Running the Stack
 
-```bash
-# From the repository root:
-docker-compose up --build
-```
+The project uses a **Makefile** for all orchestration commands.
 
-To **rebuild from scratch** (e.g. after pulling new changes):
+### Development (recommended for daily work)
 ```bash
-docker-compose down -v          # removes containers AND database volume
-docker-compose up --build
+make dev
 ```
+This combines both compose files (`docker-compose.yml` + `docker-compose.dev.yml`), giving you:
+- Hot-reload for the React client (source directory mounted into the container)
+- Adminer database browser on http://localhost:8081
+- PostgreSQL port exposed on `localhost:5432` for direct access
 
-To stop without deleting data:
+### Production
 ```bash
-docker-compose down
+make prod
+```
+Runs only the base `docker-compose.yml` in detached mode. The database port is **not** exposed and Adminer is **not** included.
+
+### Other commands
+```bash
+make down              # Stop and remove containers
+make clean             # Stop containers AND delete database volume (full reset)
+make logs              # Tail logs from all running containers
+make help              # Show all available commands
 ```
 
 ---
 
 ## 4 · Development Mode
 
-`docker compose up --build` runs the stack in development mode:
+`make dev` runs the full development stack:
 
-- The backend uses `air` for hot reload inside the container
 - The frontend uses the Vite dev server with the source directory mounted into the container
-- File changes in `backend/server` restart the Go server automatically
 - File changes in `client` are reflected immediately by Vite
+- Adminer is available for browsing the database
 
 Development URLs:
 
-- Client: http://localhost:5173
-- Backend: http://localhost:8080
-- Adminer: http://localhost:8081
-
-For production-style image validation, CI builds:
-
-- the backend final Docker image
-- the client `production` Docker target, which serves the built app through Nginx
+| Service | URL |
+|---------|-----|
+| Client | http://localhost:5173 |
+| Backend API | http://localhost:8080 |
+| Adminer | http://localhost:8081 |
+| PostgreSQL | `localhost:5432` (direct access) |
 
 ---
 
 ## 5 · Service Map
 
-| Container | URL | Description |
-|-----------|-----|-------------|
-| `plantbee-client` | http://localhost:5173 | Vite client dev server |
-| `plantbee-app` | http://localhost:8080 | Go REST API |
-| `plantbee-db` | `localhost:5432` | PostgreSQL 15 (internal only) |
-| `plantbee-adminer` | http://localhost:8081 | Database browser UI |
+| Container | URL | Mode | Description |
+|-----------|-----|------|-------------|
+| `plantbee-app` | http://localhost:8080 | Both | Go REST API + serves built React frontend |
+| `plantbee-client` | http://localhost:5173 | Both | Vite client dev server |
+| `plantbee-db` | — | Both | PostgreSQL 15 (internal network only in prod) |
+| `plantbee-adminer` | http://localhost:8081 | Dev only | Database browser UI |
 
-### Adminer Login
+### Adminer Login (dev mode only)
 
 Navigate to http://localhost:8081 and use:
 
@@ -289,24 +300,28 @@ curl -X POST http://localhost:8080/api/reading \
 
 ## 8 · Dev Tooling
 
-The repository now includes:
+The repository includes:
 
-- `Taskfile.yml` at the root for repeatable development commands
+- A `Makefile` at the root for all orchestration and development commands
 - `backend/server/.golangci.yml` for linting and formatting rules
 - GitHub Actions CI that runs backend lint/test/build, frontend checks, and Docker checks
 
 Available commands from the repository root:
 
 ```bash
-task tools:install   # installs golangci-lint into ./.bin
-task fmt             # formats Go code with gofumpt + goimports
-task lint            # runs errcheck, govet, ineffassign, unused
-task test            # runs go test ./...
-task build           # runs go build ./...
-task ci              # runs lint, test, and build
+make dev             # start dev environment (hot-reload, Adminer, DB port exposed)
+make prod            # start production environment (detached)
+make down            # stop all containers
+make clean           # stop containers and delete database volume
+make logs            # tail logs from all containers
+make lint            # run Go linters
+make fmt             # format Go code
+make test            # run Go tests
+make build           # build Go packages
+make help            # show all available commands
 ```
 
-> The runtime Docker images in this repo do not include the Go toolchain, so these tasks should run on a machine or container that has `Go` and `Task` installed.
+> The runtime Docker images in this repo do not include the Go toolchain, so `make lint/fmt/test/build` should run on a machine that has `Go` installed.
 
 ---
 
@@ -314,9 +329,12 @@ task ci              # runs lint, test, and build
 
 ```
 plantbee_repo/
-├── docker-compose.yml          # Orchestrates all services
-├── Taskfile.yml                # Common lint/test/build commands
+├── .env                        # ⚠️ You must create this (see §2)
+├── docker-compose.yml          # Production compose (base)
+├── docker-compose.dev.yml      # Dev overrides (Adminer, DB port, hot-reload)
+├── Makefile                    # All orchestration and dev commands
 ├── client/
+│   ├── Dockerfile              # Vite dev server image
 │   ├── package.json            # Node dependencies and scripts
 │   ├── vite.config.ts          # Vite bundler and proxy config
 │   ├── index.html              # Client entry point
@@ -324,7 +342,6 @@ plantbee_repo/
 └── backend/
     └── server/
         ├── Dockerfile          # Multi-stage build (Compiles React + Runs Go)
-        ├── .env                # ⚠️ You must create this (see §2)
         ├── go.mod
         ├── cmd/server/
         │   └── main.go         # Entry point — registers routes

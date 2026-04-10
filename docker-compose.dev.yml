@@ -1,0 +1,21 @@
+# Development overrides — use with: make dev
+# Adds database port exposure, Adminer UI, and client hot-reload volumes.
+
+services:
+  db:
+    ports:
+      - "5432:5432"
+
+  adminer:
+    image: adminer
+    container_name: plantbee-adminer
+    restart: always
+    ports:
+      - "8081:8080"
+    depends_on:
+      - db
+
+  client:
+    volumes:
+      - ./client:/app
+      - /app/node_modules

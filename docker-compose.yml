@@ -5,13 +5,15 @@ services:
       context: .
       dockerfile: backend/server/Dockerfile
     ports:
-      - "8080:8080"
+      - "${APP_PORT:-8080}:8080"
     volumes:
-    - ./uploads:/app/uploads 
+      - ./uploads:/app/uploads
     env_file:
+      - path: ./.env
+        required: false
       - path: ./backend/server/.env
         required: false
-    restart: on-failure
+    restart: always
     depends_on:
       db:
         condition: service_healthy
@@ -23,8 +25,6 @@ services:
       POSTGRES_USER: ${DB_USER:-postgres}
       POSTGRES_PASSWORD: ${DB_PASSWORD:-postgres}
       POSTGRES_DB: ${DB_NAME:-plantbee}
-    ports:
-      - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
     healthcheck:
@@ -32,15 +32,7 @@ services:
       interval: 3s
       timeout: 3s
       retries: 5
-
-  adminer:
-    image: adminer
-    container_name: plantbee-adminer
     restart: always
-    ports:
-      - "8081:8080"
-    depends_on:
-      - db
 
   client:
     container_name: plantbee-client
@@ -48,12 +40,10 @@ services:
       context: ./client
       dockerfile: Dockerfile
     ports:
-      - "5173:5173"
-    volumes:
-      - ./client:/app
-      - /app/node_modules
+      - "${CLIENT_PORT:-5173}:5173"
     environment:
       - VITE_API_URL=http://app:8080
+    restart: always
     depends_on:
       - app
 
