@@ -10,7 +10,7 @@ import { useEffect, useRef } from 'react'
 // import PlantImageCard from '@/components/ui/plantImageCard'
 
 function AddPlantPage() {
-  const { form, errors, status, handleChange, handleSubmit } = usePlantForm();
+  const { form, errors, status, apiError, handleChange, handleSubmit } = usePlantForm();
   const { image, handleDrop, handleChangeImage, handleDragOver } = useImageDrop();
   const { upload} = useImageUpload();
   const fileInputRef = useRef<HTMLInputElement | null>(null);
@@ -213,7 +213,7 @@ function AddPlantPage() {
       {/* Error message */}
       {status === 'error' && (
         <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg text-red-700">
-          ❌ Something went wrong. Please try again.
+          ❌ {apiError || 'Something went wrong'}
         </div>
       )}
     </div>
