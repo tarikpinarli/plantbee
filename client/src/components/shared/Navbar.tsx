@@ -25,7 +25,7 @@ export function Navbar() {
             {user && (
               <div className="flex items-center gap-6">
                 <Link
-                  to="/gardenPage"
+                  to="/garden"
                   className="ml text-sm font-medium text-slate-600 hover:text-[#13ec5b] dark:text-slate-400 dark:hover:text-[#13ec5b] transition"
                   activeProps={{
                     className: "!text-[#13ec5b] font-semibold",
@@ -45,7 +45,7 @@ export function Navbar() {
                 </Link>
   
                 <Link
-                  to="/addPlantPage"
+                  to="/addPlant"
                   className="text-sm font-medium text-slate-600 hover:text-[#13ec5b] dark:text-slate-400 dark:hover:text-[#13ec5b] transition"
                   activeProps={{
                     className: "!text-[#13ec5b] font-semibold dark:text-[#13ec5b]",

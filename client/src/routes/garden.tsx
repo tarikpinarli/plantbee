@@ -3,7 +3,7 @@ import { useQuery } from '@tanstack/react-query'
 import { fetchPlants } from '@/api/plants.api'
 import { PlantCard } from '@/components/ui/PlantCard'
 
-export const Route = createFileRoute('/gardenPage')({
+export const Route = createFileRoute('/garden')({
   component: GardenPage,
 })
 function GardenPage() {

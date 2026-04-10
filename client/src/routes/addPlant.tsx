@@ -43,7 +43,7 @@ function AddPlantPage() {
   useEffect(() => {
     if (status === 'success') {
       const timer = setTimeout(() => {
-        navigate({ to: '/gardenPage' });
+        navigate({ to: '/garden' });
       }, 600);
 
       return () => clearTimeout(timer);
@@ -223,6 +223,6 @@ function AddPlantPage() {
   )
 }
 
-export const Route = createFileRoute('/addPlantPage')({
+export const Route = createFileRoute('/addPlant')({
   component: AddPlantPage,
 })
