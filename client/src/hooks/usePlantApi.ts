@@ -1,4 +1,10 @@
+import type { PlantFormData } from "@/types/plant.types"
 import { useState } from "react"
+
+type ApiErrorResponse = {
+	field?: keyof PlantFormData;
+	error?: string;
+}
 
 export function usePlantApi() {
 	// Tracks what's happening with the API call
@@ -7,7 +13,7 @@ export function usePlantApi() {
   	// save addPlant error
   	const [apiError, setApiError] = useState<string | null>(null)
 
-	const createPlant = async (payload: any) => {
+	const createPlant = async (payload: PlantFormData) => {
 		setStatus('loading')
      	setApiError(null);
 
@@ -18,7 +24,7 @@ export function usePlantApi() {
 				body: JSON.stringify(payload),   // ← this converts JS object to JSON string
 			})
 
-			const data = await response.json();
+			const data: ApiErrorResponse = await response.json();
 
 			// console.log("Full backend response:", data); //log server error
 
@@ -28,8 +34,14 @@ export function usePlantApi() {
 
 			setStatus('success');
 			return true;
-		} catch (err: any) {
-			setApiError(err.message);
+
+		} catch (err: unknown) {
+			if (err instanceof Error) {
+				setApiError(err.message);
+			} else {
+				setApiError('Unknown error');
+			}
+			
 			setStatus('error');
 			return false;
 		}
@@ -37,3 +49,4 @@ export function usePlantApi() {
 	
 	return {createPlant, status, apiError };
 }
+

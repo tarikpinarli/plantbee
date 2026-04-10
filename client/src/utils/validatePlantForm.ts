@@ -1,5 +1,7 @@
-export function validatePlantForm(form: any) {
-	const newErrors: Record<string, string> = {};
+import type { PlantFormData } from "@/types/plant.types";
+
+export function validatePlantForm(form: PlantFormData) {
+	const newErrors: Partial<Record<keyof PlantFormData, string>> = {};
 
 	if (!form.name.trim())
 		newErrors.name = 'Plant name is required'

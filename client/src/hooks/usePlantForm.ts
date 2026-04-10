@@ -2,18 +2,7 @@ import { useState } from 'react'
 import { usePlantApi } from './usePlantApi'
 import { validatePlantForm } from '@/utils/validatePlantForm'
 import { buildPlantPayload } from '@/utils/buildPlantPayload'
-
-// Backend expect JSON
-type PlantFormData = {
-  name: string              // Required
-  species: string           // Optional
-  category: string          // Optional
-  pot_volume_l: number      // Required — float
-  light_need: string        // Required — 'Low' | 'Medium' | 'High'
-  target_moisture: number   // Required — 0 to 100, default 50
-  sensor_id: string         // Required
-  image_url: string         // Required -> not required
-}
+import type { PlantFormData } from '@/types/plant.types'
 
 export function usePlantForm() {
   // form : create state of form, setform update the form state
@@ -35,14 +24,14 @@ export function usePlantForm() {
   const {createPlant, status, apiError} = usePlantApi();
 
   // Single handler for ALL text/number inputs 
-  function handleChange(field: string, value: any) {
+  function handleChange(field: keyof PlantFormData, value: string | number) {
     setForm(prev => ({ ...prev, [field]: value }));
     // Clear the error for this field as soon as user starts typing
     setErrors(prev => ({ ...prev, [field]: '' }));
   }
 
   // ── Submit handler
-  async function handleSubmit(e: React.FormEvent<HTMLFormElement>, override?: any) {
+  async function handleSubmit(e: React.FormEvent<HTMLFormElement>, override?: Partial<PlantFormData>) {
     e.preventDefault()   // stop browser page reload
 
     // validate — stop here if anything is wrong

@@ -1,4 +1,6 @@
-export function buildPlantPayload(form: any) {
+import type { PlantFormData } from "@/types/plant.types";
+
+export function buildPlantPayload(form: PlantFormData): PlantFormData {
 	return {
 		name: form.name.trim(),
 		species: form.species.trim(),
