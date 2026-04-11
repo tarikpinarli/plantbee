@@ -379,4 +379,3 @@ func (s *SensorService) evaluateSuddenDropLifecycle(plant *models.Plant, reading
 		}
 	}
 }
-
