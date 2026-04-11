@@ -98,7 +98,9 @@ func (d *DB) GetOfflinePlants(threshold time.Time) ([]models.Plant, error) {
 	if err != nil {
 		return nil, err
 	}
-	defer rows.Close()
+	defer func() {
+		_ = rows.Close()
+	}()
 
 	var plants []models.Plant
 	for rows.Next() {

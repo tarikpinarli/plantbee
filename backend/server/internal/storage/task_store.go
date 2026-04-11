@@ -30,7 +30,6 @@ func (d *DB) CreateTask(task *models.Task) error {
 		task.Status,
 		task.ScheduledAt,
 	).Scan(&task.ID)
-
 	if err != nil {
 		if pqErr, ok := err.(*pq.Error); ok && pqErr.Code == "23505" {
 			return ErrTaskAlreadyActive
@@ -77,7 +76,9 @@ func (d *DB) CompleteTaskWithCredit(taskID, volunteerID int) error {
 	if err != nil {
 		return err
 	}
-	defer tx.Rollback()
+	defer func() {
+		_ = tx.Rollback()
+	}()
 
 	if _, err := tx.Exec(`UPDATE tasks SET status = 'completed', completed_at = CURRENT_TIMESTAMP WHERE id = $1`, taskID); err != nil {
 		return err
@@ -147,7 +148,9 @@ func (d *DB) GetTasks(statusFilter string) ([]models.TaskDTO, error) {
 	if err != nil {
 		return nil, err
 	}
-	defer rows.Close()
+	defer func() {
+		_ = rows.Close()
+	}()
 
 	var tasks []models.TaskDTO
 	for rows.Next() {

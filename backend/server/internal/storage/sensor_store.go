@@ -33,7 +33,9 @@ func (d *DB) GetRecentSensorReadings(sensorID string, limit int) ([]models.Senso
 	if err != nil {
 		return nil, err
 	}
-	defer rows.Close()
+	defer func() {
+		_ = rows.Close()
+	}()
 
 	var readings []models.SensorReading
 	for rows.Next() {
@@ -43,10 +45,10 @@ func (d *DB) GetRecentSensorReadings(sensorID string, limit int) ([]models.Senso
 		}
 		readings = append(readings, r)
 	}
-	
+
 	if err := rows.Err(); err != nil {
 		return nil, err
 	}
-	
+
 	return readings, nil
 }

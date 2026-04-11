@@ -8,12 +8,12 @@ type Task struct {
 	SensorID        string    `json:"sensor_id"`        // sensor id
 	Type            string    `json:"type"`             // "water" or "battery_error"
 	CurrentMoisture int       `json:"current_moisture"` // moisture at the time of task creation/update
-	WaterAmount int       `json:"water_amount"` // ml
-	Message     string    `json:"message"`      // task details or error message
-	Status      string    `json:"status"`       // "open", "in_progress", "completed"
-	VolenteeID  int       `json:"volentee_id"`  // who is doing the task
-	ScheduledAt time.Time `json:"scheduled_at"` // when the task was created
-	CompletedAt time.Time `json:"completed_at"` // when the task was completed
+	WaterAmount     int       `json:"water_amount"`     // ml
+	Message         string    `json:"message"`          // task details or error message
+	Status          string    `json:"status"`           // "open", "in_progress", "completed"
+	VolenteeID      int       `json:"volentee_id"`      // who is doing the task
+	ScheduledAt     time.Time `json:"scheduled_at"`     // when the task was created
+	CompletedAt     time.Time `json:"completed_at"`     // when the task was completed
 }
 
 type TaskDTO struct {
