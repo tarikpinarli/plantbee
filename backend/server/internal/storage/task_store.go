@@ -129,7 +129,8 @@ func (d *DB) GetTasks(statusFilter string) ([]models.TaskDTO, error) {
 			COALESCE(t.current_moisture, p.current_moisture) as current_moisture,
 			p.target_moisture,
 			t.water_amount as water_needed_ml,
-			COALESCE(t.message, '') as message
+			COALESCE(t.message, '') as message,
+			COALESCE(t.volentee_id, 0) as volunteer_id
 		FROM tasks t
 		JOIN plants p ON t.plant_id = p.id
 	`
@@ -163,6 +164,7 @@ func (d *DB) GetTasks(statusFilter string) ([]models.TaskDTO, error) {
 			&dto.TargetMoisture,
 			&dto.WaterNeededML,
 			&dto.Message,
+			&dto.VolunteerID,
 		); err != nil {
 			return nil, err
 		}

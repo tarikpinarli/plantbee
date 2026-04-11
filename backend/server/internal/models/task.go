@@ -28,4 +28,5 @@ type TaskDTO struct {
 	TargetMoisture  int    `json:"target_moisture"`
 	WaterNeededML   int    `json:"water_needed_ml"`
 	Message         string `json:"message"`
+	VolunteerID     int    `json:"volunteer_id"`
 }

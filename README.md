@@ -232,6 +232,27 @@ curl -X POST http://localhost:8080/api/reading \
 | `POST /api/tasks/accept` | Accepts a task for a plant |
 | `POST /api/tasks/cancel` | Cancels an accepted task |
 
+**Example Response for `GET /api/tasks`:**
+```json
+[
+  {
+    "task_id": 14,
+    "plant_id": 1,
+    "sensor_id": "sensor_01",
+    "type": "water",
+    "plant_name": "Office Monstera",
+    "image_url": "https://...",
+    "status": "open",
+    "current_moisture": 15,
+    "target_moisture": 50,
+    "water_needed_ml": 850,
+    "message": "Plant is thirsty! Moisture is at 15% (Target: 50%). Needs 850 ml of water.",
+    "volunteer_id": 0
+  }
+]
+```
+
+
 ---
 
 ## 7 · Intelligent Monitoring
