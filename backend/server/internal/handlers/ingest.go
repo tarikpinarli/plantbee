@@ -20,7 +20,7 @@ func (h *Handler) IngestData(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if err := h.PlantService.ProcessReading(raw); err != nil {
+	if err := h.SensorService.ProcessReading(raw); err != nil {
 		fmt.Printf("❌ Processing Error: %v\n", err)
 		http.Error(w, "Failed to process reading", http.StatusInternalServerError)
 		return

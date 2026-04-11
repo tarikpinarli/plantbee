@@ -9,11 +9,11 @@ import (
 )
 
 type Handler struct {
-	DB           *storage.DB
-	OAuthConfig  *oauth2.Config
-	PlantService *services.PlantService
-	AuthService  *services.AuthService
-	TaskService  *services.TaskService
+	DB            *storage.DB
+	OAuthConfig   *oauth2.Config
+	SensorService *services.SensorService
+	AuthService   *services.AuthService
+	TaskService   *services.TaskService
 }
 
 func New(db *storage.DB, cfg *config.Config) *Handler {
@@ -29,10 +29,10 @@ func New(db *storage.DB, cfg *config.Config) *Handler {
 	}
 
 	return &Handler{
-		DB:           db,
-		OAuthConfig:  oauth,
-		PlantService: services.NewPlantService(db),
-		AuthService:  services.NewAuthService(),
-		TaskService:  services.NewTaskService(db),
+		DB:            db,
+		OAuthConfig:   oauth,
+		SensorService: services.NewSensorService(db),
+		AuthService:   services.NewAuthService(),
+		TaskService:   services.NewTaskService(db),
 	}
 }

@@ -10,16 +10,16 @@ import (
 	"plantbee-backend/internal/storage"
 )
 
-type PlantService struct {
+type SensorService struct {
 	db *storage.DB
 }
 
-func NewPlantService(db *storage.DB) *PlantService {
-	return &PlantService{db: db}
+func NewSensorService(db *storage.DB) *SensorService {
+	return &SensorService{db: db}
 }
 
 // ProcessReading handles the business logic when a new sensor reading arrives.
-func (s *PlantService) ProcessReading(raw models.IncomingPayload) error {
+func (s *SensorService) ProcessReading(raw models.IncomingPayload) error {
 	reading := models.SensorReading{
 		SensorID:     raw.SensorID,
 		Moisture:     raw.Moisture,
@@ -54,7 +54,7 @@ func (s *PlantService) ProcessReading(raw models.IncomingPayload) error {
 }
 
 // evaluateTaskLifecycle implements the 3-step task evaluation algorithm.
-func (s *PlantService) evaluateTaskLifecycle(plant *models.Plant, reading *models.SensorReading) {
+func (s *SensorService) evaluateTaskLifecycle(plant *models.Plant, reading *models.SensorReading) {
 	waterNeed := s.calculateWaterNeed(plant, reading)
 
 	// ─── Step 1: Evaluate in_progress task ───
@@ -137,11 +137,11 @@ func (s *PlantService) evaluateTaskLifecycle(plant *models.Plant, reading *model
 }
 
 // calculateWaterNeed computes how many ml of water the plant needs to reach target moisture.
-func (s *PlantService) calculateWaterNeed(plant *models.Plant, reading *models.SensorReading) int {
+func (s *SensorService) calculateWaterNeed(plant *models.Plant, reading *models.SensorReading) int {
 	return int(plant.PotVolumeLiters * float64(plant.TargetMoisture-reading.Moisture) / 100.0 * 1000)
 }
 
-func (s *PlantService) evaluateBatteryLifecycle(plant *models.Plant, reading *models.SensorReading) {
+func (s *SensorService) evaluateBatteryLifecycle(plant *models.Plant, reading *models.SensorReading) {
 	if reading.BatteryLevel <= 20 {
 		// Critical battery
 		msg := fmt.Sprintf("ESP32 Battery critically low: %d%%", reading.BatteryLevel)
@@ -186,7 +186,7 @@ func (s *PlantService) evaluateBatteryLifecycle(plant *models.Plant, reading *mo
 	}
 }
 
-func (s *PlantService) printLog(t models.SensorReading) {
+func (s *SensorService) printLog(t models.SensorReading) {
 	barLen := t.Moisture / 10
 	if barLen > 10 {
 		barLen = 10
