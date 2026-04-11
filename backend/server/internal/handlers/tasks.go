@@ -28,8 +28,13 @@ func (h *Handler) HandleAcceptTask(w http.ResponseWriter, r *http.Request) {
 
 	task.VolenteeID = userID
 
-	if err := h.TaskService.AcceptTask(&task); err != nil {
+	accepted, err := h.TaskService.AcceptTask(&task)
+	if err != nil {
 		http.Error(w, "Failed to accept task", http.StatusInternalServerError)
+		return
+	}
+	if !accepted {
+		http.Error(w, "Task is not available for acceptance (it may already be in progress or completed)", http.StatusConflict)
 		return
 	}
 
@@ -63,4 +68,26 @@ func (h *Handler) HandleCancelTask(w http.ResponseWriter, r *http.Request) {
 	}
 
 	w.WriteHeader(http.StatusOK)
+}
+
+func (h *Handler) HandleGetTasks(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodGet {
+		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
+		return
+	}
+
+	statusFilter := r.URL.Query().Get("status")
+
+	tasks, err := h.TaskService.GetTasks(statusFilter)
+	if err != nil {
+		http.Error(w, "Failed to fetch tasks", http.StatusInternalServerError)
+		return
+	}
+
+	if tasks == nil {
+		tasks = []models.TaskDTO{}
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	_ = json.NewEncoder(w).Encode(tasks)
 }

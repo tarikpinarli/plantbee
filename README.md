@@ -228,12 +228,49 @@ curl -X POST http://localhost:8080/api/reading \
 
 | Endpoint | What it does |
 |----------|-------------|
+| `GET /api/tasks` | Lists all tasks with detailed DTO (supports `?status=` filter) |
 | `POST /api/tasks/accept` | Accepts a task for a plant |
 | `POST /api/tasks/cancel` | Cancels an accepted task |
 
+**Example Response for `GET /api/tasks`:**
+```json
+[
+  {
+    "task_id": 14,
+    "plant_id": 1,
+    "sensor_id": "sensor_01",
+    "type": "water",
+    "plant_name": "Office Monstera",
+    "image_url": "https://...",
+    "status": "open",
+    "current_moisture": 15,
+    "target_moisture": 50,
+    "water_needed_ml": 850,
+    "message": "Plant is thirsty! Moisture is at 15% (Target: 50%). Needs 850 ml of water.",
+    "volunteer_id": 0
+  }
+]
+```
+
+
 ---
 
-## 7 · Database Schema
+## 7 · Intelligent Monitoring
+
+The backend includes a proactive monitoring engine that automatically manages plant health and hardware status:
+
+### Automated Task Lifecycle
+- **Self-Healing:** Tasks auto-complete and reward volunteers exactly when hardware verifies a physical fix (e.g., moisture rises after a "thirsty" alert).
+- **Organic Recovery:** Open tasks are silently resolved if a sensor detects an organic fix without a formal volunteer assignment.
+
+### Anomaly & Failure Detection
+- **Sudden Drop Detection:** Uses a "Drying Average" algorithm (polling the last 15 readings) to distinguish between natural drying and a dislodged sensor probe.
+- **24h "Radio Silence" Monitor:** A background goroutine flags sensors that haven't sent data in over 24 hours.
+- **Battery Tracking:** Monitors telemetry for low voltages and alerts when battery hits <= 20%.
+
+---
+
+## 8 · Database Schema
 
 ### `users`
 | Column | Type | Notes |
@@ -271,6 +308,7 @@ curl -X POST http://localhost:8080/api/reading \
 | `sensor_id` | VARCHAR(50) | links to a plant |
 | `moisture` | INTEGER | |
 | `wake_time` | FLOAT | seconds the ESP32 was awake |
+| `battery_level` | INTEGER | |
 | `recorded_at` | TIMESTAMPTZ | |
 
 ### `tasks`
@@ -278,8 +316,11 @@ curl -X POST http://localhost:8080/api/reading \
 |--------|------|-------|
 | `id` | SERIAL PK | |
 | `plant_id` | INTEGER | FK → `plants.id` |
-| `type` | VARCHAR(50) | `water` or `error` |
+| `sensor_id` | VARCHAR(50) | |
+| `type` | VARCHAR(50) | e.g., `water`, `offline_error`, `sensor_anomaly` |
+| `current_moisture` | INTEGER | |
 | `water_amount` | INTEGER | amount in ml |
+| `message` | TEXT | dynamic alert details |
 | `status` | VARCHAR(50) | `open`, `in_progress`, or `completed` |
 | `volentee_id` | INTEGER | FK → `users.id` |
 | `scheduled_at` | TIMESTAMPTZ | |
@@ -287,7 +328,7 @@ curl -X POST http://localhost:8080/api/reading \
 
 ---
 
-## 8 · Dev Tooling
+## 9 · Dev Tooling
 
 The repository now includes:
 
@@ -310,7 +351,7 @@ task ci              # runs lint, test, and build
 
 ---
 
-## 9 · Project Structure
+## 10 · Project Structure
 
 ```
 plantbee_repo/

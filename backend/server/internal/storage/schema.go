@@ -23,6 +23,7 @@ func (d *DB) CreateTables() error {
 		sensor_id VARCHAR(50) NOT NULL,
 		moisture INTEGER,
 		wake_time FLOAT,
+		battery_level INTEGER,
 		recorded_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 	);`
 
@@ -46,13 +47,70 @@ func (d *DB) CreateTables() error {
 	CREATE TABLE IF NOT EXISTS tasks (
 		id SERIAL PRIMARY KEY,
 		plant_id INTEGER REFERENCES plants(id),
+		sensor_id VARCHAR(50),
 		type VARCHAR(50) NOT NULL,
+		current_moisture INTEGER,
 		water_amount INTEGER,
+		message TEXT,
 		status VARCHAR(50) NOT NULL,
 		volentee_id INTEGER REFERENCES users(id),
 		scheduled_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
 		completed_at TIMESTAMP WITH TIME ZONE
-	);`
+	);
+	CREATE UNIQUE INDEX IF NOT EXISTS unique_active_task_per_plant_type 
+	ON tasks (plant_id, type) 
+	WHERE status IN ('open', 'in_progress');`
+
+	const alterUsersTable = `
+		ALTER TABLE users 
+			ADD COLUMN IF NOT EXISTS intra_id VARCHAR(50),
+			ADD COLUMN IF NOT EXISTS email VARCHAR(100),
+			ADD COLUMN IF NOT EXISTS login VARCHAR(50),
+			ADD COLUMN IF NOT EXISTS image_url TEXT,
+			ADD COLUMN IF NOT EXISTS intend_to_help BOOLEAN DEFAULT FALSE,
+			ADD COLUMN IF NOT EXISTS first_visit BOOLEAN DEFAULT TRUE,
+			ADD COLUMN IF NOT EXISTS water_count INT DEFAULT 0,
+			ADD COLUMN IF NOT EXISTS logged_in BOOLEAN DEFAULT FALSE,
+			ADD COLUMN IF NOT EXISTS created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP;
+	`
+
+	const alterSensorTable = `
+		ALTER TABLE sensor_readings 
+			ADD COLUMN IF NOT EXISTS sensor_id VARCHAR(50),
+			ADD COLUMN IF NOT EXISTS moisture INTEGER,
+			ADD COLUMN IF NOT EXISTS wake_time FLOAT,
+			ADD COLUMN IF NOT EXISTS battery_level INTEGER,
+			ADD COLUMN IF NOT EXISTS recorded_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP;
+	`
+
+	const alterPlantsTable = `
+		ALTER TABLE plants 
+			ADD COLUMN IF NOT EXISTS name VARCHAR(100),
+			ADD COLUMN IF NOT EXISTS species VARCHAR(100),
+			ADD COLUMN IF NOT EXISTS category VARCHAR(50),
+			ADD COLUMN IF NOT EXISTS pot_volume_liters FLOAT,
+			ADD COLUMN IF NOT EXISTS light_need VARCHAR(50),
+			ADD COLUMN IF NOT EXISTS target_moisture INTEGER DEFAULT 50,
+			ADD COLUMN IF NOT EXISTS current_moisture INTEGER DEFAULT 50,
+			ADD COLUMN IF NOT EXISTS owner_id INTEGER,
+			ADD COLUMN IF NOT EXISTS sensor_id VARCHAR(50),
+			ADD COLUMN IF NOT EXISTS created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+			ADD COLUMN IF NOT EXISTS image_url TEXT;
+	`
+
+	const alterTasksTable = `
+		ALTER TABLE tasks 
+			ADD COLUMN IF NOT EXISTS plant_id INTEGER,
+			ADD COLUMN IF NOT EXISTS sensor_id VARCHAR(50),
+			ADD COLUMN IF NOT EXISTS type VARCHAR(50),
+			ADD COLUMN IF NOT EXISTS current_moisture INTEGER,
+			ADD COLUMN IF NOT EXISTS water_amount INTEGER,
+			ADD COLUMN IF NOT EXISTS message TEXT,
+			ADD COLUMN IF NOT EXISTS status VARCHAR(50),
+			ADD COLUMN IF NOT EXISTS volentee_id INTEGER,
+			ADD COLUMN IF NOT EXISTS scheduled_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+			ADD COLUMN IF NOT EXISTS completed_at TIMESTAMP WITH TIME ZONE;
+	`
 
 	if _, err := d.Exec(createUsersTable); err != nil {
 		return err
@@ -73,6 +131,20 @@ func (d *DB) CreateTables() error {
 		return err
 	}
 	log.Println("✅ Tasks table ensured")
+
+	if _, err := d.Exec(alterUsersTable); err != nil {
+		return err
+	}
+	if _, err := d.Exec(alterSensorTable); err != nil {
+		return err
+	}
+	if _, err := d.Exec(alterPlantsTable); err != nil {
+		return err
+	}
+	if _, err := d.Exec(alterTasksTable); err != nil {
+		return err
+	}
+	log.Println("✅ Table migrations applied")
 
 	return nil
 }

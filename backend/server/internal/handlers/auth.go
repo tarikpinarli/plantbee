@@ -95,7 +95,7 @@ func (h *Handler) HandleCallback(w http.ResponseWriter, r *http.Request) {
 	if user.FirstVisit {
 		http.Redirect(w, r, "/welcome", http.StatusTemporaryRedirect)
 	} else {
-		http.Redirect(w, r, "/dashboard", http.StatusTemporaryRedirect)
+		http.Redirect(w, r, "/garden", http.StatusTemporaryRedirect)
 	}
 }
 
