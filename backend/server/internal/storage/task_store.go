@@ -15,14 +15,16 @@ var ErrTaskAlreadyActive = errors.New("a task of this type is already active for
 // CreateTask inserts a new task into the database.
 func (d *DB) CreateTask(task *models.Task) error {
 	query := `
-        INSERT INTO tasks (plant_id, type, water_amount, message, status, scheduled_at)
-        VALUES ($1, $2, $3, $4, $5, $6)
+        INSERT INTO tasks (plant_id, sensor_id, type, current_moisture, water_amount, message, status, scheduled_at)
+        VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
         RETURNING id;
     `
 	// We only insert the fields we know when creating a new task (no volenteer_id) it will be set later
 	err := d.QueryRow(query,
 		task.PlantID,
+		task.SensorID,
 		task.Type,
+		task.CurrentMoisture,
 		task.WaterAmount,
 		task.Message,
 		task.Status,
@@ -56,10 +58,10 @@ func (d *DB) CancelTask(task *models.Task) error {
 
 // GetTaskForPlantByStatus fetches the single task matching a specific type and status for a plant.
 func (d *DB) GetTaskForPlantByStatus(plantID int, taskType, status string) (*models.Task, error) {
-	query := `SELECT id, plant_id, type, water_amount, message, status, COALESCE(volentee_id, 0)
+	query := `SELECT id, plant_id, COALESCE(sensor_id, ''), type, COALESCE(current_moisture, 0), water_amount, message, status, COALESCE(volentee_id, 0)
 		FROM tasks WHERE plant_id = $1 AND type = $2 AND status = $3 LIMIT 1`
 	var t models.Task
-	err := d.QueryRow(query, plantID, taskType, status).Scan(&t.ID, &t.PlantID, &t.Type, &t.WaterAmount, &t.Message, &t.Status, &t.VolenteeID)
+	err := d.QueryRow(query, plantID, taskType, status).Scan(&t.ID, &t.PlantID, &t.SensorID, &t.Type, &t.CurrentMoisture, &t.WaterAmount, &t.Message, &t.Status, &t.VolenteeID)
 	if err != nil {
 		if err == sql.ErrNoRows {
 			return nil, nil // No task found
@@ -86,10 +88,10 @@ func (d *DB) CompleteTaskWithCredit(taskID, volunteerID int) error {
 	return tx.Commit()
 }
 
-// ReopenTask reverts an in_progress task back to open, clears the volunteer, and updates water_amount.
-func (d *DB) ReopenTask(taskID, newWaterAmount int) error {
-	query := `UPDATE tasks SET status = 'open', volentee_id = NULL, water_amount = $1 WHERE id = $2`
-	_, err := d.Exec(query, newWaterAmount, taskID)
+// ReopenTask reverts an in_progress task back to open, clears the volunteer, and updates water_amount and current_moisture.
+func (d *DB) ReopenTask(taskID, newWaterAmount, currentMoisture int, message string) error {
+	query := `UPDATE tasks SET status = 'open', volentee_id = NULL, water_amount = $1, current_moisture = $2, message = $3 WHERE id = $4`
+	_, err := d.Exec(query, newWaterAmount, currentMoisture, message, taskID)
 	return err
 }
 
@@ -100,10 +102,10 @@ func (d *DB) AutoCloseOpenTask(plantID int, taskType string) error {
 	return err
 }
 
-// UpdateOpenTaskWaterAmount recalculates the water_amount for open task based on new reading.
-func (d *DB) UpdateOpenTaskWaterAmount(plantID int, taskType string, waterAmount int) error {
-	query := `UPDATE tasks SET water_amount = $1 WHERE plant_id = $2 AND type = $3 AND status = 'open'`
-	_, err := d.Exec(query, waterAmount, plantID, taskType)
+// UpdateOpenTaskWaterAmount recalculates the water_amount and current_moisture for open task based on new reading.
+func (d *DB) UpdateOpenTaskWaterAmount(plantID int, taskType string, waterAmount int, currentMoisture int, message string) error {
+	query := `UPDATE tasks SET water_amount = $1, current_moisture = $2, message = $3 WHERE plant_id = $4 AND type = $5 AND status = 'open'`
+	_, err := d.Exec(query, waterAmount, currentMoisture, message, plantID, taskType)
 	return err
 }
 
@@ -119,11 +121,12 @@ func (d *DB) GetTasks(statusFilter string) ([]models.TaskDTO, error) {
 		SELECT
 			t.id as task_id,
 			p.id as plant_id,
+			COALESCE(t.sensor_id, '') as sensor_id,
 			t.type,
 			p.name as plant_name,
 			COALESCE(p.image_url, '') as image_url,
 			t.status,
-			p.current_moisture,
+			COALESCE(t.current_moisture, p.current_moisture) as current_moisture,
 			p.target_moisture,
 			t.water_amount as water_needed_ml,
 			COALESCE(t.message, '') as message
@@ -151,6 +154,7 @@ func (d *DB) GetTasks(statusFilter string) ([]models.TaskDTO, error) {
 		if err := rows.Scan(
 			&dto.TaskID,
 			&dto.PlantID,
+			&dto.SensorID,
 			&dto.Type,
 			&dto.PlantName,
 			&dto.ImageURL,

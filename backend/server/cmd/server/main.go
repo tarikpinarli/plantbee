@@ -4,6 +4,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"time"
 
 	"plantbee-backend/internal/config"
 	"plantbee-backend/internal/handlers"
@@ -51,7 +52,7 @@ func main() {
 	fs := http.FileServer(http.Dir("/client/dist"))
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		// If it's an API route that wasn't caught above, return 404
-		if len(r.URL.Path) >= 5 && r.URL.Path[:5] == "/api/" {
+		if len(r.URL.Path) >= 5 && r.URL.Path[:5] == "/api/" || len(r.URL.Path) >= 5 && r.URL.Path[:5] == "/auth/" {
 			http.NotFound(w, r)
 			return
 		}
@@ -65,6 +66,10 @@ func main() {
 
 		fs.ServeHTTP(w, r)
 	})
+
+	// Start the background process to check for "radio silence" (24 hours offline)
+	// We run the check every 1 hour.
+	h.SensorService.StartOfflineMonitor(24*time.Hour, 1*time.Hour)
 
 	log.Printf("Server starting on port %s", cfg.Port)
 	log.Fatal(http.ListenAndServe(cfg.Port, nil))

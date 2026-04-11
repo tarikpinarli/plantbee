@@ -47,7 +47,9 @@ func (d *DB) CreateTables() error {
 	CREATE TABLE IF NOT EXISTS tasks (
 		id SERIAL PRIMARY KEY,
 		plant_id INTEGER REFERENCES plants(id),
+		sensor_id VARCHAR(50),
 		type VARCHAR(50) NOT NULL,
+		current_moisture INTEGER,
 		water_amount INTEGER,
 		message TEXT,
 		status VARCHAR(50) NOT NULL,
@@ -99,7 +101,9 @@ func (d *DB) CreateTables() error {
 	const alterTasksTable = `
 		ALTER TABLE tasks 
 			ADD COLUMN IF NOT EXISTS plant_id INTEGER,
+			ADD COLUMN IF NOT EXISTS sensor_id VARCHAR(50),
 			ADD COLUMN IF NOT EXISTS type VARCHAR(50),
+			ADD COLUMN IF NOT EXISTS current_moisture INTEGER,
 			ADD COLUMN IF NOT EXISTS water_amount INTEGER,
 			ADD COLUMN IF NOT EXISTS message TEXT,
 			ADD COLUMN IF NOT EXISTS status VARCHAR(50),

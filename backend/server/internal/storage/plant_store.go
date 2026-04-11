@@ -1,6 +1,8 @@
 package storage
 
 import (
+	"time"
+
 	"plantbee-backend/internal/models"
 )
 
@@ -19,7 +21,7 @@ func (d *DB) CreatePlant(plant *models.Plant) error {
 }
 
 func (d *DB) GetPlantBySensorID(sensorID string) (*models.Plant, error) {
-	query := `SELECT id, name, target_moisture, pot_volume_liters FROM plants WHERE sensor_id = $1`
+	query := `SELECT id, name, target_moisture, pot_volume_liters, COALESCE(current_moisture, 0), sensor_id FROM plants WHERE sensor_id = $1`
 
 	var plant models.Plant
 	err := d.QueryRow(query, sensorID).Scan(
@@ -27,6 +29,8 @@ func (d *DB) GetPlantBySensorID(sensorID string) (*models.Plant, error) {
 		&plant.Name,
 		&plant.TargetMoisture,
 		&plant.PotVolumeLiters,
+		&plant.CurrentMoisture,
+		&plant.SensorID,
 	)
 
 	return &plant, err
@@ -75,4 +79,41 @@ func (d *DB) GetAllPlants() ([]models.PlantListItem, error) {
 	}
 
 	return plants, nil
+}
+
+// GetOfflinePlants returns plants that have not received a sensor reading since before the threshold.
+func (d *DB) GetOfflinePlants(threshold time.Time) ([]models.Plant, error) {
+	query := `
+		SELECT p.id, p.name, COALESCE(p.sensor_id, ''), COALESCE(p.current_moisture, 0)
+		FROM plants p
+		LEFT JOIN (
+			SELECT sensor_id, MAX(recorded_at) as last_seen
+			FROM sensor_readings
+			GROUP BY sensor_id
+		) sr ON p.sensor_id = sr.sensor_id
+		WHERE (sr.last_seen IS NOT NULL AND sr.last_seen < $1) 
+		   OR (sr.last_seen IS NULL AND p.created_at < $1)
+	`
+	rows, err := d.Query(query, threshold)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	var plants []models.Plant
+	for rows.Next() {
+		var p models.Plant
+		if err := rows.Scan(&p.ID, &p.Name, &p.SensorID, &p.CurrentMoisture); err != nil {
+			return nil, err
+		}
+		plants = append(plants, p)
+	}
+	return plants, nil
+}
+
+// UpdatePlantCurrentMoisture keeps the plant's current_moisture cached field up to date.
+func (d *DB) UpdatePlantCurrentMoisture(plantID int, moisture int) error {
+	query := `UPDATE plants SET current_moisture = $1 WHERE id = $2`
+	_, err := d.Exec(query, moisture, plantID)
+	return err
 }

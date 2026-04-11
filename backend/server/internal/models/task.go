@@ -3,9 +3,11 @@ package models
 import "time"
 
 type Task struct {
-	ID          int       `json:"id"`           // task id
-	PlantID     int       `json:"plant_id"`     // plant id
-	Type        string    `json:"type"`         // "water" or "battery_error"
+	ID              int       `json:"id"`               // task id
+	PlantID         int       `json:"plant_id"`         // plant id
+	SensorID        string    `json:"sensor_id"`        // sensor id
+	Type            string    `json:"type"`             // "water" or "battery_error"
+	CurrentMoisture int       `json:"current_moisture"` // moisture at the time of task creation/update
 	WaterAmount int       `json:"water_amount"` // ml
 	Message     string    `json:"message"`      // task details or error message
 	Status      string    `json:"status"`       // "open", "in_progress", "completed"
@@ -17,6 +19,7 @@ type Task struct {
 type TaskDTO struct {
 	TaskID          int    `json:"task_id"`
 	PlantID         int    `json:"plant_id"`
+	SensorID        string `json:"sensor_id"`
 	Type            string `json:"type"`
 	PlantName       string `json:"plant_name"`
 	ImageURL        string `json:"image_url"`

@@ -26,15 +26,15 @@ curl -X POST http://localhost:8080/plants/add \
   accept task:
 curl -X POST http://localhost:8080/api/tasks/accept \
   -H "Content-Type: application/json" \
-  -b "auth_token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NzU3NjI2MTYsImxvZ2luIjoidHBpbmFybGkiLCJ1c2VyX2lkIjoxfQ.vozBOyuS7dOAqMF5rnk5QsNLQgTpspBph_XRKSjRUcE" \
+  -b "auth_token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NzU5ODQ0MTgsImxvZ2luIjoidHBpbmFybGkiLCJ1c2VyX2lkIjoxfQ.Ji-6ptD2DVUTG6Fp11_vb_smdLNrET0vh-4dvcYzeqE" \
   -d '{
     "id": 1
   }'
 
   cancel task:
-  curl -X POST http://localhost:8080/tasks/cancel \
+  curl -X POST http://localhost:8080/api/tasks/cancel \
   -H "Content-Type: application/json" \
-  -b "auth_token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NzM5MjY5NTYsImxvZ2luIjoidHBpbmFybGkiLCJ1c2VyX2lkIjoxfQ.wDyq3Rt-JP_ox6T2mg5rMYt-tSLhlTfGbUhZ_JQvTKc" \
+  -b "auth_token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NzU5ODQ0MTgsImxvZ2luIjoidHBpbmFybGkiLCJ1c2VyX2lkIjoxfQ.Ji-6ptD2DVUTG6Fp11_vb_smdLNrET0vh-4dvcYzeqE" \
   -d '{
     "id": 1
   }'
