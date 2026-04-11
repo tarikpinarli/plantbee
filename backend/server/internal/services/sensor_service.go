@@ -303,7 +303,7 @@ func (s *SensorService) evaluateSuddenDropLifecycle(plant *models.Plant, reading
 
 	var dryingDrops []int
 
-	// recent is ordered DESC (recent[0] is newest). 
+	// recent is ordered DESC (recent[0] is newest).
 	// To find drops over time, we compare a newer reading to its immediate older neighbor.
 	for i := 0; i < len(recent)-1; i++ {
 		newer := recent[i].Moisture

@@ -132,7 +132,7 @@ func (h *Handler) HandleAddPlant(w http.ResponseWriter, r *http.Request) {
 
 	if err := h.DB.CreatePlant(plant); err != nil {
 		fmt.Printf("❌ Failed to create plant: %v\n", err)
-		
+
 		// If Postgres complains about a duplicate key, we intercept it here
 		if strings.Contains(err.Error(), "unique constraint") || strings.Contains(err.Error(), "duplicate key value") {
 			jsonError(w, "A plant is already assigned to this sensor ID", http.StatusConflict)
