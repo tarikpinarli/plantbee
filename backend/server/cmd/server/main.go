@@ -4,11 +4,14 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"strings"
 	"time"
 
 	"plantbee-backend/internal/config"
 	"plantbee-backend/internal/handlers"
 	"plantbee-backend/internal/storage"
+
+	"github.com/go-chi/chi/v5"
 )
 
 func main() {
@@ -34,37 +37,43 @@ func main() {
 
 	h := handlers.New(db, cfg)
 
-	http.HandleFunc("/api/reading", h.IngestData)
-	http.HandleFunc("/auth/login", h.HandleLogin)
-	http.HandleFunc("/auth/callback", h.HandleCallback)
-	http.HandleFunc("/auth/me", h.Me)
-	http.HandleFunc("/auth/logout", h.RequireAuth(h.HandleLogout))
-	http.HandleFunc("/api/plants/add", h.RequireAuth(h.HandleAddPlant))
-	http.HandleFunc("/api/upload", h.HandleUploadImage) // trang test for image upload
-	http.HandleFunc("/api/plants", h.HandleListPlants)
-	http.HandleFunc("/api/user/welcome", h.RequireAuth(h.HandleWelcome))
-	http.HandleFunc("/api/tasks", h.RequireAuth(h.HandleGetTasks))
-	http.HandleFunc("/api/tasks/accept", h.RequireAuth(h.HandleAcceptTask))
-	http.HandleFunc("/api/tasks/cancel", h.RequireAuth(h.HandleCancelTask))
+	r := chi.NewRouter()
 
-	http.Handle("/uploads/", http.StripPrefix("/uploads/", http.FileServer(http.Dir("./uploads")))) // trang test for image upload
-	// Serve the frontend static files
+	// Public routes
+	r.Post("/api/reading", h.IngestData)
+	r.Get("/auth/login", h.HandleLogin)
+	r.Get("/auth/callback", h.HandleCallback)
+	r.Get("/auth/me", h.Me)
+	r.Get("/api/plants", h.HandleListPlants)
+	r.Post("/api/upload", h.HandleUploadImage) // trang test for image upload
+
+	// Protected routes (JWT required)
+	r.Group(func(r chi.Router) {
+		r.Use(h.RequireAuth)
+		r.Post("/auth/logout", h.HandleLogout)
+		r.Post("/api/plants/add", h.HandleAddPlant)
+		r.Post("/api/user/welcome", h.HandleWelcome)
+		r.Get("/api/tasks", h.HandleGetTasks)
+		r.Post("/api/tasks/accept", h.HandleAcceptTask)
+		r.Post("/api/tasks/cancel", h.HandleCancelTask)
+	})
+
+	// Static uploads
+	r.Handle("/uploads/*", http.StripPrefix("/uploads/", http.FileServer(http.Dir("./uploads"))))
+
+	// SPA fallback: serve the React build for anything not matched above.
+	// Unmatched /api/* requests return 404 so the frontend gets a real error.
 	fs := http.FileServer(http.Dir("/client/dist"))
-	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		// If it's an API route that wasn't caught above, return 404
-		if len(r.URL.Path) >= 5 && r.URL.Path[:5] == "/api/" || len(r.URL.Path) >= 5 && r.URL.Path[:5] == "/auth/" {
-			http.NotFound(w, r)
+	r.NotFound(func(w http.ResponseWriter, req *http.Request) {
+		if strings.HasPrefix(req.URL.Path, "/api/") {
+			http.NotFound(w, req)
 			return
 		}
-
-		// Check if the requested file exists
-		if _, err := os.Stat("/client/dist" + r.URL.Path); os.IsNotExist(err) {
-			// If file not found, serve index.html for React Router
-			http.ServeFile(w, r, "/client/dist/index.html")
+		if _, err := os.Stat("/client/dist" + req.URL.Path); os.IsNotExist(err) {
+			http.ServeFile(w, req, "/client/dist/index.html")
 			return
 		}
-
-		fs.ServeHTTP(w, r)
+		fs.ServeHTTP(w, req)
 	})
 
 	// Start the background process to check for "radio silence" (24 hours offline)
@@ -72,5 +81,5 @@ func main() {
 	h.SensorService.StartOfflineMonitor(24*time.Hour, 1*time.Hour)
 
 	log.Printf("Server starting on port %s", cfg.Port)
-	log.Fatal(http.ListenAndServe(cfg.Port, nil))
+	log.Fatal(http.ListenAndServe(cfg.Port, r))
 }
