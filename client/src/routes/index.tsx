@@ -1,12 +1,16 @@
 // / welcome page
 import { createFileRoute } from "@tanstack/react-router";
 import mainImg from "../assets/hive_clusture.webp";
+import { SharedButton } from "@/components/ui/CustomedButton";
+import { loginTo42 } from "@/api/auth.api";
+import { useAuth } from "@/hooks/useAuth";
 
 export const Route = createFileRoute("/")({
   component: Index,
 });
 
 function Index() {
+  const { user } = useAuth();
   return (
     <>
       <section
@@ -35,9 +39,14 @@ function Index() {
             Empowering volunteers with ESP32 sensors to keep our plants thriving
             though precise, collaborative care. Join the smart plant revolution!
           </p>
-          <button className="bg-transparent rounded-full text-white border-2 border-white px-6 py-3 mt-8 text-lg font-semibold hover:bg-white hover:text-slate-900 transition-colors">
-            Login with 42
-          </button>
+          {!user && (
+            <SharedButton
+              onClick={loginTo42}
+              className="bg-transparent rounded-full text-white border-2 border-white px-6 py-3 mt-8 text-lg font-semibold hover:bg-white hover:text-slate-900 transition-colors"
+            >
+              Login with 42
+            </SharedButton>
+          )}
         </div>
       </section>
       <section
@@ -52,35 +61,34 @@ function Index() {
         className="flex flex-col gap-10 px-4 py-16 @container mt-30"
         id="intro"
       >
-         <div className="flex flex-col items-center gap-4 text-center md:text-left">
-        <h1 className="text-3xl md:text-4xl font-black leading-tight max-w-260">Grow somethihng great together! 🌱🐝</h1>
-        <p className="text-slate-600 dark:text-slate-400 text-lg font-normal leading-relaxed max-w-180">
-          Welcome to PlantBee, a community-driven smart plant monitoring system
-          that ensures our campus plants thrive through collective care. We turn
-          sensor data into real-world action.
-        </p>
-        
-           <div className="flex flex-col gap-4 rounded-2xl border border-primary/20 bg-background-light dark:bg-background-dark/50 p-8 shadow-lg shadow-primary/5 hover:border-primary/50 transition-colors group">
-          
-          <div className="flex flex-col gap-2 mt-4">
-           <h2 className="text-xl font-bold leading-tight">
-            The human heartbeat
-          </h2>
-            <p className="text-slate-600 dark:text-slate-400 text-base font-normal leading-relaxed">
-               Volunteering is the heartbeat of our system. While sensors tell us
-            when a plant is thirsty, it's the community members who provide the
-            care that makes the difference. When a plant needs attention,
-            volunteers receive notifications and step in to water, prune, or
-            simply check on the plant's health. This human touch ensures that
-            our plants not only survive but thrive, fostering a strong sense of
-            community and shared responsibility for our green spaces.
-            </p>
+        <div className="flex flex-col items-center gap-4 text-center md:text-left">
+          <h1 className="text-3xl md:text-4xl font-black leading-tight max-w-260">
+            Grow somethihng great together! 🌱🐝
+          </h1>
+          <p className="text-slate-600 dark:text-slate-400 text-lg font-normal leading-relaxed max-w-180">
+            Welcome to PlantBee, a community-driven smart plant monitoring
+            system that ensures our campus plants thrive through collective
+            care. We turn sensor data into real-world action.
+          </p>
+
+          <div className="flex flex-col gap-4 rounded-2xl border border-primary/20 bg-background-light dark:bg-background-dark/50 p-8 shadow-lg shadow-primary/5 hover:border-primary/50 transition-colors group">
+            <div className="flex flex-col gap-2 mt-4">
+              <h2 className="text-xl font-bold leading-tight">
+                The human heartbeat
+              </h2>
+              <p className="text-slate-600 dark:text-slate-400 text-base font-normal leading-relaxed">
+                Volunteering is the heartbeat of our system. While sensors tell
+                us when a plant is thirsty, it's the community members who
+                provide the care that makes the difference. When a plant needs
+                attention, volunteers receive notifications and step in to
+                water, prune, or simply check on the plant's health. This human
+                touch ensures that our plants not only survive but thrive,
+                fostering a strong sense of community and shared responsibility
+                for our green spaces.
+              </p>
+            </div>
           </div>
         </div>
-        
-        </div>
-
-     
       </section>
 
       <div
