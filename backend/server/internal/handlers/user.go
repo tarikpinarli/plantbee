@@ -84,31 +84,26 @@ func (h *Handler) DeleteUser(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
 		return
 	}
-
-	userId, ok := r.Context().Value(UserIDKey).(int)
+	userID, ok := r.Context().Value(UserIDKey).(int)
 	if !ok {
 		http.Error(w, "Unauthorized", http.StatusUnauthorized)
 		return
 	}
-	
-	if err := h.DB.DeleteUser(userId); err != nil {
+	if err := h.DB.DeleteUser(userID); err != nil {
 		log.Printf("DeleteUser: DeleteUser error: %v", err)
 		http.Error(w, "Failed to delete user", http.StatusInternalServerError)
 		return
 	}
-
 	http.SetCookie(w, &http.Cookie{
 		Name:     "auth_token",
 		Value:    "",
 		Path:     "/",
 		HttpOnly: true,
-		Secure:   false,
-		MaxAge:   -1,
+		Secure:   true,
 		Expires:  time.Unix(0, 0),
 	})
-
 	w.WriteHeader(http.StatusOK)
 	if err := json.NewEncoder(w).Encode(map[string]string{"message": "User has been deleted successfully"}); err != nil {
-		log.Printf("error encoding update user role response: %v\n", err)
+		log.Printf("error encoding delete user response: %v\n", err)
 	}
 }
