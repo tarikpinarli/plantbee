@@ -50,7 +50,7 @@ func main() {
 	http.HandleFunc("/api/tasks/accept", h.RequireAuth(h.HandleAcceptTask))
 	http.HandleFunc("/api/tasks/cancel", h.RequireAuth(h.HandleCancelTask))
 
-	http.Handle("/uploads/", http.StripPrefix("/uploads/", http.FileServer(http.Dir("./uploads")))) // trang test for image upload
+	http.Handle("/uploads/", http.StripPrefix("/uploads/", http.FileServer(http.Dir(cfg.UploadDir)))) // serve uploaded images
 	// Serve the frontend static files
 	fs := http.FileServer(http.Dir("/client/dist"))
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {

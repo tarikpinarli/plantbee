@@ -14,6 +14,7 @@ type Config struct {
 	ClientID     string
 	ClientSecret string
 	RedirectURI  string
+	UploadDir    string
 }
 
 func Load() *Config {
@@ -27,6 +28,7 @@ func Load() *Config {
 		ClientID:     getEnv("CLIENT_ID", ""),
 		ClientSecret: getEnv("CLIENT_SECRET", ""),
 		RedirectURI:  getEnv("REDIRECT_URI", "http://localhost:8080/auth/callback"),
+		UploadDir:    getEnv("UPLOAD_DIR", "./uploads"),
 	}
 }
 

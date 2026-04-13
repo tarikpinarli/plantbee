@@ -40,13 +40,13 @@ FROM alpine:latest
 # required for HTTPS/DB connections
 RUN apk --no-cache add ca-certificates
 
-WORKDIR /root/
+WORKDIR /app
 
 # Copy Go binary
-COPY --from=builder /app/server .
+COPY --from=builder /app/server /app/server
 # Copy built React frontend
 COPY --from=frontend-builder /app/dist /client/dist
 
 EXPOSE 8080
 
-CMD ["./server"]
+CMD ["/app/server"]
