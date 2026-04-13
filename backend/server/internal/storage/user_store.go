@@ -69,3 +69,9 @@ func (d *DB) SetUserLoggedOut(userID int) error {
 	_, err := d.Exec(query, userID)
 	return err
 }
+
+func (d *DB) DeleteUser(userID int) error {
+	query := `DELETE FROM users WHERE id = $1`
+	_, err := d.Exec(query, userID)
+	return err
+}

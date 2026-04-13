@@ -2,6 +2,8 @@
 
 import { Link, useNavigate, useRouterState } from "@tanstack/react-router";
 import { useAuth } from "@/hooks/useAuth";
+import { SharedButton } from "../ui/CustomedButton";
+import { NavLink } from "../ui/NavLink";
 
 export function Navbar() {
   const { user, setUser } = useAuth();
@@ -11,6 +13,14 @@ export function Navbar() {
   const hideNavbarRoutes = ["/login", "/welcome"];
 
   if (hideNavbarRoutes.includes(currentPath)) return null;
+
+  const logout = () => {
+    fetch("/auth/logout", {
+      credentials: "include",
+    });
+    setUser(null);
+    navigate({ to: "/" });
+  };
 
   return (
     <>
@@ -23,37 +33,17 @@ export function Navbar() {
           </Link>
           <nav className="flex items-center gap-6">
             {user && (
-              <div className="flex items-center gap-6">
-                <Link
-                  to="/garden"
-                  className="ml text-sm font-medium text-slate-600 hover:text-[#13ec5b] dark:text-slate-400 dark:hover:text-[#13ec5b] transition"
-                  activeProps={{
-                    className: "!text-[#13ec5b] font-semibold",
-                  }}
-                >
-                  Plants
-                </Link>
-                
-                <Link
-                  to="/tasks"
-                  className="text-sm font-medium text-slate-600 hover:text-[#13ec5b] dark:text-slate-400 dark:hover:text-[#13ec5b] transition"
-                  activeProps={{
-                    className: "!text-[#13ec5b] font-semibold",
-                  }}
-                >
-                  Tasks
-                </Link>
-  
-                <Link
-                  to="/addPlant"
-                  className="text-sm font-medium text-slate-600 hover:text-[#13ec5b] dark:text-slate-400 dark:hover:text-[#13ec5b] transition"
-                  activeProps={{
-                    className: "!text-[#13ec5b] font-semibold dark:text-[#13ec5b]",
-                  }}
-                >
-                  Add Plant
-                </Link>
-              </div>
+              <ul className="flex items-center gap-6">
+                <li>
+                  <NavLink href="/garden">Plants</NavLink>
+                </li>
+                <li>
+                  <NavLink href="/tasks">Tasks</NavLink>
+                </li>
+                <li>
+                  <NavLink href="/addPlant">Add Plant</NavLink>
+                </li>
+              </ul>
             )}
 
             {user && (
@@ -69,17 +59,7 @@ export function Navbar() {
             {!user ? (
               <Link to="/login">LOG IN</Link>
             ) : (
-              <button
-                onClick={() => {
-                  fetch("/auth/logout", {
-                    credentials: "include",
-                  });
-                  setUser(null);
-                  navigate({ to: "/" });
-                }}
-              >
-                LOG OUT
-              </button>
+              <SharedButton onClick={logout}>LOG OUT</SharedButton>
             )}
           </nav>
         </div>

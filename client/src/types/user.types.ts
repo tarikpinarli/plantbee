@@ -6,3 +6,5 @@ export interface User {
   intendToHelp: boolean;
   firstVisit: boolean;
 }
+
+export type UserRole = "volunteer" | "observer" | null;

@@ -197,7 +197,7 @@ function AddPlantPage() {
 
           {/* Submit Button */}
           <SharedButton 
-            className="flex-1 py-4 rounded-xl bg-primary text-background-dark font-bold text-lg hover:shadow-lg hover:shadow-primary/20 transition-all flex items-center justify-center gap-2" 
+            className="flex-1 py-4 rounded-xl text-background-dark font-bold text-lg hover:shadow-lg hover:shadow-primary/20 transition-all flex items-center justify-center gap-2" 
             type="submit" 
             disabled={status === 'loading'}>
             {status === 'loading' ? 'Saving...' : 'Add Plant 🌿'}

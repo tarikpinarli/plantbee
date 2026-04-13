@@ -1,4 +1,5 @@
 import { useAuth } from "@/hooks/useAuth";
+import type { UserRole } from "@/types/user.types";
 import { requireAuth } from "@/utils/helper";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
@@ -24,7 +25,6 @@ const updateUserRole = async (selected: boolean) => {
     return null;
   }
 };
-type UserRole = "volunteer" | "observer" | null;
 
 function RouteComponent() {
   const { user } = useAuth();
@@ -94,7 +94,7 @@ function RouteComponent() {
               <h3 className="text-2xl font-bold mb-3">
                 Continue as an Observer
               </h3>
-              <p className="text-sm text-slate-500 dark:text-slate-400 mb-8 flex-grow">
+              <p className="text-sm text-slate-500 dark:text-slate-400 mb-8 grow">
                 Browse the map and check plant health stats without committing
                 to care tasks. You can still see all data.
               </p>
