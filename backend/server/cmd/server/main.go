@@ -40,6 +40,7 @@ func main() {
 	http.HandleFunc("/auth/me", h.Me)
 	http.HandleFunc("/auth/logout", h.RequireAuth(h.HandleLogout))
 	http.HandleFunc("/api/plants/add", h.RequireAuth(h.HandleAddPlant))
+	http.HandleFunc("/api/user/plants", h.RequireAuth(h.HandleListUserPlants))
 	http.HandleFunc("/api/upload", h.HandleUploadImage) // trang test for image upload
 	http.HandleFunc("/api/plants", h.HandleListPlants)
 	http.HandleFunc("DELETE /api/user", h.RequireAuth(h.DeleteUser))

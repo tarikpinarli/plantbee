@@ -58,6 +58,55 @@ func (h *Handler) HandleListPlants(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+// HandleListUserPlants returns a JSON array of plants owned by the authenticated user.
+func (h *Handler) HandleListUserPlants(w http.ResponseWriter, r *http.Request) {
+	// CORS headers
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	w.Header().Set("Access-Control-Allow-Methods", "GET, OPTIONS")
+	w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
+
+	// Handle preflight
+	if r.Method == http.MethodOptions {
+		w.WriteHeader(http.StatusOK)
+		return
+	}
+
+	if r.Method != http.MethodGet {
+		jsonError(w, "Method not allowed", http.StatusMethodNotAllowed)
+		return
+	}
+
+	// Extract user ID from context (provided by RequireAuth middleware)
+	userID, ok := r.Context().Value(UserIDKey).(int)
+	if !ok {
+		jsonError(w, "Unauthorized", http.StatusUnauthorized)
+		return
+	}
+
+	if h.DB == nil {
+		jsonError(w, "Database not available", http.StatusServiceUnavailable)
+		return
+	}
+
+	plants, err := h.DB.GetPlantsByOwnerID(userID)
+	if err != nil {
+		fmt.Printf("❌ Failed to fetch user plants: %v\n", err)
+		jsonError(w, "Failed to fetch plants", http.StatusInternalServerError)
+		return
+	}
+
+	// Ensure we return an empty array instead of nil
+	if plants == nil {
+		plants = []models.Plant{}
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
+	if err := json.NewEncoder(w).Encode(plants); err != nil {
+		fmt.Printf("error encoding user plants response: %v\n", err)
+	}
+}
+
 func (h *Handler) HandleAddPlant(w http.ResponseWriter, r *http.Request) {
 	// CORS headers
 	w.Header().Set("Access-Control-Allow-Origin", "*")

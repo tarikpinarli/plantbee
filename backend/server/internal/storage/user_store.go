@@ -71,7 +71,27 @@ func (d *DB) SetUserLoggedOut(userID int) error {
 }
 
 func (d *DB) DeleteUser(userID int) error {
-	query := `DELETE FROM users WHERE id = $1`
-	_, err := d.Exec(query, userID)
-	return err
+	tx, err := d.Begin()
+	if err != nil {
+		return err
+	}
+	defer func() {
+		_ = tx.Rollback()
+	}()
+
+	// 1. Revert in_progress tasks accepted by this user to 'open'
+	// This ensures other volunteers can see the task after the user is gone.
+	if _, err := tx.Exec(`UPDATE tasks SET status = 'open', volentee_id = NULL WHERE volentee_id = $1 AND status = 'in_progress'`, userID); err != nil {
+		return err
+	}
+
+	// 2. Delete the user
+	// Due to ON DELETE SET NULL on foreign keys:
+	// - plants.owner_id will become NULL (Orphaning)
+	// - tasks.volentee_id for 'completed' tasks will become NULL (Preserving history)
+	if _, err := tx.Exec(`DELETE FROM users WHERE id = $1`, userID); err != nil {
+		return err
+	}
+
+	return tx.Commit()
 }

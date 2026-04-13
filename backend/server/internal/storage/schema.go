@@ -37,7 +37,7 @@ func (d *DB) CreateTables() error {
 		light_need VARCHAR(50),
 		target_moisture INTEGER DEFAULT 50,
 		current_moisture INTEGER DEFAULT 50,
-		owner_id INTEGER REFERENCES users(id),
+		owner_id INTEGER REFERENCES users(id) ON DELETE SET NULL,
 		sensor_id VARCHAR(50) UNIQUE,
 		created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
 		image_url TEXT
@@ -53,7 +53,7 @@ func (d *DB) CreateTables() error {
 		water_amount INTEGER,
 		message TEXT,
 		status VARCHAR(50) NOT NULL,
-		volentee_id INTEGER REFERENCES users(id),
+		volentee_id INTEGER REFERENCES users(id) ON DELETE SET NULL,
 		scheduled_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
 		completed_at TIMESTAMP WITH TIME ZONE
 	);
@@ -112,6 +112,26 @@ func (d *DB) CreateTables() error {
 			ADD COLUMN IF NOT EXISTS completed_at TIMESTAMP WITH TIME ZONE;
 	`
 
+	const updateConstraints = `
+		-- Update plants owner_id constraint
+		DO $$ 
+		BEGIN 
+			IF EXISTS (SELECT 1 FROM information_schema.table_constraints WHERE constraint_name = 'plants_owner_id_fkey') THEN
+				ALTER TABLE plants DROP CONSTRAINT plants_owner_id_fkey;
+			END IF;
+			ALTER TABLE plants ADD CONSTRAINT plants_owner_id_fkey FOREIGN KEY (owner_id) REFERENCES users(id) ON DELETE SET NULL;
+		END $$;
+
+		-- Update tasks volentee_id constraint
+		DO $$ 
+		BEGIN 
+			IF EXISTS (SELECT 1 FROM information_schema.table_constraints WHERE constraint_name = 'tasks_volentee_id_fkey') THEN
+				ALTER TABLE tasks DROP CONSTRAINT tasks_volentee_id_fkey;
+			END IF;
+			ALTER TABLE tasks ADD CONSTRAINT tasks_volentee_id_fkey FOREIGN KEY (volentee_id) REFERENCES users(id) ON DELETE SET NULL;
+		END $$;
+	`
+
 	if _, err := d.Exec(createUsersTable); err != nil {
 		return err
 	}
@@ -142,6 +162,9 @@ func (d *DB) CreateTables() error {
 		return err
 	}
 	if _, err := d.Exec(alterTasksTable); err != nil {
+		return err
+	}
+	if _, err := d.Exec(updateConstraints); err != nil {
 		return err
 	}
 	log.Println("✅ Table migrations applied")
