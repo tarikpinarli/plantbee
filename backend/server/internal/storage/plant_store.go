@@ -162,7 +162,7 @@ func (d *DB) GetPlantByID(id int) (*models.Plant, error) {
 		FROM plants 
 		WHERE id = $1
 	`
-	
+
 	var p models.Plant
 	err := d.QueryRow(query, id).Scan(
 		&p.ID, &p.Name, &p.Species, &p.Category,
@@ -170,7 +170,7 @@ func (d *DB) GetPlantByID(id int) (*models.Plant, error) {
 		&p.TargetMoisture, &p.CurrentMoisture,
 		&p.OwnerID, &p.SensorID, &p.CreatedAt, &p.ImageURL,
 	)
-	
+
 	if err != nil {
 		return nil, err
 	}

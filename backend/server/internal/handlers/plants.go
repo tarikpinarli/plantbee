@@ -4,8 +4,9 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
-	"strings"
 	"strconv"
+	"strings"
+
 	"plantbee-backend/internal/models"
 )
 
@@ -291,5 +292,7 @@ func (h *Handler) HandleGetPlantByID(w http.ResponseWriter, r *http.Request) {
 
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
-	json.NewEncoder(w).Encode(response)
+	if err := json.NewEncoder(w).Encode(response); err != nil {
+		fmt.Printf("error encoding plant response: %v\n", err)
+	}
 }
