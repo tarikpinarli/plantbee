@@ -170,7 +170,6 @@ func (d *DB) GetPlantByID(id int) (*models.Plant, error) {
 		&p.TargetMoisture, &p.CurrentMoisture,
 		&p.OwnerID, &p.SensorID, &p.CreatedAt, &p.ImageURL,
 	)
-
 	if err != nil {
 		return nil, err
 	}
