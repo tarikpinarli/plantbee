@@ -108,7 +108,7 @@ export const PlantDetailsModal: React.FC<PlantDetailsModalProps> = ({ plantId, o
                     </h3>
                     {plant.active_tasks && plant.active_tasks.length > 0 ? (
                         <div className="space-y-3">
-                            {plant.active_tasks.map((task: any) => (
+                            {plant.active_tasks.map((task: { id: number, type: string, status: string, water_amount: number, message: string, volentee_id: number }) => (
                                 <div key={task.id} className={`flex flex-col border ${task.type === 'water' ? 'border-blue-200 bg-blue-50' : 'border-red-200 bg-red-50'} p-3 rounded-xl`}>
                                     <div className="flex justify-between items-center mb-1">
                                         <div className="font-bold text-sm flex items-center gap-1.5">
@@ -141,7 +141,7 @@ export const PlantDetailsModal: React.FC<PlantDetailsModalProps> = ({ plantId, o
                     <h3 className="text-xs text-slate-400 uppercase tracking-wider font-semibold mb-3">Recent Sensor Logs</h3>
                     {plant.recent_readings && plant.recent_readings.length > 0 ? (
                         <div className="space-y-2 max-h-40 overflow-y-auto pr-2">
-                            {plant.recent_readings.map((log: any) => (
+                            {plant.recent_readings.map((log: { id: number, recorded_at: string, moisture: number, battery_level?: number }) => (
                                 <div key={log.id} className="flex justify-between items-center bg-white border border-slate-200 shadow-sm p-2.5 rounded-lg text-sm">
                                     <div className="text-slate-600 font-medium">
                                         {formatDate(log.recorded_at)} <span className="text-slate-400 text-xs ml-1">{formatTime(log.recorded_at)}</span>
