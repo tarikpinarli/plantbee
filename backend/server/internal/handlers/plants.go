@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"net/http"
 	"strings"
-
+	"strconv"
 	"plantbee-backend/internal/models"
 )
 
@@ -199,4 +199,97 @@ func (h *Handler) HandleAddPlant(w http.ResponseWriter, r *http.Request) {
 	if err := json.NewEncoder(w).Encode(plant); err != nil {
 		fmt.Printf("error encoding plant response: %v\n", err)
 	}
+}
+
+// HandleGetPlantByID returns detailed information for a single plant.
+func (h *Handler) HandleGetPlantByID(w http.ResponseWriter, r *http.Request) {
+	// CORS headers
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	w.Header().Set("Access-Control-Allow-Methods", "GET, OPTIONS")
+	w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
+
+	if r.Method == http.MethodOptions {
+		w.WriteHeader(http.StatusOK)
+		return
+	}
+
+	if r.Method != http.MethodGet {
+		jsonError(w, "Method not allowed", http.StatusMethodNotAllowed)
+		return
+	}
+
+	if h.DB == nil {
+		jsonError(w, "Database not available", http.StatusServiceUnavailable)
+		return
+	}
+
+	// Extract the ID from the URL path
+	idStr := r.PathValue("id")
+	plantID, err := strconv.Atoi(idStr)
+	if err != nil {
+		jsonError(w, "Invalid plant ID", http.StatusBadRequest)
+		return
+	}
+
+	// 1. Fetch the Plant
+	plant, err := h.DB.GetPlantByID(plantID)
+	if err != nil {
+		jsonError(w, "Plant not found", http.StatusNotFound)
+		return
+	}
+
+	// 2. Fetch the Owner's Name
+	var ownerName string
+	err = h.DB.QueryRow("SELECT login FROM users WHERE id = $1", plant.OwnerID).Scan(&ownerName)
+	if err != nil {
+		ownerName = "PlantBee Community"
+	}
+
+	// 3. Fetch Recent Readings
+	readings, err := h.DB.GetRecentSensorReadings(plant.SensorID, 5)
+	if err != nil || readings == nil {
+		readings = []models.SensorReading{}
+	}
+
+	// 4. NEW: Fetch Active Tasks (Open or In Progress)
+	var activeTasks []models.Task
+	rows, err := h.DB.Query(`
+		SELECT id, type, status, water_amount, COALESCE(message, ''), COALESCE(volentee_id, 0) 
+		FROM tasks 
+		WHERE plant_id = $1 AND status IN ('open', 'in_progress')
+		ORDER BY status DESC
+	`, plantID)
+	if err == nil {
+		defer func() {
+			_ = rows.Close()
+		}()
+		for rows.Next() {
+			var t models.Task
+			if err := rows.Scan(&t.ID, &t.Type, &t.Status, &t.WaterAmount, &t.Message, &t.VolenteeID); err == nil {
+				activeTasks = append(activeTasks, t)
+			}
+		}
+	}
+	if activeTasks == nil {
+		activeTasks = []models.Task{}
+	}
+
+	// 5. Build Final Response
+	type PlantDetailResponse struct {
+		models.Plant
+		OwnerName      string                 `json:"owner_name"`
+		RecentReadings []models.SensorReading `json:"recent_readings"`
+		ActiveTasks    []models.Task          `json:"active_tasks"` // NEW FIELD
+	}
+
+	response := PlantDetailResponse{
+		Plant:          *plant,
+		OwnerName:      ownerName,
+		RecentReadings: readings,
+		ActiveTasks:    activeTasks,
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
+	json.NewEncoder(w).Encode(response)
 }

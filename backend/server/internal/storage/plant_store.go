@@ -44,14 +44,16 @@ func (d *DB) GetPlantByOwnerID(ownerID int) (*models.Plant, error) {
 }
 
 func (d *DB) GetPlantsByOwnerID(ownerID int) ([]models.Plant, error) {
-	query := `SELECT id, name, species, category, pot_volume_liters, light_need, target_moisture, current_moisture, owner_id, sensor_id, created_at, image_url 
+	query := `SELECT id, name, COALESCE(species, ''), COALESCE(category, ''), COALESCE(pot_volume_liters, 0), light_need, target_moisture, COALESCE(current_moisture, 0), owner_id, COALESCE(sensor_id, ''), created_at, COALESCE(image_url, '') 
 	          FROM plants WHERE owner_id = $1 ORDER BY created_at DESC`
 
 	rows, err := d.Query(query, ownerID)
 	if err != nil {
 		return nil, err
 	}
-	defer rows.Close()
+	defer func() {
+		_ = rows.Close()
+	}()
 
 	var plants []models.Plant
 	for rows.Next() {
@@ -73,7 +75,7 @@ func (d *DB) GetPlantsByOwnerID(ownerID int) ([]models.Plant, error) {
 // GetAllPlants returns all plants with owner names for the plant list page.
 func (d *DB) GetAllPlants() ([]models.PlantListItem, error) {
 	query := `
-		SELECT p.id, p.name, p.light_need, p.target_moisture, p.current_moisture, p.image_url, COALESCE(u.login, 'PlantBee Community') AS owner_name
+		SELECT p.id, p.name, p.light_need, p.target_moisture, COALESCE(p.current_moisture, 0), COALESCE(p.image_url, ''), COALESCE(u.login, 'PlantBee Community') AS owner_name
 		FROM plants p
 		LEFT JOIN users u ON p.owner_id = u.id
 		ORDER BY p.created_at DESC
@@ -138,6 +140,41 @@ func (d *DB) GetOfflinePlants(threshold time.Time) ([]models.Plant, error) {
 		plants = append(plants, p)
 	}
 	return plants, nil
+}
+
+// GetPlantByID fetches a single plant's detailed information by its ID.
+func (d *DB) GetPlantByID(id int) (*models.Plant, error) {
+	// Added COALESCE to safely handle NULL values for deleted users and optional fields!
+	query := `
+		SELECT 
+			id, 
+			name, 
+			COALESCE(species, ''), 
+			COALESCE(category, ''), 
+			COALESCE(pot_volume_liters, 0), 
+			light_need, 
+			target_moisture, 
+			COALESCE(current_moisture, 0), 
+			COALESCE(owner_id, 0), 
+			COALESCE(sensor_id, ''), 
+			created_at, 
+			COALESCE(image_url, '') 
+		FROM plants 
+		WHERE id = $1
+	`
+	
+	var p models.Plant
+	err := d.QueryRow(query, id).Scan(
+		&p.ID, &p.Name, &p.Species, &p.Category,
+		&p.PotVolumeLiters, &p.LightRequirement,
+		&p.TargetMoisture, &p.CurrentMoisture,
+		&p.OwnerID, &p.SensorID, &p.CreatedAt, &p.ImageURL,
+	)
+	
+	if err != nil {
+		return nil, err
+	}
+	return &p, nil
 }
 
 // UpdatePlantCurrentMoisture keeps the plant's current_moisture cached field up to date.

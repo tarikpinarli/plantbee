@@ -21,3 +21,12 @@ export async function fetchPlants() {
   return result.data
 
 }
+
+export async function fetchPlantById(id: number | string) {
+  const res = await fetch(`/api/plants/${id}`) // Make sure this matches your backend endpoint
+  
+  if (!res.ok) throw new Error("Failed to fetch plant details")
+  
+  const data = await res.json()
+  return data;
+}
