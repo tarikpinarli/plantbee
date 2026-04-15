@@ -8,6 +8,7 @@ import { searchPlantSchema } from '@/types/plant.schema'
 import { CustomedDropdown } from '@/components/ui/CustomedDropdown'
 import { CustomedToggle } from '@/components/ui/CustomedToggle'
 import { CustomedInput } from '@/components/ui/CustomedInput'
+import { PaginationButton } from '@/components/ui/Pagination'
 
 export const Route = createFileRoute('/garden')({
   validateSearch: (search) => {
@@ -98,13 +99,6 @@ function GardenPage() {
         ></CustomedInput>
 
       </div>
-      
-      {/* Pagination controls */}
-      <div>
-          <button
-            disabled
-          ></button>
-      </div>
 
       {isLoading && <p> Loading... </p>}
       {error && <p>Error loading plants</p>}
@@ -133,6 +127,21 @@ function GardenPage() {
           onClose={() => setSelectedPlantId(null)} 
         />
       )}
+
+      {/* Pagination controls */}
+      <PaginationButton
+        page={page}
+        // totalPages={totalPages}
+        onPageChange={(newPage) => 
+          navigate({
+            search: (prev) => ({
+              ...prev,
+              page: newPage,
+            }),
+          })
+        }
+      ></PaginationButton>
+
     </div>
   )
 }
