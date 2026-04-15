@@ -1,10 +1,21 @@
 /** Fetch data from backend, validate the data type at runtime and return data to UI */
 import { plantsArraySchema } from "@/types/plant.schema"
+import type { FetchPlantParams } from "@/types/plant.types"
 
-export async function fetchPlants() {
-  const res = await fetch("/api/plants")
+export async function fetchPlants(params: FetchPlantParams) {
+  const {page, limit, sortBy, order , query} = params
 
-  if (!res.ok) throw new Error("Failed to fetch")
+  const searchParams = new URLSearchParams({
+    page: String(page),
+    limit: String(limit),
+    sortBy, 
+    order,
+    query,
+  })
+
+  const res = await fetch(`/api/plants?${searchParams.toString()}`)
+
+  if (!res.ok) throw new Error("Failed to fetch plants")
 
   const data = await res.json()
   // console.log("API response:", data); //debug

@@ -43,7 +43,16 @@ function AddPlantPage() {
   useEffect(() => {
     if (status === 'success') {
       const timer = setTimeout(() => {
-        navigate({ to: '/garden' });
+        navigate({ 
+          to: '/garden',
+          search: (prev) => ({
+            page: 1,
+            limit: prev.limit ?? 6,
+            sortBy: prev.sortBy ?? 'name',
+            order: prev.order ?? 'asc',
+            query: prev.query ?? '',
+          }),
+        });
       }, 600);
 
       return () => clearTimeout(timer);
