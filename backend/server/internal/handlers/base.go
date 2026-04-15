@@ -14,6 +14,7 @@ type Handler struct {
 	SensorService *services.SensorService
 	AuthService   *services.AuthService
 	TaskService   *services.TaskService
+	Cfg           *config.Config
 }
 
 func New(db *storage.DB, cfg *config.Config) *Handler {
@@ -34,5 +35,6 @@ func New(db *storage.DB, cfg *config.Config) *Handler {
 		SensorService: services.NewSensorService(db),
 		AuthService:   services.NewAuthService(),
 		TaskService:   services.NewTaskService(db),
+		Cfg:           cfg,
 	}
 }

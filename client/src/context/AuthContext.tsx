@@ -24,22 +24,21 @@ export const AuthProvider = ({
   const [user, setUser] = useState<User | null>(initialUser);
   const [loading, setLoading] = useState(!initialUser);
 
-  const fetchCurrentUser = async () => {
-    try {
-      const currentUser = await getCurrentUser();
-      setUser(currentUser);
-    } catch (error) {
-      console.error(error);
-      setUser(null);
-    } finally {
-      setLoading(false);
-    }
-  };
-
   useEffect(() => {
     if (initialUser) return;
+    const fetchCurrentUser = async () => {
+      try {
+        const currentUser = await getCurrentUser();
+        setUser(currentUser);
+      } catch (error) {
+        console.error(error);
+        setUser(null);
+      } finally {
+        setLoading(false);
+      }
+    };
     fetchCurrentUser();
-  }, []);
+  }, [initialUser]);
 
   return (
     <AuthContext.Provider value={{ user, setUser, loading }}>

@@ -7,7 +7,9 @@ services:
     ports:
       - "8080:8080"
     volumes:
-    - ./uploads:/app/uploads 
+    - plantbee_uploads:/app/uploads 
+    environment:
+      - UPLOAD_DIR=/app/uploads
     env_file:
       - path: ./backend/server/.env
         required: false
@@ -59,3 +61,4 @@ services:
 
 volumes:
   postgres_data:
+  plantbee_uploads:

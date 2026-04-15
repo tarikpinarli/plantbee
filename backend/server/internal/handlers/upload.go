@@ -6,6 +6,7 @@ import (
 	"io"
 	"net/http"
 	"os"
+	"path/filepath"
 )
 
 // HandleUploadImage handles multipart image file uploads.
@@ -32,12 +33,13 @@ func (h *Handler) HandleUploadImage(w http.ResponseWriter, r *http.Request) {
 	}()
 
 	// Create uploads folder if not exists
-	if err := os.MkdirAll("./uploads", os.ModePerm); err != nil {
+	if err := os.MkdirAll(h.Cfg.UploadDir, os.ModePerm); err != nil {
 		http.Error(w, "Failed to create folder", http.StatusInternalServerError)
 		return
 	}
 
-	dst, err := os.Create("./uploads/" + handler.Filename)
+	dstPath := filepath.Join(h.Cfg.UploadDir, handler.Filename)
+	dst, err := os.Create(dstPath)
 	if err != nil {
 		http.Error(w, "Failed to save file", http.StatusInternalServerError)
 		return

@@ -7,6 +7,7 @@ export const plantSchema = z.object({
   light_need: z.string(),
   owner_name: z.string(),
   image_url: z.string(),
+  target_moisture: z.number().optional(),
 })
 
 export const plantsArraySchema = z.array(plantSchema)
