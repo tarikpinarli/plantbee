@@ -28,7 +28,7 @@ function GardenPage() {
     queryKey: ['plants', {page, limit, sortBy, order, query}],
     queryFn: () => fetchPlants({page, limit, sortBy, order, query}),
   });
-  // console.log("queryKey", {page, limit, sortBy, order, query});
+  console.log("API response:", data);
 
   const navigate = useNavigate({from: '/garden'});
 
@@ -139,7 +139,7 @@ function GardenPage() {
       {/* Pagination controls */}
       <PaginationButton
         page={page}
-        // totalPages={totalPages}
+        // totalPages={data?.totalPages}
         onPageChange={(newPage) => 
           navigate({
             search: (prev) => ({
