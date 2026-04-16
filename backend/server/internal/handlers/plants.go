@@ -92,7 +92,7 @@ func (h *Handler) HandleListPlants(w http.ResponseWriter, r *http.Request) {
 				return plants[i].CurrentMoisture > plants[j].CurrentMoisture
 			}
 			return plants[i].CurrentMoisture < plants[j].CurrentMoisture
-		
+
 		case "target_moisture":
 			if order == "desc" {
 				return plants[i].TargetMoisture > plants[j].TargetMoisture
@@ -116,7 +116,7 @@ func (h *Handler) HandleListPlants(w http.ResponseWriter, r *http.Request) {
 
 		default:
 			return true
-			}
+		}
 	})
 
 	w.Header().Set("Content-Type", "application/json")
