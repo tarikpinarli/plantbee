@@ -91,3 +91,49 @@ func (h *Handler) HandleGetTasks(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	_ = json.NewEncoder(w).Encode(tasks)
 }
+
+func (h *Handler) HandleGetMyTasks(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodGet {
+		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
+		return
+	}
+
+	userID, ok := r.Context().Value(UserIDKey).(int)
+	if !ok {
+		http.Error(w, "Unauthorized", http.StatusUnauthorized)
+		return
+	}
+
+	tasks, err := h.TaskService.GetTasksByVolunteerID(userID)
+	if err != nil {
+		http.Error(w, "Failed to fetch tasks", http.StatusInternalServerError)
+		return
+	}
+
+	if tasks == nil {
+		tasks = []models.TaskDTO{}
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	_ = json.NewEncoder(w).Encode(tasks)
+}
+
+func (h *Handler) HandleGetOpenTasks(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodGet {
+		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
+		return
+	}
+
+	tasks, err := h.TaskService.GetTasks("open")
+	if err != nil {
+		http.Error(w, "Failed to fetch tasks", http.StatusInternalServerError)
+		return
+	}
+
+	if tasks == nil {
+		tasks = []models.TaskDTO{}
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	_ = json.NewEncoder(w).Encode(tasks)
+}

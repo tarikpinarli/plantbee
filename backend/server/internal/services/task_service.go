@@ -26,5 +26,9 @@ func (s *TaskService) CancelTask(task *models.Task) error {
 }
 
 func (s *TaskService) GetTasks(statusFilter string) ([]models.TaskDTO, error) {
-	return s.db.GetTasks(statusFilter)
+	return s.db.GetTasks(statusFilter, 0)
+}
+
+func (s *TaskService) GetTasksByVolunteerID(volunteerID int) ([]models.TaskDTO, error) {
+	return s.db.GetTasks("", volunteerID)
 }

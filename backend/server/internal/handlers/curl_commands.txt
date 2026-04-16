@@ -26,7 +26,7 @@ curl -X POST http://localhost:8080/plants/add \
   accept task:
 curl -X POST http://localhost:8080/api/tasks/accept \
   -H "Content-Type: application/json" \
-  -b "auth_token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NzU5ODQ0MTgsImxvZ2luIjoidHBpbmFybGkiLCJ1c2VyX2lkIjoxfQ.Ji-6ptD2DVUTG6Fp11_vb_smdLNrET0vh-4dvcYzeqE" \
+  -b "auth_token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NzY0MjA3OTksImxvZ2luIjoidHBpbmFybGkiLCJ1c2VyX2lkIjo1fQ.Cu6dUQa3ys9-lkZPI3bDNI07ucza_BYigdgoPeUdBVg" \
   -d '{
     "id": 1
   }'

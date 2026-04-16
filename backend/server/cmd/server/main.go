@@ -48,6 +48,8 @@ func main() {
 	http.HandleFunc("/api/user/welcome", h.RequireAuth(h.HandleWelcome))
 	http.HandleFunc("/api/user/role", h.RequireAuth(h.HandleUpdateUserRole))
 	http.HandleFunc("/api/tasks", h.RequireAuth(h.HandleGetTasks))
+	http.HandleFunc("/api/tasks/my-tasks", h.RequireAuth(h.HandleGetMyTasks))
+	http.HandleFunc("/api/tasks/open", h.RequireAuth(h.HandleGetOpenTasks)) 
 	http.HandleFunc("/api/tasks/accept", h.RequireAuth(h.HandleAcceptTask))
 	http.HandleFunc("/api/tasks/cancel", h.RequireAuth(h.HandleCancelTask))
 

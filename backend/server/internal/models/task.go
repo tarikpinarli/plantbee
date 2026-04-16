@@ -27,6 +27,9 @@ type TaskDTO struct {
 	CurrentMoisture int    `json:"current_moisture"`
 	TargetMoisture  int    `json:"target_moisture"`
 	WaterNeededML   int    `json:"water_needed_ml"`
-	Message         string `json:"message"`
-	VolunteerID     int    `json:"volunteer_id"`
+	Message         string     `json:"message"`
+	VolunteerID     int        `json:"volunteer_id"`
+	VolunteerName   string     `json:"volunteer_name,omitempty"`
+	ScheduledAt     time.Time  `json:"scheduled_at"`
+	CompletedAt     *time.Time `json:"completed_at,omitempty"`
 }

@@ -12,12 +12,21 @@ export type PlantFormData = {
 };
 
 export type Task = {
-  id: number;
+  task_id: number;
+  id: number; // Keep this backward compatible or alias if used in old code
   plant_id: number;
-  type: "water" | "error";
-  water_amount?: number;
-  status: "open" | "assigned" | "accepted" | "in_progress" | "completed"; // Add 'accepted' here
-  volentee_id?: number;
+  sensor_id?: string;
+  type: string;
+  plant_name: string;
+  image_url: string;
+  status: "open" | "in_progress" | "completed";
+  current_moisture: number;
+  target_moisture: number;
+  water_needed_ml: number;
+  message: string;
+  volunteer_id: number;
+  volunteer_name?: string;
   scheduled_at: string;
   completed_at?: string;
+  water_amount?: number; // legacy
 };

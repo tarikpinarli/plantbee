@@ -6,6 +6,13 @@ export async function getMyTasks(): Promise<Task[]> {
   return await response.json() ?? []
 }
 
+export async function getTasks(statusFilter?: string): Promise<Task[]> {
+  const url = statusFilter ? `/api/tasks?status=${statusFilter}` : '/api/tasks'
+  const response = await fetch(url)
+  if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`)
+  return await response.json() ?? []
+}
+
 export async function getOpenTasks(): Promise<Task[]> {
   const response = await fetch('/api/tasks/open')
   if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`)

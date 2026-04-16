@@ -3,6 +3,8 @@ package storage
 import (
 	"database/sql"
 	"errors"
+	"strconv"
+	"strings"
 
 	"plantbee-backend/internal/models"
 
@@ -117,7 +119,7 @@ func (d *DB) UpdateOpenTaskMessage(plantID int, taskType string, message string)
 	return err
 }
 
-func (d *DB) GetTasks(statusFilter string) ([]models.TaskDTO, error) {
+func (d *DB) GetTasks(statusFilter string, volunteerID int) ([]models.TaskDTO, error) {
 	query := `
 		SELECT
 			t.id as task_id,
@@ -131,15 +133,30 @@ func (d *DB) GetTasks(statusFilter string) ([]models.TaskDTO, error) {
 			p.target_moisture,
 			t.water_amount as water_needed_ml,
 			COALESCE(t.message, '') as message,
-			COALESCE(t.volentee_id, 0) as volunteer_id
+			COALESCE(t.volentee_id, 0) as volunteer_id,
+			COALESCE(u.login, '') as volunteer_name,
+			t.scheduled_at,
+			t.completed_at
 		FROM tasks t
 		JOIN plants p ON t.plant_id = p.id
+		LEFT JOIN users u ON t.volentee_id = u.id
 	`
 
 	var args []interface{}
+	var conditions []string
+
 	if statusFilter != "" {
-		query += " WHERE t.status = $1"
 		args = append(args, statusFilter)
+		conditions = append(conditions, "t.status = $"+strconv.Itoa(len(args)))
+	}
+
+	if volunteerID > 0 {
+		args = append(args, volunteerID)
+		conditions = append(conditions, "t.volentee_id = $"+strconv.Itoa(len(args)))
+	}
+
+	if len(conditions) > 0 {
+		query += " WHERE " + strings.Join(conditions, " AND ")
 	}
 
 	query += " ORDER BY t.scheduled_at DESC"
@@ -155,6 +172,9 @@ func (d *DB) GetTasks(statusFilter string) ([]models.TaskDTO, error) {
 	var tasks []models.TaskDTO
 	for rows.Next() {
 		var dto models.TaskDTO
+		var scheduledAt sql.NullTime
+		var completedAt sql.NullTime
+
 		if err := rows.Scan(
 			&dto.TaskID,
 			&dto.PlantID,
@@ -168,9 +188,20 @@ func (d *DB) GetTasks(statusFilter string) ([]models.TaskDTO, error) {
 			&dto.WaterNeededML,
 			&dto.Message,
 			&dto.VolunteerID,
+			&dto.VolunteerName,
+			&scheduledAt,
+			&completedAt,
 		); err != nil {
 			return nil, err
 		}
+
+		if scheduledAt.Valid {
+			dto.ScheduledAt = scheduledAt.Time
+		}
+		if completedAt.Valid {
+			dto.CompletedAt = &completedAt.Time
+		}
+
 		tasks = append(tasks, dto)
 	}
 	return tasks, nil
