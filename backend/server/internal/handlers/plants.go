@@ -28,6 +28,8 @@ func (h *Handler) HandleListPlants(w http.ResponseWriter, r *http.Request) {
 	// New read query param
 	sortBy := r.URL.Query().Get("sortBy")
 	order := r.URL.Query().Get("order")
+	query := strings.ToLower(r.URL.Query().Get("query"))
+
 	// fmt.Println("Sort params:", sortBy, order)
 
 	// CORS headers
@@ -52,6 +54,26 @@ func (h *Handler) HandleListPlants(w http.ResponseWriter, r *http.Request) {
 	}
 
 	plants, err := h.DB.GetAllPlants()
+	if err != nil {
+		fmt.Printf("❌ Failed to fetch plants: %v\n", err)
+		jsonError(w, "Failed to fetch plants", http.StatusInternalServerError)
+		return
+	}
+
+	// New: filtering
+	if query != "" {
+		filtered := make([]models.PlantListItem, 0)
+
+		for _, p := range plants {
+			name := strings.ToLower(p.Name)
+
+			if strings.Contains(name, query) {
+				filtered = append(filtered, p)
+			}
+		}
+
+		plants = filtered
+	}
 	// New: Add sort slice
 	sort.Slice(plants, func(i, j int) bool {
 		switch sortBy {
@@ -96,12 +118,6 @@ func (h *Handler) HandleListPlants(w http.ResponseWriter, r *http.Request) {
 			return true
 			}
 	})
-
-	if err != nil {
-		fmt.Printf("❌ Failed to fetch plants: %v\n", err)
-		jsonError(w, "Failed to fetch plants", http.StatusInternalServerError)
-		return
-	}
 
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
