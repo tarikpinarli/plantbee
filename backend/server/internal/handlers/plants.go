@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"strconv"
 	"strings"
+	"sort"
 
 	"plantbee-backend/internal/models"
 )
@@ -24,6 +25,11 @@ type addPlantRequest struct {
 
 // HandleListPlants returns a JSON array of all plants for the plant list page.
 func (h *Handler) HandleListPlants(w http.ResponseWriter, r *http.Request) {
+	// New read query param
+	sortBy := r.URL.Query().Get("sortBy")
+	order := r.URL.Query().Get("order")
+	// fmt.Println("Sort params:", sortBy, order)
+
 	// CORS headers
 	w.Header().Set("Access-Control-Allow-Origin", "*")
 	w.Header().Set("Access-Control-Allow-Methods", "GET, OPTIONS")
@@ -46,6 +52,51 @@ func (h *Handler) HandleListPlants(w http.ResponseWriter, r *http.Request) {
 	}
 
 	plants, err := h.DB.GetAllPlants()
+	// New: Add sort slice
+	sort.Slice(plants, func(i, j int) bool {
+		switch sortBy {
+
+		case "name":
+			a := strings.ToLower(plants[i].Name)
+			b := strings.ToLower(plants[j].Name)
+
+			if order == "desc" {
+				return a > b
+			}
+			return a < b
+
+		case "current_moisture":
+			if order == "desc" {
+				return plants[i].CurrentMoisture > plants[j].CurrentMoisture
+			}
+			return plants[i].CurrentMoisture < plants[j].CurrentMoisture
+		
+		case "target_moisture":
+			if order == "desc" {
+				return plants[i].TargetMoisture > plants[j].TargetMoisture
+			}
+			return plants[i].TargetMoisture < plants[j].TargetMoisture
+
+		case "light_need":
+			lightRank := map[string]int{
+				"low":    1,
+				"medium": 2,
+				"high":   3,
+			}
+
+			a := lightRank[strings.ToLower(plants[i].LightRequirement)]
+			b := lightRank[strings.ToLower(plants[j].LightRequirement)]
+
+			if order == "desc" {
+				return a > b
+			}
+			return a < b
+
+		default:
+			return true
+			}
+	})
+
 	if err != nil {
 		fmt.Printf("❌ Failed to fetch plants: %v\n", err)
 		jsonError(w, "Failed to fetch plants", http.StatusInternalServerError)

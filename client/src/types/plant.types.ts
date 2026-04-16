@@ -14,7 +14,7 @@ export type PlantFormData = {
 export type FetchPlantParams = {
   page: number;
   limit: number;
-  sortBy: 'name' | 'current_moisture' | 'light_need';
+  sortBy: 'name' | 'current_moisture' | 'target_moisture' | 'light_need';
   order: 'asc' | 'desc';
   query: string;
 }

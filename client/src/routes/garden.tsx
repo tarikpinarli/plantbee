@@ -19,13 +19,16 @@ export const Route = createFileRoute('/garden')({
 })
 
 function GardenPage() {
-  const {page, limit, sortBy, query } = useSearch({from: '/garden'});
-  const order: "asc" | "desc" = useSearch({from: '/garden'}).order;
+  const {page, limit, sortBy, order, query } = useSearch({from: '/garden'});
+  // const order: "asc" | "desc" = useSearch({from: '/garden'}).order;
+
+  // console.log("Search state: ", { page, limit, sortBy, order, query }); //debug
   
   const { data, isLoading, error } = useQuery({
     queryKey: ['plants', {page, limit, sortBy, order, query}],
     queryFn: () => fetchPlants({page, limit, sortBy, order, query}),
   });
+  // console.log("queryKey", {page, limit, sortBy, order, query});
 
   const navigate = useNavigate({from: '/garden'});
 
@@ -50,15 +53,20 @@ function GardenPage() {
           value={sortBy}
           options={[
             { label: "Name", value: "name"},
-            { label: "Moisture", value: "current_moisture"},
+            { label: "Current Moisture", value: "current_moisture"},
+            { label: "Target Moisture", value: "target_moisture"},
             { label: "Light need", value: "light_need"},
           ]}
           onChange={(e) => {
+            // console.log("Dropdown changed:", e.target.value);
+
             navigate({
               search: (prev) => ({
                 ...prev,
                 sortBy: e.target.value  as "name" | "current_moisture" | "light_need",
-              }),
+              }
+              // console.log("Next search params:", next);
+            ),
             })
           }}
         ></CustomedDropdown>
