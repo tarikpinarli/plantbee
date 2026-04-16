@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"sort"
 	"strconv"
 	"strings"
 
@@ -24,6 +25,13 @@ type addPlantRequest struct {
 
 // HandleListPlants returns a JSON array of all plants for the plant list page.
 func (h *Handler) HandleListPlants(w http.ResponseWriter, r *http.Request) {
+	// New read query param
+	sortBy := r.URL.Query().Get("sortBy")
+	order := r.URL.Query().Get("order")
+	query := strings.ToLower(r.URL.Query().Get("query"))
+
+	// fmt.Println("Sort params:", sortBy, order)
+
 	// CORS headers
 	w.Header().Set("Access-Control-Allow-Origin", "*")
 	w.Header().Set("Access-Control-Allow-Methods", "GET, OPTIONS")
@@ -51,6 +59,65 @@ func (h *Handler) HandleListPlants(w http.ResponseWriter, r *http.Request) {
 		jsonError(w, "Failed to fetch plants", http.StatusInternalServerError)
 		return
 	}
+
+	// New: filtering
+	if query != "" {
+		filtered := make([]models.PlantListItem, 0)
+
+		for _, p := range plants {
+			name := strings.ToLower(p.Name)
+
+			if strings.Contains(name, query) {
+				filtered = append(filtered, p)
+			}
+		}
+
+		plants = filtered
+	}
+	// New: Add sort slice
+	sort.Slice(plants, func(i, j int) bool {
+		switch sortBy {
+
+		case "name":
+			a := strings.ToLower(plants[i].Name)
+			b := strings.ToLower(plants[j].Name)
+
+			if order == "desc" {
+				return a > b
+			}
+			return a < b
+
+		case "current_moisture":
+			if order == "desc" {
+				return plants[i].CurrentMoisture > plants[j].CurrentMoisture
+			}
+			return plants[i].CurrentMoisture < plants[j].CurrentMoisture
+
+		case "target_moisture":
+			if order == "desc" {
+				return plants[i].TargetMoisture > plants[j].TargetMoisture
+			}
+			return plants[i].TargetMoisture < plants[j].TargetMoisture
+
+		case "light_need":
+			lightRank := map[string]int{
+				"low":    1,
+				"medium": 2,
+				"high":   3,
+			}
+
+			a := lightRank[strings.ToLower(plants[i].LightRequirement)]
+			b := lightRank[strings.ToLower(plants[j].LightRequirement)]
+
+			if order == "desc" {
+				return a > b
+			}
+			return a < b
+
+		default:
+			return true
+		}
+	})
 
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)

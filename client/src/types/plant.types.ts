@@ -11,6 +11,14 @@ export type PlantFormData = {
   //  Plant, AddPlantPayload, schema
 };
 
+export type FetchPlantParams = {
+  page: number;
+  limit: number;
+  sortBy: 'name' | 'current_moisture' | 'target_moisture' | 'light_need';
+  order: 'asc' | 'desc';
+  query: string;
+}
+
 export type Task = {
   id: number;
   plant_id: number;

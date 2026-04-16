@@ -15,11 +15,6 @@ export function validatePlantForm(form: PlantFormData) {
 	if (!form.sensor_id.trim())
 		newErrors.sensor_id = 'Sensor ID is required'
 
-	// if (!form.image_url.trim())
-	//   newErrors.image_url = 'Image URL is required'
-
-	// setErrors(newErrors)
-
 	// Returns true only if no errors found
 	return newErrors;
 }
