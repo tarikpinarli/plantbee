@@ -10,7 +10,7 @@ export const PaginationButton = ({page, totalPages, onPageChange} : PaginationPr
 	return (
 		<div className='mt-10 flex justify-center gap-4'>
 			<button 
-				className="text-sm font-semibold text-gray-700"
+				className="text-sm font-semibold"
 				disabled={page === 1}
 				onClick={() => onPageChange(page - 1)}
 			> Prev </button>
@@ -26,7 +26,7 @@ export const PaginationButton = ({page, totalPages, onPageChange} : PaginationPr
 			))}
 
 			<button 
-				className="text-sm font-semibold text-gray-700"
+				className="text-sm font-semibold"
 				disabled={page === totalPages}
 				onClick={() => onPageChange(page + 1)}
 			> Next </button>

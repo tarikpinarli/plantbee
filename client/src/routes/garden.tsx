@@ -1,14 +1,13 @@
 import { useState } from 'react'
-import { createFileRoute, useNavigate, useSearch } from '@tanstack/react-router'
+import { createFileRoute, useSearch } from '@tanstack/react-router'
 import { useQuery } from '@tanstack/react-query'
 import { fetchPlants } from '@/api/plants.api'
-import { PlantCard } from '@/components/ui/PlantCard'
 import { PlantDetailsModal } from '@/components/ui/PlantDetailsModal'
 import { searchPlantSchema } from '@/types/plant.schema'
-import { CustomedDropdown } from '@/components/ui/CustomedDropdown'
-import { CustomedToggle } from '@/components/ui/CustomedToggle'
-import { CustomedInput } from '@/components/ui/CustomedInput'
 import { PaginationButton } from '@/components/ui/Pagination'
+import { usePlantSearch } from '@/hooks/usePlantSearch'
+import { GardenControls } from '@/components/ui/GardenControls'
+import { GardenGrid } from '@/components/ui/GardenGrid'
 
 export const Route = createFileRoute('/garden')({
   validateSearch: (search) => {
@@ -19,18 +18,16 @@ export const Route = createFileRoute('/garden')({
 })
 
 function GardenPage() {
-  const {page, limit, sortBy, order, query } = useSearch({from: '/garden'});
-  // const order: "asc" | "desc" = useSearch({from: '/garden'}).order;
+  const search = useSearch({from: '/garden'});
 
-  // console.log("Search state: ", { page, limit, sortBy, order, query }); //debug
+  const { setSearch } = usePlantSearch();
   
   const { data, isLoading, error } = useQuery({
-    queryKey: ['plants', {page, limit, sortBy, order, query}],
-    queryFn: () => fetchPlants({page, limit, sortBy, order, query}),
+    queryKey: ['plants', search],
+    queryFn: () => fetchPlants(search),
   });
-  console.log("API response:", data);
 
-  const navigate = useNavigate({from: '/garden'});
+  // console.log("API response:", data);
 
   const [selectedPlantId, setSelectedPlantId] = useState<number | null>(null);
 
@@ -38,7 +35,7 @@ function GardenPage() {
     <div className="w-full sm:max-w-xl md:max-w-2xl lg:max-w-3xl xl:max-w-4xl mx-auto px-4 py-10 relative">
       <header className="mb-8">
         <h1 className="flex flex-col text-2xl font-bold mb-2 text-green-800">
-          My Indoor Jungle
+          Hive's Garden
         </h1>
 
         <p className="text-slate-600 dark:text-slate-500 text-sm">
@@ -46,90 +43,20 @@ function GardenPage() {
         </p>
       </header>
 
-      {/* Sorting dropdown */}
-      <div className='mb-6 flex flex-wrap justify-begin gap-4'>
-        <CustomedDropdown
-          label='Sort by'
-          value={sortBy}
-          options={[
-            { label: "Name", value: "name"},
-            { label: "Current Moisture", value: "current_moisture"},
-            { label: "Target Moisture", value: "target_moisture"},
-            { label: "Light need", value: "light_need"},
-          ]}
-          onChange={(e) => {
-            // console.log("Dropdown changed:", e.target.value);
-
-            navigate({
-              search: (prev) => ({
-                ...prev,
-                sortBy: e.target.value  as "name" | "current_moisture" | "light_need",
-              }
-              // console.log("Next search params:", next);
-            ),
-            })
-          }}
-        ></CustomedDropdown>
-
-        {/* Order toggle */}
-        <CustomedToggle<"asc" | "desc">
-          label="Order"
-          className='!border-gray-300 !py-2 !text-sm'
-          value={order}
-          options={["asc", "desc"] as const}
-          onToggle={(val) => 
-            navigate({
-              search: (prev) => ({
-                ...prev,
-                order: val,
-              }),
-            })
-          }
-          render={(val) => (val === 'asc' ? '↑' : '↓')}
-        ></CustomedToggle>
-      
-        {/* Filter */}
-        <CustomedInput
-          label='Filter'
-          className={`!bg-transparent`}
-          value={query}
-          onChange={(e) => 
-            navigate({
-              search: (prev) => ({
-                ...prev,
-                query: e.target.value,
-                page: 1,
-              }),
-            })
-          }
-          placeholder='Search plants by name, etc...'
-
-        ></CustomedInput>
-
-      </div>
+      <GardenControls
+        search={search}
+        setSearch={setSearch}
+      />
 
       {isLoading && <p> Loading... </p>}
       {error && <p>Error loading plants</p>}
       {!isLoading && !error && (!data || data.length === 0) && <p>No plants found</p>}
 
-      {!isLoading && !error && data && data.length !== 0 && ( 
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5">
-          {data.map((plant) => (
-            <PlantCard
-              key={plant.id}
-              name={plant.name}
-              current_moisture={plant.current_moisture}
-              target_moisture={plant.target_moisture} // NEW: Pass the target!
-              light_need={plant.light_need}
-              owner_name={plant.owner_name}
-              image_url={plant.image_url}
-              onClick={() => setSelectedPlantId(plant.id)}
-            />
-          ))}
-        </div>
+      {data && (
+        <GardenGrid data={data} onSelect={setSelectedPlantId} />
       )}
 
-      {selectedPlantId !== null && (
+      {selectedPlantId && (
         <PlantDetailsModal 
           plantId={selectedPlantId} 
           onClose={() => setSelectedPlantId(null)} 
@@ -138,16 +65,8 @@ function GardenPage() {
 
       {/* Pagination controls */}
       <PaginationButton
-        page={page}
-        // totalPages={data?.totalPages}
-        onPageChange={(newPage) => 
-          navigate({
-            search: (prev) => ({
-              ...prev,
-              page: newPage,
-            }),
-          })
-        }
+        page={search.page}
+        onPageChange={(newPage) => setSearch({ page: newPage})}
       ></PaginationButton>
 
     </div>

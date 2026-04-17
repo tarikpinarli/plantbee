@@ -35,7 +35,7 @@ export function Navbar() {
             {user && (
               <ul className="flex items-center gap-6">
                 <li>
-                  <NavLink href="/garden">Plants</NavLink>
+                  <NavLink href="/garden">Garden</NavLink>
                 </li>
                 <li>
                   <NavLink href="/tasks">Tasks</NavLink>
