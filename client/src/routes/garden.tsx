@@ -35,7 +35,7 @@ function GardenPage() {
     <div className="w-full sm:max-w-xl md:max-w-2xl lg:max-w-3xl xl:max-w-4xl mx-auto px-4 py-10 relative">
       <header className="mb-8">
         <h1 className="flex flex-col text-2xl font-bold mb-2 text-green-800">
-          Hive's Garden
+          Hivers' Garden
         </h1>
 
         <p className="text-slate-600 dark:text-slate-500 text-sm">
