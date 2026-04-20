@@ -50,6 +50,7 @@ func main() {
 	http.HandleFunc("/api/tasks", h.RequireAuth(h.HandleGetTasks))
 	http.HandleFunc("/api/tasks/accept", h.RequireAuth(h.HandleAcceptTask))
 	http.HandleFunc("/api/tasks/cancel", h.RequireAuth(h.HandleCancelTask))
+	http.HandleFunc("/api/leaderboard", h.HandleGetLeaderboard)
 
 	http.Handle("/uploads/", http.StripPrefix("/uploads/", http.FileServer(http.Dir(cfg.UploadDir)))) // serve uploaded images
 	// Serve the frontend static files

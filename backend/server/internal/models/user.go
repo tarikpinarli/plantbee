@@ -13,3 +13,15 @@ type User struct {
 	WaterCount   int       `json:"water_count"`
 	CreatedAt    time.Time `json:"created_at"`
 }
+
+type LeaderboardEntry struct {
+	Rank       int    `json:"rank"`
+	UserID     int    `json:"user_id"`
+	IntraName  string `json:"intra_name"`
+	ImageURL   string `json:"image_url"`
+	WaterCount int    `json:"water_count"`
+}
+
+type LeaderboardResponse struct {
+	Rankings []LeaderboardEntry `json:"rankings"`
+}

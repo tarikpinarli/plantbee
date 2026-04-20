@@ -69,3 +69,6 @@ curl -X POST http://localhost:8080/api/tasks/accept \
   get my tasks:
   curl -X GET "http://localhost:8080/api/tasks?my_tasks=true" \
     -b "auth_token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NzY0MzkyNjAsImxvZ2luIjoidHBpbmFybGkiLCJ1c2VyX2lkIjoyM30.Dxua3MQl5KtQ9wvThwI6Oxl_oDhfZ1-Fi-WfhHOyzrY" | jq
+
+  get all-time leaderboard:
+  curl -X GET http://localhost:8080/api/leaderboard | jq
