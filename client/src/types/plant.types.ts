@@ -7,7 +7,7 @@ export type PlantFormData = {
   light_need: string; // Required — 'Low' | 'Medium' | 'High'
   target_moisture: number; // Required — 0 to 100, default 50
   sensor_id: string; // Required
-  image_url: string; // Required -> not required
+  image_url: string; // Required
   //  Plant, AddPlantPayload, schema
 };
 
