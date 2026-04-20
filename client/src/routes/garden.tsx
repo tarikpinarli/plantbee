@@ -58,7 +58,7 @@ function GardenPage() {
 
       {selectedPlantId && (
         <PlantDetailsModal 
-          plantId={selectedPlantId} 
+          plantId={selectedPlantId}
           onClose={() => setSelectedPlantId(null)} 
         />
       )}
