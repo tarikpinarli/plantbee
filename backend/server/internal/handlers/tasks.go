@@ -77,8 +77,22 @@ func (h *Handler) HandleGetTasks(w http.ResponseWriter, r *http.Request) {
 	}
 
 	statusFilter := r.URL.Query().Get("status")
+	if statusFilter == "all" {
+		statusFilter = ""
+	}
 
-	tasks, err := h.TaskService.GetTasks(statusFilter)
+	myTasks := r.URL.Query().Get("my_tasks") == "true"
+	var volunteerID int
+	if myTasks {
+		userID, ok := r.Context().Value(UserIDKey).(int)
+		if !ok {
+			http.Error(w, "Unauthorized", http.StatusUnauthorized)
+			return
+		}
+		volunteerID = userID
+	}
+
+	tasks, err := h.TaskService.GetTasks(statusFilter, volunteerID)
 	if err != nil {
 		http.Error(w, "Failed to fetch tasks", http.StatusInternalServerError)
 		return
