@@ -192,3 +192,28 @@ func (d *DB) GetTasks(statusFilter string, volunteerID int) ([]models.TaskDTO, e
 	}
 	return tasks, nil
 }
+
+// CleanupTasksOnPlantDeletion handles tasks when a plant is deleted:
+// 1. Deletes active tasks (open/in_progress) as they are no longer actionable.
+// 2. Sets plant_id to NULL for completed tasks to preserve volunteer history.
+func (d *DB) CleanupTasksOnPlantDeletion(plantID int) error {
+	tx, err := d.Begin()
+	if err != nil {
+		return err
+	}
+	defer func() {
+		_ = tx.Rollback()
+	}()
+
+	// Delete non-completed tasks
+	if _, err := tx.Exec(`DELETE FROM tasks WHERE plant_id = $1 AND status != 'completed'`, plantID); err != nil {
+		return err
+	}
+
+	// Nullify plant_id for completed tasks to preserve history
+	if _, err := tx.Exec(`UPDATE tasks SET plant_id = NULL WHERE plant_id = $1 AND status = 'completed'`, plantID); err != nil {
+		return err
+	}
+
+	return tx.Commit()
+}

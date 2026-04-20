@@ -363,3 +363,91 @@ func (h *Handler) HandleGetPlantByID(w http.ResponseWriter, r *http.Request) {
 		fmt.Printf("error encoding plant response: %v\n", err)
 	}
 }
+
+// HandleDeletePlant removes a plant from the system.
+// Any user can delete "Community" plants. Owners can delete their own plants.
+func (h *Handler) HandleDeletePlant(w http.ResponseWriter, r *http.Request) {
+	// CORS headers
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	w.Header().Set("Access-Control-Allow-Methods", "DELETE, OPTIONS")
+	w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
+
+	if r.Method == http.MethodOptions {
+		w.WriteHeader(http.StatusOK)
+		return
+	}
+
+	if r.Method != http.MethodDelete {
+		jsonError(w, "Method not allowed", http.StatusMethodNotAllowed)
+		return
+	}
+
+	if h.DB == nil {
+		jsonError(w, "Database not available", http.StatusServiceUnavailable)
+		return
+	}
+
+	// Extract the ID from the URL path
+	idStr := r.PathValue("id")
+	plantID, err := strconv.Atoi(idStr)
+	if err != nil {
+		jsonError(w, "Invalid plant ID", http.StatusBadRequest)
+		return
+	}
+
+	// 1. Fetch the Plant to check ownership
+	plant, err := h.DB.GetPlantByID(plantID)
+	if err != nil {
+		jsonError(w, "Plant not found", http.StatusNotFound)
+		return
+	}
+
+	// 2. Extract current user from context
+	currentUserID, ok := r.Context().Value(UserIDKey).(int)
+	if !ok {
+		// This should be caught by RequireAuth middleware, but added for safety
+		jsonError(w, "Unauthorized", http.StatusUnauthorized)
+		return
+	}
+
+	// 3. Authorization Logic:
+	// - If OwnerID is 0 (or some value for NULL), it's a Community Plant -> anyone can delete.
+	// - If current user is the owner -> they can delete.
+	isCommunityPlant := plant.OwnerID == 0
+	isOwner := plant.OwnerID == currentUserID
+
+	if !isCommunityPlant && !isOwner {
+		jsonError(w, "Forbidden: You are not authorized to delete this plant.", http.StatusForbidden)
+		return
+	}
+
+	// 4. Cleanup associated tasks first (avoid foreign key violations)
+	// Active tasks are deleted, completed tasks are nullified to preserve history.
+	if err := h.DB.CleanupTasksOnPlantDeletion(plantID); err != nil {
+		fmt.Printf("❌ Failed to cleanup tasks for plant %d: %v\n", plantID, err)
+		jsonError(w, "Failed to cleanup associated tasks", http.StatusInternalServerError)
+		return
+	}
+
+	// 5. Delete the plant
+	if err := h.DB.DeletePlant(plantID); err != nil {
+		fmt.Printf("❌ Failed to delete plant %d: %v\n", plantID, err)
+		jsonError(w, "Failed to delete plant", http.StatusInternalServerError)
+		return
+	}
+
+	fmt.Printf("🗑️ Plant deleted: id=%d name=%s deleted_by=%d (community=%v)\n", plantID, plant.Name, currentUserID, isCommunityPlant)
+
+	w.WriteHeader(http.StatusNoContent)
+}
+
+// HandlePlantByID is a unified entry point for /api/plants/{id}
+// It routes GET requests to HandleGetPlantByID and DELETE requests to HandleDeletePlant.
+func (h *Handler) HandlePlantByID(w http.ResponseWriter, r *http.Request) {
+	if r.Method == http.MethodDelete {
+		h.RequireAuth(h.HandleDeletePlant)(w, r)
+		return
+	}
+	// Default to GET behavior (which includes method check inside HandleGetPlantByID)
+	h.HandleGetPlantByID(w, r)
+}
