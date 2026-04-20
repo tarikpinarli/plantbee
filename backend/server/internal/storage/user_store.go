@@ -95,3 +95,34 @@ func (d *DB) DeleteUser(userID int) error {
 
 	return tx.Commit()
 }
+func (d *DB) GetLeaderboard() ([]models.LeaderboardEntry, error) {
+	query := `
+		SELECT id, login, COALESCE(image_url, ''), water_count as score
+		FROM users
+		WHERE water_count > 0
+		ORDER BY score DESC
+	`
+
+	rows, err := d.Query(query)
+
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	var entries []models.LeaderboardEntry
+	rank := 1
+	for rows.Next() {
+		var e models.LeaderboardEntry
+		if err := rows.Scan(&e.UserID, &e.IntraName, &e.ImageURL, &e.WaterCount); err != nil {
+			return nil, err
+		}
+
+
+		e.Rank = rank
+		entries = append(entries, e)
+		rank++
+	}
+	return entries, nil
+}
+
