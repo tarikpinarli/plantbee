@@ -22,9 +22,6 @@ type LeaderboardEntry struct {
 	WaterCount int    `json:"water_count"`
 }
 
-
 type LeaderboardResponse struct {
 	Rankings []LeaderboardEntry `json:"rankings"`
 }
-
-

@@ -95,6 +95,7 @@ func (d *DB) DeleteUser(userID int) error {
 
 	return tx.Commit()
 }
+
 func (d *DB) GetLeaderboard() ([]models.LeaderboardEntry, error) {
 	query := `
 		SELECT id, login, COALESCE(image_url, ''), water_count as score
@@ -108,7 +109,7 @@ func (d *DB) GetLeaderboard() ([]models.LeaderboardEntry, error) {
 	if err != nil {
 		return nil, err
 	}
-	defer rows.Close()
+	defer func() { _ = rows.Close() }()
 
 	var entries []models.LeaderboardEntry
 	rank := 1
@@ -117,12 +118,9 @@ func (d *DB) GetLeaderboard() ([]models.LeaderboardEntry, error) {
 		if err := rows.Scan(&e.UserID, &e.IntraName, &e.ImageURL, &e.WaterCount); err != nil {
 			return nil, err
 		}
-
-
 		e.Rank = rank
 		entries = append(entries, e)
 		rank++
 	}
 	return entries, nil
 }
-

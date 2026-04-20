@@ -14,7 +14,6 @@ func (h *Handler) HandleGetLeaderboard(w http.ResponseWriter, r *http.Request) {
 	}
 
 	rankings, err := h.DB.GetLeaderboard()
-
 	if err != nil {
 		log.Printf("HandleGetLeaderboard: GetLeaderboard error: %v", err)
 		http.Error(w, "Failed to fetch leaderboard", http.StatusInternalServerError)
@@ -30,4 +29,3 @@ func (h *Handler) HandleGetLeaderboard(w http.ResponseWriter, r *http.Request) {
 		log.Printf("HandleGetLeaderboard: JSON Encode error: %v", err)
 	}
 }
-
