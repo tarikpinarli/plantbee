@@ -105,7 +105,6 @@ func (d *DB) GetLeaderboard() ([]models.LeaderboardEntry, error) {
 	`
 
 	rows, err := d.Query(query)
-
 	if err != nil {
 		return nil, err
 	}
