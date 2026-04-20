@@ -11,7 +11,7 @@ export const SharedButton = ({
   return (
     <button
       className={twMerge(
-        'mt-2 bg-green-400 hover:bg-green-600 disabled:bg-green-300 text-black font-semibold py-3 rounded-lg transition-colors',
+        'mt-2 bg-green-600 hover:bg-green-700 disabled:bg-green-300 text-white font-bold py-3 rounded-lg transition-colors',
         className,
       )}
       {...rest}

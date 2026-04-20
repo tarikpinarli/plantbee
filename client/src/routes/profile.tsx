@@ -72,7 +72,9 @@ function Profile() {
           />
         )}
         <div className="relative">
-          <div className="size-32 rounded-full border-2 border-primary/20 p-1">
+          <div
+            className={`size-32 rounded-full border-2 ${intendedToHelp ? "border-green-300" : "border-primary/20"} p-1`}
+          >
             <img
               alt={user.login}
               className="size-full rounded-full object-cover"
@@ -102,7 +104,8 @@ function Profile() {
           </div>
         </div>
       </div>
-      <section className="space-y-4">
+
+      <section className="space-y-4 my-8">
         <div className="bg-white dark:bg-slate-900 p-6 rounded-xl shadow-sm border border-primary/5 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
           <div className="text-center md:text-left max-w-2xl">
             <h2 className="text-lg font-semibold mb-1">

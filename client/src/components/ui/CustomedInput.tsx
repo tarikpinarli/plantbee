@@ -1,4 +1,3 @@
-
 import { type ComponentProps, type ReactNode } from "react";
 
 interface InputProps extends ComponentProps<"input"> {
