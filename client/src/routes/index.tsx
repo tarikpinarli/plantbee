@@ -6,10 +6,22 @@ import sensor from "@/assets/sensor.svg";
 import team from "@/assets/team.svg";
 import waterDrop from "@/assets/water_drop.svg";
 import { IntroCard } from "@/components/ui/IntroCard";
+import type { searchPlantSchema } from "@/types/plant.schema";
+import type z from "zod";
 
 export const Route = createFileRoute("/")({
   component: Index,
 });
+
+type PlantSearch = z.infer<typeof searchPlantSchema>;
+
+const defaultSearch: PlantSearch = {
+  page: 1,
+  limit: 6,
+  sortBy: "name",
+  order: "asc",
+  query: "",
+};
 
 function Index() {
   return (
@@ -41,7 +53,7 @@ function Index() {
             though precise, collaborative care. Join the smart plant revolution!
           </p>
           <SharedButton className="max-w-full mt-6 font-extrabold border-white border-2 bg-transparent hover:border-transparent hover:bg-[#FFDD03] hover:text-slate-900 transition-colors:duration-300">
-            <Link to="/garden" >
+            <Link to="/garden" search={defaultSearch}>
               Meet our green friends! 🌿
             </Link>
           </SharedButton>

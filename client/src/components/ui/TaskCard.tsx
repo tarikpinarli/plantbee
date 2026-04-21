@@ -1,10 +1,11 @@
+import placeholderImg from "@/assets/placeholder.svg";
 import type { Task } from "@/types/plant.types";
 import { ProgressBar } from "./ProgressBar";
 import { StatusTag } from "./StatusTag";
-import placeholderImg from "@/assets/placeholder.svg";
 import { SharedButton } from "./CustomedButton";
 import { useAuth } from "@/hooks/useAuth";
 import { BASE_URL } from "@/utils/helper";
+import { ErrorMessageBox } from "./ErrorMessageBox";
 
 export const TaskCard = ({
   task,
@@ -16,6 +17,8 @@ export const TaskCard = ({
   onCancel: () => void;
 }) => {
   const { user } = useAuth();
+
+  if (!user) return <ErrorMessageBox message="Failed to load task." />;
 
   return (
     <li className="glass-card flex flex-col md:flex-row items-stretch rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-shadow group">
@@ -35,8 +38,14 @@ export const TaskCard = ({
             <div>
               <div className="flex items-center gap-2 mb-1">
                 <StatusTag
-                  status="pending"
-                  styles="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold bg-pink-100 text-amber-800 dark:bg-amber-900/30 dark:text-amber-400 mb-2 uppercase tracking-wider"
+                  status={
+                    task.status === "open"
+                      ? "Open"
+                      : task.status === "in_progress"
+                        ? "In Progress"
+                        : "Completed"
+                  }
+                  styles={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold ${task.status === "open" ? "bg-pink-100 text-amber-800 dark:bg-amber-900/30 dark:text-amber-400" : task.status === "in_progress" ? "bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400" : "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400"} mb-2 uppercase tracking-wider`}
                 />
                 <StatusTag
                   status={
@@ -48,11 +57,29 @@ export const TaskCard = ({
               <h2 className="text-2xl font-bold text-slate-900 dark:text-slate-100 font-display">
                 {task.plant_name}
               </h2>
-              {task.volunteer_id != 0 && (
-                <h3 className="text-md text-slate-600 dark:text-slate-400 font-medium">
-                  Assigned to: {task.volunteer_id}
-                </h3>
-              )}
+              <div className="mt-4 space-y-1">
+                <p className="text-md text-slate-600 dark:text-slate-400 font-medium">
+                  Scheduled at:{" "}
+                  {new Date(task.scheduled_at)
+                    .toISOString()
+                    .slice(0, 16)
+                    .replace("T", " ")}
+                </p>
+                {task.volunteer_id != 0 && (
+                  <p className="text-md text-slate-600 dark:text-slate-400 font-medium">
+                    Assigned to: {task.volunteer_id}
+                  </p>
+                )}
+                {task.status === "completed" && (
+                  <p className="text-md text-green-600 dark:text-green-400 font-medium">
+                    Completed at:{" "}
+                    {new Date(task.completed_at)
+                      .toISOString()
+                      .slice(0, 16)
+                      .replace("T", " ")}
+                  </p>
+                )}
+              </div>
             </div>
             {task.water_needed_ml > 0 && (
               <div className="text-right">
@@ -86,7 +113,7 @@ export const TaskCard = ({
             </SharedButton>
           )}
           {task.status === "in_progress" &&
-            task.volunteer_id === Number(user?.id) && (
+            task.volunteer_id === Number(user.id) && (
               <SharedButton
                 className="max-w-35 bg-red-500 hover:bg-red-600 text-white px-4 py-2 transition-colors"
                 onClick={onCancel}

@@ -33,5 +33,5 @@ export type Task = {
   type: "water" | "offline_error";
   status: "open" | "in_progress" | "completed";
   scheduled_at: string;
-  completed_at?: string;
+  completed_at: string;
 };

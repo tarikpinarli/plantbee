@@ -75,7 +75,7 @@ export function Navbar() {
           </nav>
           {/* mobile — hamburger button */}
           <button
-            className="md:hidden cursor-pointer text-2xl"
+            className="md:hidden cursor-pointer text-4xl text-[#09431c] dark:text-slate-100 font-extrabold"
             onClick={() => setMenuOpen(!menuOpen)}
           >
             {menuOpen ? "✕" : "☰"}
@@ -86,7 +86,7 @@ export function Navbar() {
           <nav className="md:hidden flex flex-col items-center gap-5 px-6 py-4 border-t border-[#09431c]/20 bg-white dark:bg-[#09431c]/80">
             {user && (
               <>
-                <NavLink href="/garden">Plants</NavLink>
+                <NavLink href="/garden">Garden</NavLink>
                 <NavLink href="/tasks">Tasks</NavLink>
                 <NavLink href="/addPlant">Add Plant</NavLink>
                 <NavLink href="/leaderboard">Leaderboard</NavLink>

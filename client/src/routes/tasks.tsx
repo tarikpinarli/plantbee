@@ -1,18 +1,34 @@
 import { useEffect, useState } from "react";
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { acceptTask, cancelTask, getTasks } from "@/api/tasks.api";
 import type { Task } from "@/types/plant.types";
 import { PageHeader } from "@/components/ui/PageHeader";
 import { TaskCard } from "@/components/ui/TaskCard";
+import { TaskFilterBar } from "@/components/ui/TaskFilterBar";
+import { useAuth } from "@/hooks/useAuth";
+import { ErrorMessageBox } from "@/components/ui/ErrorMessageBox";
 
 export const Route = createFileRoute("/tasks")({
   component: TasksPage,
 });
 
 function TasksPage() {
+  const { user } = useAuth();
+  const navigate = useNavigate();
   const [tasks, setTasks] = useState<Task[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [statusFilter, setStatusFilter] = useState<Task["status"] | "all">(
+    "all",
+  );
+  const [typeFilter, setTypeFilter] = useState<Task["type"] | "all">("all");
+  const [showMyTasks, setShowMyTasks] = useState(true);
+
+  const filtered = tasks.filter((t) => {
+    const matchStatus = statusFilter === "all" || t.status === statusFilter;
+    const matchType = typeFilter === "all" || t.type === typeFilter;
+    return matchStatus && matchType;
+  });
 
   useEffect(() => {
     const fetchTasks = async () => {
@@ -32,12 +48,23 @@ function TasksPage() {
     fetchTasks();
   }, []);
 
+  if (!user) {
+    navigate({ to: "/login" });
+    return null;
+  }
+
   const handleAccept = async (taskId: number) => {
     try {
       await acceptTask(taskId);
       setTasks(
-        tasks.map((t) =>
-          t.task_id === taskId ? { ...t, status: "in_progress" as const } : t,
+        filtered.map((t) =>
+          t.task_id === taskId
+            ? {
+                ...t,
+                status: "in_progress" as const,
+                volunteer_id: Number(user.id),
+              }
+            : t,
         ),
       );
     } catch (err) {
@@ -50,8 +77,10 @@ function TasksPage() {
     try {
       await cancelTask(taskId);
       setTasks(
-        tasks.map((t) =>
-          t.task_id === taskId ? { ...t, status: "open" as const } : t,
+        filtered.map((t) =>
+          t.task_id === taskId
+            ? { ...t, status: "open" as const, volunteer_id: 0 }
+            : t,
         ),
       );
     } catch (err) {
@@ -68,15 +97,7 @@ function TasksPage() {
     );
   }
 
-  if (error) {
-    return (
-      <div className="p-8">
-        <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded">
-          {error}
-        </div>
-      </div>
-    );
-  }
+  if (error) return <ErrorMessageBox message={error} />;
 
   return (
     <section className="p-8">
@@ -84,82 +105,32 @@ function TasksPage() {
         title="Garden tasks"
         content="Your green companions need your help and care! Check out available tasks and keep your plants happy."
       />
-
-      {tasks.length === 0 ? (
-        <section className="bg-gray-100 border border-gray-300 rounded p-6 text-center">
+      <TaskFilterBar
+        onMyTasksChange={setShowMyTasks}
+        showMyTasks={showMyTasks}
+        statusFilter={statusFilter}
+        typeFilter={typeFilter}
+        onStatusChange={setStatusFilter}
+        onTypeChange={setTypeFilter}
+      />
+      {filtered.length === 0 ? (
+        <section className="bg-gray-100 border border-gray-300 rounded-lg p-6 text-center">
           <p className="text-gray-600">No tasks assigned yet</p>
         </section>
       ) : (
         <ul className="space-y-8 mt-6">
-          {tasks.map((task) => (
-            <TaskCard key={task.task_id + task.plant_name} task={task} onAccept={()=>{handleAccept(task.task_id)}} onCancel={()=>{handleCancel(task.task_id)}}/>
+          {filtered.map((task) => (
+            <TaskCard
+              key={task.task_id + task.plant_name}
+              task={task}
+              onAccept={() => {
+                handleAccept(task.task_id);
+              }}
+              onCancel={() => {
+                handleCancel(task.task_id);
+              }}
+            />
           ))}
-          {/* {tasks.map((task) => (
-            <li
-              key={task.id}
-              className="border border-gray-200 rounded-lg p-6 shadow-sm hover:shadow-md transition-shadow"
-            >
-              <div className="flex justify-between items-start mb-4">
-                <div>
-                  <p className="text-sm text-gray-500">
-                    Plant ID: {task.plant_id}
-                  </p>
-                  <p className="text-sm text-gray-500">Task ID: {task.id}</p>
-                </div>
-                <span
-                  className={`px-3 py-1 rounded-full text-sm font-semibold ${
-                    task.status === "open"
-                      ? "bg-yellow-100 text-yellow-800"
-                      : task.status === "accepted"
-                        ? "bg-blue-100 text-blue-800"
-                        : task.status === "completed"
-                          ? "bg-green-100 text-green-800"
-                          : "bg-gray-100 text-gray-800"
-                  }`}
-                >
-                  {task.status}
-                </span>
-              </div>
-
-              <div className="mb-4">
-                <p className="text-lg font-semibold capitalize">
-                  {task.type === "water" ? "💧 Water Plant" : "⚠️ Error Task"}
-                </p>
-                {task.type === "water" && task.water_amount && (
-                  <p className="text-gray-700 mt-2">
-                    Water needed:{" "}
-                    <span className="font-bold">{task.water_amount} ml</span>
-                  </p>
-                )}
-              </div>
-
-              <div className="text-sm text-gray-600 mb-4">
-                <p>
-                  Created: {new Date(task.scheduled_at).toLocaleDateString()} at{" "}
-                  {new Date(task.scheduled_at).toLocaleTimeString()}
-                </p>
-              </div>
-
-              <div className="flex gap-2">
-                {task.status === "open" && (
-                  <button
-                    onClick={() => handleAccept(task.id)}
-                    className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded font-semibold transition-colors"
-                  >
-                    Accept Task
-                  </button>
-                )}
-                {task.status === "accepted" && (
-                  <button
-                    onClick={() => handleCancel(task.id)}
-                    className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded font-semibold transition-colors"
-                  >
-                    Cancel
-                  </button>
-                )}
-              </div>
-            </li>
-          ))} */}
         </ul>
       )}
     </section>

@@ -1,6 +1,5 @@
 import { updateUser } from "@/api/user.api";
 import { SharedButton } from "@/components/ui/CustomedButton";
-import { ErrorMessageBox } from "@/components/ui/ErrorMessageBox";
 import { StatusTag } from "@/components/ui/StatusTag";
 import { Toast } from "@/components/ui/Toast";
 import { useAuth } from "@/hooks/useAuth";
@@ -58,9 +57,8 @@ function Profile() {
   };
 
   if (!user) {
-    return (
-      <ErrorMessageBox message="Failed to load profile. Please log in and try again." />
-    );
+    navigate({ to: "/login" });
+    return null;
   }
 
   return (
@@ -82,10 +80,6 @@ function Profile() {
               src={user.imageUrl}
             />
           </div>
-          {/* Profile picture edit button */}
-          {/* <button className="absolute bottom-1 right-1 bg-primary text-slate-900 p-2 rounded-full shadow-lg hover:scale-105 transition-transform">
-            <span className="material-symbols-outlined text-sm">edit</span>
-          </button> */}
         </div>
         <div className="flex flex-col justify-center text-center md:text-left space-y-1">
           <h1 className="text-3xl font-bold">{user.login}</h1>
@@ -125,7 +119,7 @@ function Profile() {
                 type="checkbox"
                 onChange={updateUserRole}
               />
-              <div className="w-14 h-8 bg-slate-200 peer-focus:outline-none rounded-full peer dark:bg-slate-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-1 after:inset-s-1 after:bg-white after:border-gray-300 after:border after:rounded-full after:h-6 after:w-6 after:transition-all peer-checked:bg-primary"></div>
+              <div className="w-14 h-8 bg-slate-200 peer-focus:outline-none rounded-full peer dark:bg-slate-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-1 after:inset-s-1 after:bg-white after:border-gray-300 after:border after:rounded-full after:h-6 after:w-6 after:transition-all peer-checked:bg-green-600"/>
             </label>
           </div>
         </div>
