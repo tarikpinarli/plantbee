@@ -6,16 +6,15 @@ import { CustomedInput } from '@/components/ui/CustomedInput'
 import { CustomedDropdown } from '@/components/ui/CustomedDropdown'
 import { useImageDrop } from '@/hooks/useImageDrop'
 import { useImageUpload } from '@/hooks/useImageUpload'
-import { useEffect, useRef } from 'react'
+import { useEffect } from 'react'
+import { ImageDropZone } from '@/components/ui/ImageDropZone'
 
 function AddPlantPage() {
   const { form, errors, status, apiError, handleChange, handleSubmit } = usePlantForm();
   
-  const { image, handleDrop, handleChangeImage, handleDragOver } = useImageDrop();
+  const { image, preview, handleDrop, handleChangeImage, handleDragOver } = useImageDrop();
   
   const { upload} = useImageUpload();
-  
-  const fileInputRef = useRef<HTMLInputElement | null>(null);
 
   const handleSubmitWithImage = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -30,18 +29,16 @@ function AddPlantPage() {
     }
 
     // submit form
-    await handleSubmit(e, { image_url: imageUrl });
-
-    handleChangeImage(null);
-    if (fileInputRef.current) {
-      fileInputRef.current.value = '';
-    }
+    await handleSubmit(e, image, { image_url: imageUrl });
   };
 
   const navigate = useNavigate();
 
   useEffect(() => {
     if (status === 'success') {
+      // clear image after success submit only
+      handleChangeImage(null);
+      
       const timer = setTimeout(() => {
         navigate({ 
           to: '/garden',
@@ -166,39 +163,33 @@ function AddPlantPage() {
 
         </div>
 
-        <div className="bg-white rounded-xl shadow p-6 mb-6 flex flex-col gap-5">
-          <h2 className="text-lg font-semibold text-gray-700">Plant Visual</h2>
+        <div className="bg-white rounded-xl shadow p-6 mb-6 flex flex-col gap-2">
+          <h2 className="text-lg font-semibold text-gray-700">
+            Plant Visual  <span className="text-red-500">*</span>
+          </h2>
+            <div className="grid grid-cols-1 md:grid-cols-[2fr_2fr] gap-5 items-start">
 
-            <div className="grid grid-cols-1 md:grid-cols-[1fr_3fr] gap-5 items-start">
+              <p className="text-sm text-gray-500 mt-1 italic">
+                  Drag & drop an image or click to upload. <br/>
+                  All image files are acceptable such as JPEG, SVG, PNG, etc.
+              </p>
 
-              {/* Drag and drop image */}
-
-              <CustomedInput
-                className='w-full md:w-50 h-32 md:h-48 flex flex-col items-center 
-                justify-center border-2 border-dashed border-green-200 bg-green-00 
-                text-gray-400 rounded-lg cursor-pointer'
-                // label='Drag & drop an image or click to upload'
-                type='file'
-                accept='image/*'
-                onChange={handleChangeImage}
+              <ImageDropZone
+                preview={preview}
                 onDrop={handleDrop}
                 onDragOver={handleDragOver}
-                ref={fileInputRef}
+                onChange={handleChangeImage}
+                onRemove={() => {
+                  handleChangeImage(null);
+                }}
               />
 
-              {/* Image URL */} 
-              <div>
-                <CustomedInput
-                  className='text-sm font-medium mb-2'
-                  label={ "Image URL" }
-                  value={form.image_url}
-                  onChange={e => handleChange('image_url', e.target.value)}
-                  placeholder='https://example.com/plant.jpg (optional)'
-                />
-                <p className="text-xs text-gray-500 mt-1 italic">
-                  Pro-tip: Use high-quality JPG or PNG images for better identification.
-                </p>
-              </div>
+              {errors.image && (
+                <span className="text-xs text-red-500">
+                  {errors.image}
+                </span>
+              )}
+
             </div>
         </div>
 

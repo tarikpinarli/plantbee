@@ -1,6 +1,9 @@
 import React from 'react';
-import { useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { fetchPlantById } from '@/api/plants.api';
+import { SharedButton } from './CustomedButton';
+import { deletePlant } from '@/utils/deleteAPI';
+import { useCurrentOwnerId } from '@/hooks/useCurrentOwnerId';
 
 interface PlantDetailsModalProps {
   plantId: number;
@@ -23,6 +26,33 @@ export const PlantDetailsModal: React.FC<PlantDetailsModalProps> = ({ plantId, o
         hour: '2-digit', minute: '2-digit'
     });
   }
+  
+  const queryClient = useQueryClient();
+
+  const deleteMutation = useMutation({
+    mutationFn: deletePlant,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['plants']});
+      queryClient.invalidateQueries({queryKey: ['plant', plantId]});
+      onClose();
+    },
+  });
+
+  const handleDelete = () => {
+    const confirmed = window.confirm(
+      'Are you sure you want to delete this plant? This action cannot be undone.'
+    );
+
+    if (!confirmed) return;
+
+    deleteMutation.mutate(plantId);
+  };
+
+  const { data: user } = useCurrentOwnerId();
+
+  const currentUserId = user ? Number(user.id) : null;
+
+  const canDelete = plant && (plant.owner_id === 0 || plant.owner_id === currentUserId);
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
@@ -160,7 +190,21 @@ export const PlantDetailsModal: React.FC<PlantDetailsModalProps> = ({ plantId, o
                     )}
                 </div>
 
+
               </div>
+
+              {/* DELETE BUTTON */}
+              {canDelete && (
+                <div className="flex items-center justify-center pt-4 border-t border-slate-100 mt-4">
+                  <SharedButton
+                    onClick={handleDelete}
+                    disabled={deleteMutation.isPending}
+                    className="bg-red-600 hover:bg-red-700 text-white"
+                  >
+                    {deleteMutation.isPending ? 'Deleting...' : 'Delete Plant'}
+                  </SharedButton>
+                </div>
+              )}
             </div>
           </div>
         )}

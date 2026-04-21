@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { usePlantApi } from './usePlantApi'
-import { validatePlantForm } from '@/utils/validatePlantForm'
+import { validatePlantForm, type PlantFormErrors } from '@/utils/validatePlantForm'
 import { buildPlantPayload } from '@/utils/buildPlantPayload'
 import type { PlantFormData } from '@/types/plant.types'
 
@@ -18,7 +18,7 @@ export function usePlantForm() {
   })
 
   // Tracks errors per field - record<> create an object type with these keys, each holding a string, partial <> make all keys optiional
-  const [errors, setErrors] = useState<Record<string, string>>({});
+  const [errors, setErrors] = useState<PlantFormErrors>({});
 
   // Tracks what's happening with the API call
   const {createPlant, status, apiError} = usePlantApi();
@@ -31,11 +31,15 @@ export function usePlantForm() {
   }
 
   // ── Submit handler
-  async function handleSubmit(e: React.FormEvent<HTMLFormElement>, override?: Partial<PlantFormData>) {
+  async function handleSubmit(
+    e: React.FormEvent<HTMLFormElement>, 
+    image: File | null,
+    override?: Partial<PlantFormData>
+  ) {
     e.preventDefault()   // stop browser page reload
 
     // validate — stop here if anything is wrong
-    const newErrors = validatePlantForm(form);
+    const newErrors = validatePlantForm(form, image);
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors);
       return;
