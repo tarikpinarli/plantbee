@@ -7,9 +7,17 @@ export type PlantFormData = {
   light_need: string; // Required — 'Low' | 'Medium' | 'High'
   target_moisture: number; // Required — 0 to 100, default 50
   sensor_id: string; // Required
-  image_url: string; // Required -> not required
+  image_url: string; // Required
   //  Plant, AddPlantPayload, schema
 };
+
+export type FetchPlantParams = {
+  page: number;
+  limit: number;
+  sortBy: 'name' | 'current_moisture' | 'target_moisture' | 'light_need';
+  order: 'asc' | 'desc';
+  query: string;
+}
 
 export type Task = {
   task_id: number;

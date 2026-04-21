@@ -11,7 +11,7 @@ curl -X POST http://localhost:8080/plants/add \
     "target_moisture": 45,        
     "sensor_id": "sensor_00",                                     
     "image_url": "https://example.com/images/monstera.jpg"
-  }'
+  }' | jq
 
   sensor reading:
   curl -X POST http://localhost:8080/api/reading \
@@ -21,7 +21,7 @@ curl -X POST http://localhost:8080/plants/add \
     "moisture": 20,
     "duration_ms": 1500,
     "battery_level": 15
-  }'
+  }' | jq
 
   accept task:
 curl -X POST http://localhost:8080/api/tasks/accept \
@@ -29,7 +29,7 @@ curl -X POST http://localhost:8080/api/tasks/accept \
   -b "auth_token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NzU5ODQ0MTgsImxvZ2luIjoidHBpbmFybGkiLCJ1c2VyX2lkIjoxfQ.Ji-6ptD2DVUTG6Fp11_vb_smdLNrET0vh-4dvcYzeqE" \
   -d '{
     "id": 1
-  }'
+  }' | jq
 
   cancel task:
   curl -X POST http://localhost:8080/api/tasks/cancel \
@@ -37,7 +37,7 @@ curl -X POST http://localhost:8080/api/tasks/accept \
   -b "auth_token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NzU5ODQ0MTgsImxvZ2luIjoidHBpbmFybGkiLCJ1c2VyX2lkIjoxfQ.Ji-6ptD2DVUTG6Fp11_vb_smdLNrET0vh-4dvcYzeqE" \
   -d '{
     "id": 1
-  }'
+  }' | jq
 
   set user intention:
   curl -X POST http://localhost:8080/api/user/welcome \
@@ -45,7 +45,30 @@ curl -X POST http://localhost:8080/api/tasks/accept \
   -b "auth_token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NzM5MjY5NTYsImxvZ2luIjoidHBpbmFybGkiLCJ1c2VyX2lkIjoxfQ.wDyq3Rt-JP_ox6T2mg5rMYt-tSLhlTfGbUhZ_JQvTKc" \
   -d '{
     "intend_to_help": true
-  }'
+  }' | jq
 
   get all plants:
-  curl -X GET http://localhost:8080/api/plants
+  curl -X GET http://localhost:8080/api/plants | jq
+
+  get all tasks:
+  curl -X GET http://localhost:8080/api/tasks \
+    -b "auth_token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NzY0MzkyNjAsImxvZ2luIjoidHBpbmFybGkiLCJ1c2VyX2lkIjoyM30.Dxua3MQl5KtQ9wvThwI6Oxl_oDhfZ1-Fi-WfhHOyzrY" | jq
+
+  get open tasks:
+  curl -X GET "http://localhost:8080/api/tasks?status=open" \
+    -b "auth_token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NzY0MzkyNjAsImxvZ2luIjoidHBpbmFybGkiLCJ1c2VyX2lkIjoyM30.Dxua3MQl5KtQ9wvThwI6Oxl_oDhfZ1-Fi-WfhHOyzrY" | jq
+
+  get in-progress tasks:
+  curl -X GET "http://localhost:8080/api/tasks?status=in_progress" \
+    -b "auth_token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NzY0MzkyNjAsImxvZ2luIjoidHBpbmFybGkiLCJ1c2VyX2lkIjoyM30.Dxua3MQl5KtQ9wvThwI6Oxl_oDhfZ1-Fi-WfhHOyzrY" | jq
+
+  get completed tasks:
+  curl -X GET "http://localhost:8080/api/tasks?status=completed" \
+    -b "auth_token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NzY0MzkyNjAsImxvZ2luIjoidHBpbmFybGkiLCJ1c2VyX2lkIjoyM30.Dxua3MQl5KtQ9wvThwI6Oxl_oDhfZ1-Fi-WfhHOyzrY" | jq
+
+  get my tasks:
+  curl -X GET "http://localhost:8080/api/tasks?my_tasks=true" \
+    -b "auth_token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NzY0MzkyNjAsImxvZ2luIjoidHBpbmFybGkiLCJ1c2VyX2lkIjoyM30.Dxua3MQl5KtQ9wvThwI6Oxl_oDhfZ1-Fi-WfhHOyzrY" | jq
+
+  get all-time leaderboard:
+  curl -X GET http://localhost:8080/api/leaderboard | jq

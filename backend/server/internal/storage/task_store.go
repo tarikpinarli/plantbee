@@ -3,6 +3,7 @@ package storage
 import (
 	"database/sql"
 	"errors"
+	"fmt"
 
 	"plantbee-backend/internal/models"
 
@@ -117,7 +118,7 @@ func (d *DB) UpdateOpenTaskMessage(plantID int, taskType string, message string)
 	return err
 }
 
-func (d *DB) GetTasks(statusFilter string) ([]models.TaskDTO, error) {
+func (d *DB) GetTasks(statusFilter string, volunteerID int) ([]models.TaskDTO, error) {
 	query := `
 		SELECT
 			t.id as task_id,
@@ -131,15 +132,24 @@ func (d *DB) GetTasks(statusFilter string) ([]models.TaskDTO, error) {
 			p.target_moisture,
 			t.water_amount as water_needed_ml,
 			COALESCE(t.message, '') as message,
-			COALESCE(t.volentee_id, 0) as volunteer_id
+			COALESCE(t.volentee_id, 0) as volunteer_id,
+			COALESCE(u.login, '') as volunteer_name,
+			t.scheduled_at,
+			t.completed_at
 		FROM tasks t
 		JOIN plants p ON t.plant_id = p.id
+		LEFT JOIN users u ON t.volentee_id = u.id
+		WHERE 1=1
 	`
 
 	var args []interface{}
-	if statusFilter != "" {
-		query += " WHERE t.status = $1"
+	if statusFilter != "" && statusFilter != "all" {
 		args = append(args, statusFilter)
+		query += fmt.Sprintf(" AND t.status = $%d", len(args))
+	}
+	if volunteerID > 0 {
+		args = append(args, volunteerID)
+		query += fmt.Sprintf(" AND t.volentee_id = $%d", len(args))
 	}
 
 	query += " ORDER BY t.scheduled_at DESC"
@@ -155,6 +165,7 @@ func (d *DB) GetTasks(statusFilter string) ([]models.TaskDTO, error) {
 	var tasks []models.TaskDTO
 	for rows.Next() {
 		var dto models.TaskDTO
+		var completedAt sql.NullTime
 		if err := rows.Scan(
 			&dto.TaskID,
 			&dto.PlantID,
@@ -168,10 +179,41 @@ func (d *DB) GetTasks(statusFilter string) ([]models.TaskDTO, error) {
 			&dto.WaterNeededML,
 			&dto.Message,
 			&dto.VolunteerID,
+			&dto.VolunteerName,
+			&dto.ScheduledAt,
+			&completedAt,
 		); err != nil {
 			return nil, err
+		}
+		if completedAt.Valid {
+			dto.CompletedAt = &completedAt.Time
 		}
 		tasks = append(tasks, dto)
 	}
 	return tasks, nil
+}
+
+// CleanupTasksOnPlantDeletion handles tasks when a plant is deleted:
+// 1. Deletes active tasks (open/in_progress) as they are no longer actionable.
+// 2. Sets plant_id to NULL for completed tasks to preserve volunteer history.
+func (d *DB) CleanupTasksOnPlantDeletion(plantID int) error {
+	tx, err := d.Begin()
+	if err != nil {
+		return err
+	}
+	defer func() {
+		_ = tx.Rollback()
+	}()
+
+	// Delete non-completed tasks
+	if _, err := tx.Exec(`DELETE FROM tasks WHERE plant_id = $1 AND status != 'completed'`, plantID); err != nil {
+		return err
+	}
+
+	// Nullify plant_id for completed tasks to preserve history
+	if _, err := tx.Exec(`UPDATE tasks SET plant_id = NULL WHERE plant_id = $1 AND status = 'completed'`, plantID); err != nil {
+		return err
+	}
+
+	return tx.Commit()
 }

@@ -182,3 +182,10 @@ func (d *DB) UpdatePlantCurrentMoisture(plantID int, moisture int) error {
 	_, err := d.Exec(query, moisture, plantID)
 	return err
 }
+
+// DeletePlant removes a plant from the database by its ID.
+func (d *DB) DeletePlant(id int) error {
+	query := `DELETE FROM plants WHERE id = $1`
+	_, err := d.Exec(query, id)
+	return err
+}
