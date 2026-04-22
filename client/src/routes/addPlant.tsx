@@ -4,32 +4,30 @@ import { SharedButton } from '@/components/ui/CustomedButton'
 import { CustomedSlider } from '@/components/ui/CustomedSlider'
 import { CustomedInput } from '@/components/ui/CustomedInput'
 import { CustomedDropdown } from '@/components/ui/CustomedDropdown'
-import { useImageDrop } from '@/hooks/useImageDrop'
+// import { useImageDrop } from '@/hooks/useImageDrop'
 import { useImageUpload } from '@/hooks/useImageUpload'
 import { useEffect } from 'react'
 import { ImageDropZone } from '@/components/ui/ImageDropZone'
+// import type { PlantPayload } from '@/types/plant.types'
 
 function AddPlantPage() {
   const { form, errors, status, apiError, handleChange, handleSubmit } = usePlantForm();
-  
-  const { image, preview, handleDrop, handleChangeImage, handleDragOver } = useImageDrop();
-  
+  // const { image, preview, handleDrop, handleChangeImage, handleDragOver } = useImageDrop();
   const { upload} = useImageUpload();
-
   const handleSubmitWithImage = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     let imageUrl = form.image_url;
 
     // upload file if exists
-    if (image) {
-      const uploaded = await upload(image);
+    if (form.image) {
+      const uploaded = await upload(form.image);
       if (!uploaded) return; // stop if failed
       imageUrl = uploaded;
     }
 
-    // submit form
-    await handleSubmit(e, image, { image_url: imageUrl });
+    // await handleSubmit(e, payload);
+    await handleSubmit(e, { image_url: imageUrl });
   };
 
   const navigate = useNavigate();
@@ -37,7 +35,7 @@ function AddPlantPage() {
   useEffect(() => {
     if (status === 'success') {
       // clear image after success submit only
-      handleChangeImage(null);
+      // handleChangeImage(null);
       
       const timer = setTimeout(() => {
         navigate({ 
@@ -162,7 +160,8 @@ function AddPlantPage() {
             </div>
 
         </div>
-
+        
+        {/* Plant Image */}
         <div className="bg-white rounded-xl shadow p-6 mb-6 flex flex-col gap-2">
           <h2 className="text-lg font-semibold text-gray-700">
             Plant Visual  <span className="text-red-500">*</span>
@@ -175,20 +174,16 @@ function AddPlantPage() {
               </p>
 
               <ImageDropZone
-                preview={preview}
-                onDrop={handleDrop}
-                onDragOver={handleDragOver}
-                onChange={handleChangeImage}
-                onRemove={() => {
-                  handleChangeImage(null);
-                }}
+                value={form.image}
+                onChange={(file) => handleChange("image", file)}
+                error={errors.image}
               />
 
-              {errors.image && (
+              {/* {errors.image && (
                 <span className="text-xs text-red-500">
                   {errors.image}
                 </span>
-              )}
+              )} */}
 
             </div>
         </div>

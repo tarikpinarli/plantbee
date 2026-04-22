@@ -15,6 +15,7 @@ export function usePlantForm() {
     target_moisture: 50,
     sensor_id: '',
     image_url: '',
+    image: null as File | null,
   })
 
   // Tracks errors per field - record<> create an object type with these keys, each holding a string, partial <> make all keys optiional
@@ -24,32 +25,42 @@ export function usePlantForm() {
   const {createPlant, status, apiError} = usePlantApi();
 
   // Single handler for ALL text/number inputs 
-  function handleChange(field: keyof PlantFormData, value: string | number) {
+  function handleChange(
+    field: keyof PlantFormData, 
+    value: string | number | File | null
+  ) {
     setForm(prev => ({ ...prev, [field]: value }));
     // Clear the error for this field as soon as user starts typing
-    setErrors(prev => ({ ...prev, [field]: '' }));
+    // setErrors(prev => ({ ...prev, [field]: '' }));
+    setErrors(prev => {
+      const newErrors = { ...prev };
+      delete newErrors[field]; // 👈 remove error completely
+      return newErrors;
+    });
   }
 
   // ── Submit handler
   async function handleSubmit(
     e: React.FormEvent<HTMLFormElement>, 
-    image: File | null,
     override?: Partial<PlantFormData>
   ) {
     e.preventDefault()   // stop browser page reload
 
     // validate — stop here if anything is wrong
-    const newErrors = validatePlantForm(form, image);
+    const newErrors = validatePlantForm(form);
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors);
       return;
     }
 
     // build the JSON payload
-    const payload = {
-      ...buildPlantPayload(form),
-      ...override,
-    };
+    const imageUrl = override?.image_url ?? form.image_url;
+
+    const payload = buildPlantPayload(form, imageUrl);
+    // const payload = buildPlantPayload{
+    //   ...form,
+    //   ...override?.image_url ?? form={.image_url},
+    // };
 
     // log it so you can see exactly what would be sent
     // console.log('Sending to backend:', JSON.stringify(payload, null, 2))
@@ -58,9 +69,15 @@ export function usePlantForm() {
 
     if (success) {
       setForm({
-        name: '', species: '', category: '',
-        pot_volume_l: 0, light_need: '',
-        target_moisture: 50, sensor_id: '', image_url: '',
+        name: '', 
+        species: '', 
+        category: '',
+        pot_volume_l: 0, 
+        light_need: '',
+        target_moisture: 50, 
+        sensor_id: '', 
+        image_url: '', 
+        image: null,
       });
     }
   }
