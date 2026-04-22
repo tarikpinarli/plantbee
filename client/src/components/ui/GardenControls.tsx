@@ -46,13 +46,13 @@ export function GardenControls({ search, setSearch }: GardenControlsProps) {
 		
 			{/* Filter */}
 			<CustomedInput
-				label='Search'
+				label='Search plant by name'
 				className={`!bg-transparent`}
 				value={query}
 				onChange={(e) => 
-					setSearch({ query: e.target.value, page: 1})
+					setSearch({ query: e.target.value})
 				}
-				placeholder='Search plants by name, etc...'
+				// placeholder='Search plants by name, etc...'
 
 			></CustomedInput>
 		</div>	

@@ -3,11 +3,11 @@ import { plantsArraySchema } from "@/types/plant.schema"
 import type { FetchPlantParams } from "@/types/plant.types"
 
 export async function fetchPlants(params: FetchPlantParams) {
-  const {page, limit, sortBy, order , query} = params
+  const { sortBy, order , query} = params
 
   const searchParams = new URLSearchParams({
-    page: String(page),
-    limit: String(limit),
+    // page: String(page),
+    // limit: String(limit),
     sortBy, 
     order,
     query,

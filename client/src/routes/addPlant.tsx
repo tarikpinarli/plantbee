@@ -42,7 +42,7 @@ function AddPlantPage() {
           to: '/garden',
           search: (prev) => ({
             page: 1,
-            limit: prev.limit ?? 6,
+            // limit: prev.limit ?? 6,
             sortBy: prev.sortBy ?? 'name',
             order: prev.order ?? 'asc',
             query: prev.query ?? '',

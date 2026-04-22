@@ -13,8 +13,8 @@ export const plantSchema = z.object({
 export const plantsArraySchema = z.array(plantSchema);
 
 export const searchPlantSchema = z.object ({
-  page: z.coerce.number().min(1).default(1),
-  limit: z.coerce.number().min(1).max(50).default(6),
+  // page: z.coerce.number().min(1).default(1),
+  // limit: z.coerce.number().min(1).max(50).default(6),
   
   sortBy: z.enum(['name' , 'current_moisture' ,     'target_moisture','light_need']).default('name'),
   order: z.enum(['asc' , 'desc']).default('asc'),
