@@ -5,7 +5,7 @@ type PodiumProps = {
 	data: LeaderboardItem[];
 };
 
-export function LeaderboardPodium({data}: PodiumProps) {
+export const LeaderboardPodium = ({data}: PodiumProps) => {
 	const badges = ["Master Gardener", "Green Heart", "Sprout Scout"];
 	const badgeColors = ["bg-yellow-300", "bg-gray-300", "bg-orange-300"];
 
