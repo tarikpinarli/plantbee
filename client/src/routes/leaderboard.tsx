@@ -39,21 +39,21 @@ function LeaderboardPage() {
   const table = data.slice(3);
 
   return (
-    <>
-      <section>
+    <section className="p-8">
+      <div className="bg-green-100 rounded-xl mb-8 ml-8">
         <PageHeader 
-          title="Leaderboard" 
+          title="Green Guardians" 
           content="Every drop counts! Join the effort, stay hydrated, and help our shared greenery thrive."
         />
+      </div>
 
-        <LeaderboardPodium data={podium} />
+      <LeaderboardPodium data={podium} />
 
-        <LeaderboardTable
-          data={table}
-          currentUserId={me?.user_id}
-        />
+      <LeaderboardTable
+        data={table}
+        currentUserId={me?.user_id}
+      />
 
-      </section>
-    </>
+    </section>
   );
 }
