@@ -40,12 +40,10 @@ function LeaderboardPage() {
 
   return (
     <section className="p-8">
-      <div className="bg-green-100 rounded-xl mb-8 ml-8">
-        <PageHeader 
-          title="Green Guardians" 
-          content="Every drop counts! Join the effort, stay hydrated, and help our shared greenery thrive."
-        />
-      </div>
+      <PageHeader 
+        title="Green Guardians" 
+        content="Every drop counts! Join the effort, stay hydrated, and help our shared greenery thrive."
+      />
 
       <LeaderboardPodium data={podium} />
 
