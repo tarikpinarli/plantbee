@@ -20,12 +20,18 @@ export type FetchPlantParams = {
 }
 
 export type Task = {
-  id: number;
+  task_id: number;
+  image_url?: string;
+  message: string;
   plant_id: number;
-  type: "water" | "error";
-  water_amount?: number;
-  status: "open" | "assigned" | "accepted" | "in_progress" | "completed"; // Add 'accepted' here
-  volentee_id?: number;
+  plant_name: string;
+  sensor_id: string;
+  volunteer_id: number;
+  water_needed_ml: number;
+  target_moisture: number;
+  current_moisture: number;
+  type: "water" | "offline_error";
+  status: "open" | "in_progress" | "completed";
   scheduled_at: string;
-  completed_at?: string;
+  completed_at: string;
 };

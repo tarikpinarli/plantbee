@@ -1,6 +1,6 @@
 type Props = {
   status: string;
-  styles: string;
+  styles?: string;
 };
 
 export const StatusTag = ({ status, styles }: Props) => {

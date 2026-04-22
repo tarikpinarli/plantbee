@@ -4,7 +4,6 @@ import tailwindcss from "@tailwindcss/vite";
 import { tanstackRouter } from "@tanstack/router-plugin/vite";
 import path from "path";
 
-// https://vite.dev/config/
 export default defineConfig({
   plugins: [
     tanstackRouter({
@@ -29,14 +28,6 @@ export default defineConfig({
         changeOrigin: true,
       },
       "/auth": {
-        target: process.env.VITE_API_URL || "http://localhost:8080",
-        changeOrigin: true,
-      },
-      "/plants": {
-        target: process.env.VITE_API_URL || "http://localhost:8080",
-        changeOrigin: true,
-      },
-      "/tasks": {
         target: process.env.VITE_API_URL || "http://localhost:8080",
         changeOrigin: true,
       },

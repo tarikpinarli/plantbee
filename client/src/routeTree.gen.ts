@@ -13,6 +13,7 @@ import { Route as WelcomeRouteImport } from './routes/welcome'
 import { Route as TasksRouteImport } from './routes/tasks'
 import { Route as ProfileRouteImport } from './routes/profile'
 import { Route as LoginRouteImport } from './routes/login'
+import { Route as LeaderboardRouteImport } from './routes/leaderboard'
 import { Route as GardenRouteImport } from './routes/garden'
 import { Route as AddPlantRouteImport } from './routes/addPlant'
 import { Route as AboutRouteImport } from './routes/about'
@@ -36,6 +37,11 @@ const ProfileRoute = ProfileRouteImport.update({
 const LoginRoute = LoginRouteImport.update({
   id: '/login',
   path: '/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LeaderboardRoute = LeaderboardRouteImport.update({
+  id: '/leaderboard',
+  path: '/leaderboard',
   getParentRoute: () => rootRouteImport,
 } as any)
 const GardenRoute = GardenRouteImport.update({
@@ -64,6 +70,7 @@ export interface FileRoutesByFullPath {
   '/about': typeof AboutRoute
   '/addPlant': typeof AddPlantRoute
   '/garden': typeof GardenRoute
+  '/leaderboard': typeof LeaderboardRoute
   '/login': typeof LoginRoute
   '/profile': typeof ProfileRoute
   '/tasks': typeof TasksRoute
@@ -74,6 +81,7 @@ export interface FileRoutesByTo {
   '/about': typeof AboutRoute
   '/addPlant': typeof AddPlantRoute
   '/garden': typeof GardenRoute
+  '/leaderboard': typeof LeaderboardRoute
   '/login': typeof LoginRoute
   '/profile': typeof ProfileRoute
   '/tasks': typeof TasksRoute
@@ -85,6 +93,7 @@ export interface FileRoutesById {
   '/about': typeof AboutRoute
   '/addPlant': typeof AddPlantRoute
   '/garden': typeof GardenRoute
+  '/leaderboard': typeof LeaderboardRoute
   '/login': typeof LoginRoute
   '/profile': typeof ProfileRoute
   '/tasks': typeof TasksRoute
@@ -97,6 +106,7 @@ export interface FileRouteTypes {
     | '/about'
     | '/addPlant'
     | '/garden'
+    | '/leaderboard'
     | '/login'
     | '/profile'
     | '/tasks'
@@ -107,6 +117,7 @@ export interface FileRouteTypes {
     | '/about'
     | '/addPlant'
     | '/garden'
+    | '/leaderboard'
     | '/login'
     | '/profile'
     | '/tasks'
@@ -117,6 +128,7 @@ export interface FileRouteTypes {
     | '/about'
     | '/addPlant'
     | '/garden'
+    | '/leaderboard'
     | '/login'
     | '/profile'
     | '/tasks'
@@ -128,6 +140,7 @@ export interface RootRouteChildren {
   AboutRoute: typeof AboutRoute
   AddPlantRoute: typeof AddPlantRoute
   GardenRoute: typeof GardenRoute
+  LeaderboardRoute: typeof LeaderboardRoute
   LoginRoute: typeof LoginRoute
   ProfileRoute: typeof ProfileRoute
   TasksRoute: typeof TasksRoute
@@ -162,6 +175,13 @@ declare module '@tanstack/react-router' {
       path: '/login'
       fullPath: '/login'
       preLoaderRoute: typeof LoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/leaderboard': {
+      id: '/leaderboard'
+      path: '/leaderboard'
+      fullPath: '/leaderboard'
+      preLoaderRoute: typeof LeaderboardRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/garden': {
@@ -200,6 +220,7 @@ const rootRouteChildren: RootRouteChildren = {
   AboutRoute: AboutRoute,
   AddPlantRoute: AddPlantRoute,
   GardenRoute: GardenRoute,
+  LeaderboardRoute: LeaderboardRoute,
   LoginRoute: LoginRoute,
   ProfileRoute: ProfileRoute,
   TasksRoute: TasksRoute,

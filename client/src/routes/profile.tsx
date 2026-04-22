@@ -1,6 +1,5 @@
 import { updateUser } from "@/api/user.api";
 import { SharedButton } from "@/components/ui/CustomedButton";
-import { ErrorMessageBox } from "@/components/ui/ErrorMessageBox";
 import { StatusTag } from "@/components/ui/StatusTag";
 import { Toast } from "@/components/ui/Toast";
 import { useAuth } from "@/hooks/useAuth";
@@ -58,9 +57,8 @@ function Profile() {
   };
 
   if (!user) {
-    return (
-      <ErrorMessageBox message="Failed to load profile. Please log in and try again." />
-    );
+    navigate({ to: "/login" });
+    return null;
   }
 
   return (
@@ -72,7 +70,9 @@ function Profile() {
           />
         )}
         <div className="relative">
-          <div className="size-32 rounded-full border-2 border-primary/20 p-1">
+          <div
+            className={`size-32 rounded-full border-2 ${intendedToHelp ? "border-green-300" : "border-primary/20"} p-1`}
+          >
             <img
               alt={user.login}
               className="size-full rounded-full object-cover"
@@ -80,10 +80,6 @@ function Profile() {
               src={user.imageUrl}
             />
           </div>
-          {/* Profile picture edit button */}
-          {/* <button className="absolute bottom-1 right-1 bg-primary text-slate-900 p-2 rounded-full shadow-lg hover:scale-105 transition-transform">
-            <span className="material-symbols-outlined text-sm">edit</span>
-          </button> */}
         </div>
         <div className="flex flex-col justify-center text-center md:text-left space-y-1">
           <h1 className="text-3xl font-bold">{user.login}</h1>
@@ -102,7 +98,8 @@ function Profile() {
           </div>
         </div>
       </div>
-      <section className="space-y-4">
+
+      <section className="space-y-4 my-8">
         <div className="bg-white dark:bg-slate-900 p-6 rounded-xl shadow-sm border border-primary/5 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
           <div className="text-center md:text-left max-w-2xl">
             <h2 className="text-lg font-semibold mb-1">
@@ -122,7 +119,7 @@ function Profile() {
                 type="checkbox"
                 onChange={updateUserRole}
               />
-              <div className="w-14 h-8 bg-slate-200 peer-focus:outline-none rounded-full peer dark:bg-slate-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-1 after:inset-s-1 after:bg-white after:border-gray-300 after:border after:rounded-full after:h-6 after:w-6 after:transition-all peer-checked:bg-primary"></div>
+              <div className="w-14 h-8 bg-slate-200 peer-focus:outline-none rounded-full peer dark:bg-slate-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-1 after:inset-s-1 after:bg-white after:border-gray-300 after:border after:rounded-full after:h-6 after:w-6 after:transition-all peer-checked:bg-green-600"/>
             </label>
           </div>
         </div>

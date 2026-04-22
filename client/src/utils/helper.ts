@@ -29,3 +29,5 @@ export const requireAuth = async ({
   if (!context.user) throw redirect({ to: "/login" });
   return {};
 };
+
+ export const BASE_URL = "http://localhost:8080"

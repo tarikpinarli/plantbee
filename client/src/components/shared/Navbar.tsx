@@ -4,6 +4,7 @@ import { Link, useNavigate, useRouterState } from "@tanstack/react-router";
 import { useAuth } from "@/hooks/useAuth";
 import { SharedButton } from "../ui/CustomedButton";
 import { NavLink } from "../ui/NavLink";
+import { useEffect, useState } from "react";
 
 export function Navbar() {
   const { user, setUser } = useAuth();
@@ -11,6 +12,11 @@ export function Navbar() {
   const router = useRouterState();
   const currentPath = router.location.pathname;
   const hideNavbarRoutes = ["/login", "/welcome"];
+  const [menuOpen, setMenuOpen] = useState(false);
+
+  useEffect(() => {
+    return () => setMenuOpen(false);
+  }, [currentPath]);
 
   if (hideNavbarRoutes.includes(currentPath)) return null;
 
@@ -31,7 +37,7 @@ export function Navbar() {
               PlantBee
             </span>
           </Link>
-          <nav className="flex items-center gap-6">
+          <nav className="items-center gap-6 hidden md:flex">
             {user && (
               <ul className="flex items-center gap-6">
                 <li>
@@ -42,6 +48,9 @@ export function Navbar() {
                 </li>
                 <li>
                   <NavLink href="/addPlant">Add Plant</NavLink>
+                </li>
+                <li>
+                  <NavLink href="/leaderboard">Leaderboard</NavLink>
                 </li>
               </ul>
             )}
@@ -59,10 +68,47 @@ export function Navbar() {
             {!user ? (
               <Link to="/login">LOG IN</Link>
             ) : (
-              <SharedButton onClick={logout}>LOG OUT</SharedButton>
+              <SharedButton onClick={logout} className="m-0">
+                LOG OUT
+              </SharedButton>
             )}
           </nav>
+          {/* mobile — hamburger button */}
+          <button
+            className="md:hidden cursor-pointer text-4xl text-[#09431c] dark:text-slate-100 font-extrabold"
+            onClick={() => setMenuOpen(!menuOpen)}
+          >
+            {menuOpen ? "✕" : "☰"}
+          </button>
         </div>
+        {/* mobile dropdown menu */}
+        {menuOpen && (
+          <nav className="md:hidden flex flex-col items-center gap-5 px-6 py-4 border-t border-[#09431c]/20 bg-white dark:bg-[#09431c]/80">
+            {user && (
+              <>
+                <NavLink href="/garden">Garden</NavLink>
+                <NavLink href="/tasks">Tasks</NavLink>
+                <NavLink href="/addPlant">Add Plant</NavLink>
+                <NavLink href="/leaderboard">Leaderboard</NavLink>
+                <Link to="/profile" className="flex items-center gap-2">
+                  <img
+                    src={user.imageUrl}
+                    alt="Profile"
+                    className="w-8 h-8 rounded-full"
+                  />
+                  {user.login}
+                </Link>
+              </>
+            )}
+            {!user ? (
+              <Link to="/login">LOG IN</Link>
+            ) : (
+              <SharedButton onClick={logout} className="m-0 w-sm">
+                LOG OUT
+              </SharedButton>
+            )}
+          </nav>
+        )}
       </header>
     </>
   );

@@ -2,6 +2,7 @@ import z from "zod";
 import type { plantSchema } from "@/types/plant.schema";
 import type React from "react";
 import { LightBadge } from "./LightBadge";
+import { BASE_URL } from "@/utils/helper";
 
 type Plant = z.infer<typeof plantSchema>
 
@@ -19,8 +20,7 @@ export const PlantCard: React.FC<PlantCardProps> = ({
     image_url,
     onClick
 }) => {
-    const BASE_URL = "http://localhost:8080"
-    
+ 
     // Default to 50% if the plant doesn't have a specific target set
     const target = target_moisture || 50; 
     
