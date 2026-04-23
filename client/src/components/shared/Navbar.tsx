@@ -5,6 +5,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { SharedButton } from "../ui/CustomedButton";
 import { NavLink } from "../ui/NavLink";
 import { useEffect, useState } from "react";
+import logo from "@/assets/logo_upscaled.webp";
 
 export function Navbar() {
   const { user, setUser } = useAuth();
@@ -32,7 +33,8 @@ export function Navbar() {
     <>
       <header className="sticky top-0 z-50 border-b border-[#09431c]/20 dark:bg-[#09431c]/80 backdrop-blur-md">
         <div className="max-w-7xl mx-auto flex items-center justify-between px-6 py-4">
-          <Link to="/" className="flex items-center gap-3 text-[#13ec5b]">
+          <Link to="/" className="flex items-center gap-3 text-[#13ec5b] group">
+            <img src={logo} alt="PlantBee Logo" className="w-12 h-12 object-contain transition-transform group-hover:scale-105" />
             <span className="text-3xl font-bold -tracking-wide text-[#09431c] dark:text-slate-100 md:text-3xl leading-tight max-w-180">
               PlantBee
             </span>

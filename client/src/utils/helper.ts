@@ -13,6 +13,7 @@ export const getCurrentUser = async (): Promise<User | null> => {
       imageUrl: data.image_url,
       intendToHelp: data.intend_to_help,
       firstVisit: data.first_visit,
+      waterCount: data.water_count || 0,
     };
     return user;
   } catch (error) {

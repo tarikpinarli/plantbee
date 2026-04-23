@@ -39,8 +39,12 @@ export const LeaderboardPodium = ({data}: PodiumProps) => {
 							{/* Avatar Container */}
 							<div className="flex justify-center mb-4">
 								<div className={`w-16 h-16 rounded-full flex items-center justify-center text-2xl font-bold 
-								${badgeColors[index]} shadow-md border-3 border-white`}>
-									👤
+								${badgeColors[index]} shadow-md border-3 border-white overflow-hidden`}>
+									{user.image_url ? (
+										<img src={user.image_url} alt={user.intra_name} className="w-full h-full object-cover" />
+									) : (
+										"👤"
+									)}
 								</div>
 								
 								<div className={`absolute top-2 right-2 w-8 h-8 flex items-center justify-center bg-emerald-400 rounded-full border-2 border-white text-sm font-bold 

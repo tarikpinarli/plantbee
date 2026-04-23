@@ -32,8 +32,12 @@ export const LeaderboardTableRow = ({user, index, isMe}: RowProps) => {
 
 			<td className="px-6 py-4">
 				<div className="flex items-center gap-3">
-					<div className="w-10 h-10 rounded-full bg-linear-to-br from-emerald-400 to-teal-500 flex items-center justify-center text-white font-bold text-sm">
-						{user.intra_name[0]?.toUpperCase()}
+					<div className="w-10 h-10 rounded-full bg-linear-to-br from-emerald-400 to-teal-500 flex items-center justify-center text-white font-bold text-sm overflow-hidden">
+						{user.image_url ? (
+							<img src={user.image_url} alt={user.intra_name} className="w-full h-full object-cover" />
+						) : (
+							user.intra_name[0]?.toUpperCase()
+						)}
 					</div>
 
 					<div>

@@ -63,13 +63,13 @@ function Profile() {
 
   return (
     <>
-      <div className="relative flex flex-col items-center md:flex-row md:items-start gap-6 bg-white dark:bg-slate-900 p-8 rounded-xl shadow-sm border border-primary/5">
+      <div className="relative flex flex-col items-center md:flex-row md:items-center gap-6 bg-white dark:bg-slate-900 p-8 rounded-xl shadow-sm border border-primary/5 w-full">
         {showToast && (
           <Toast
             message={`Your role has been updated to ${intendedToHelp ? "Volunteer 🐝" : "Quiet Observer 🌱"}`}
           />
         )}
-        <div className="relative">
+        <div className="relative shrink-0">
           <div
             className={`size-32 rounded-full border-2 ${intendedToHelp ? "border-green-300" : "border-primary/20"} p-1`}
           >
@@ -81,7 +81,7 @@ function Profile() {
             />
           </div>
         </div>
-        <div className="flex flex-col justify-center text-center md:text-left space-y-1">
+        <div className="flex flex-col justify-center text-center md:text-left space-y-1 flex-1">
           <h1 className="text-3xl font-bold">{user.login}</h1>
           <p className="text-slate-500 dark:text-slate-400 font-medium">
             {user.email}
@@ -97,6 +97,12 @@ function Profile() {
             />
           </div>
         </div>
+        <div className="flex justify-center md:justify-end mt-4 md:mt-0 shrink-0">
+          <div className="flex flex-col items-center justify-center bg-linear-to-br from-emerald-400 to-teal-500 text-white rounded-2xl p-6 shadow-lg min-w-36 transform transition hover:-translate-y-1 hover:shadow-xl">
+            <span className="text-4xl font-black mb-1">🪙 {user.waterCount}</span>
+            <span className="text-xs font-bold uppercase tracking-widest opacity-90 text-emerald-50">Total Points</span>
+          </div>
+        </div>
       </div>
 
       <section className="space-y-4 my-8">
@@ -106,9 +112,7 @@ function Profile() {
               Change Volunteer Status
             </h2>
             <p className="text-md text-slate-500 dark:text-slate-400 leading-relaxed">
-              When active, you'll receive real-time notifications for nearby
-              gardening tasks and community events. Switch to Quiet Observer to
-              temporarily pause all alerts.
+              Coming up: Receive weekly summaries of completed tasks to your email. 
             </p>
           </div>
           <div className="flex items-center">

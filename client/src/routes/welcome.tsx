@@ -4,6 +4,7 @@ import { requireAuth } from "@/utils/helper";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
 import bee from "../assets/bee.svg";
+import logo from "../assets/logo_upscaled.webp";
 import volunteer from "../assets/volunteer.svg";
 import { SharedButton } from "@/components/ui/CustomedButton";
 import { StatusTag } from "@/components/ui/StatusTag";
@@ -47,7 +48,8 @@ function RouteComponent() {
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-linear-to-b from-white to-green-100 w-full">
-      <section className="max-w-4xl w-full px-6 py-12 text-center">
+      <section className="max-w-4xl w-full px-6 py-12 text-center flex flex-col items-center">
+        <img src={logo} alt="PlantBee Logo" className="w-24 h-24 object-contain mb-6" />
         <StatusTag
           status="New member onboarding"
           styles="bg-green-200 text-[#09431c] border border-[#09431c]"

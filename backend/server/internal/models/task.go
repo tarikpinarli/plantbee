@@ -29,7 +29,7 @@ type TaskDTO struct {
 	WaterNeededML   int        `json:"water_needed_ml"`
 	Message         string     `json:"message"`
 	VolunteerID     int        `json:"volunteer_id"`
-	VolunteerName   string     `json:"volunteer_name"`
+	VolunteerIntraName string     `json:"volunteer_intra_name"`
 	ScheduledAt     time.Time  `json:"scheduled_at"`
 	CompletedAt     *time.Time `json:"completed_at"`
 }

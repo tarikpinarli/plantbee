@@ -8,25 +8,43 @@ import { TaskFilterBar } from "@/components/ui/TaskFilterBar";
 import { useAuth } from "@/hooks/useAuth";
 import { ErrorMessageBox } from "@/components/ui/ErrorMessageBox";
 
+type TasksSearch = {
+  status?: Task["status"] | "all";
+  type?: Task["type"] | "all";
+  myTasks?: boolean;
+};
+
 export const Route = createFileRoute("/tasks")({
+  validateSearch: (search: Record<string, unknown>): TasksSearch => {
+    return {
+      status: (search.status as Task["status"] | "all") || "all",
+      type: (search.type as Task["type"] | "all") || "all",
+      myTasks: search.myTasks === 'true' || search.myTasks === true,
+    };
+  },
   component: TasksPage,
 });
 
 function TasksPage() {
   const { user } = useAuth();
-  const navigate = useNavigate();
+  const navigate = useNavigate({ from: Route.fullPath });
+  const search = Route.useSearch();
+  
   const [tasks, setTasks] = useState<Task[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [statusFilter, setStatusFilter] = useState<Task["status"] | "all">(
-    "all",
-  );
-  const [typeFilter, setTypeFilter] = useState<Task["type"] | "all">("all");
-  const [showMyTasks, setShowMyTasks] = useState(true);
+
+  const statusFilter = search.status || "all";
+  const typeFilter = search.type || "all";
+  const showMyTasks = search.myTasks || false;
+
+  const setStatusFilter = (status: Task["status"] | "all") => navigate({ search: (prev) => ({ ...prev, status }) });
+  const setTypeFilter = (type: Task["type"] | "all") => navigate({ search: (prev) => ({ ...prev, type }) });
+  const setShowMyTasks = (myTasks: boolean) => navigate({ search: (prev) => ({ ...prev, myTasks }) });
 
  const filtered = tasks.filter(t => {
   const matchStatus = statusFilter === 'all' || t.status === statusFilter
-  const matchType = typeFilter === 'all' || t.type === typeFilter
+  const matchType = typeFilter === 'all' || (typeFilter === 'error' ? t.type !== 'water' : t.type === typeFilter)
   const matchMine = !showMyTasks || t.volunteer_id === Number(user?.id)  // ← Number() converts string id
   return matchStatus && matchType && matchMine
 })
@@ -64,6 +82,7 @@ function TasksPage() {
                 ...t,
                 status: "in_progress" as const,
                 volunteer_id: Number(user.id),
+                volunteer_intra_name: user.login,
               }
             : t,
         ),
@@ -80,7 +99,7 @@ function TasksPage() {
       setTasks(
         filtered.map((t) =>
           t.task_id === taskId
-            ? { ...t, status: "open" as const, volunteer_id: 0 }
+            ? { ...t, status: "open" as const, volunteer_id: 0, volunteer_intra_name: "" }
             : t,
         ),
       );

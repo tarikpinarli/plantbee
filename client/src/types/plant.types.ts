@@ -38,10 +38,11 @@ export type Task = {
   plant_name: string;
   sensor_id: string;
   volunteer_id: number;
+  volunteer_intra_name: string;
   water_needed_ml: number;
   target_moisture: number;
   current_moisture: number;
-  type: "water" | "offline_error";
+  type: "water" | "error" | "battery_error" | "sensor_anomaly" | (string & {});
   status: "open" | "in_progress" | "completed";
   scheduled_at: string;
   completed_at: string;

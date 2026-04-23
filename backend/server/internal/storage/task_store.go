@@ -133,7 +133,7 @@ func (d *DB) GetTasks(statusFilter string, volunteerID int) ([]models.TaskDTO, e
 			t.water_amount as water_needed_ml,
 			COALESCE(t.message, '') as message,
 			COALESCE(t.volentee_id, 0) as volunteer_id,
-			COALESCE(u.login, '') as volunteer_name,
+			COALESCE(u.login, '') as volunteer_intra_name,
 			t.scheduled_at,
 			t.completed_at
 		FROM tasks t
@@ -179,7 +179,7 @@ func (d *DB) GetTasks(statusFilter string, volunteerID int) ([]models.TaskDTO, e
 			&dto.WaterNeededML,
 			&dto.Message,
 			&dto.VolunteerID,
-			&dto.VolunteerName,
+			&dto.VolunteerIntraName,
 			&dto.ScheduledAt,
 			&completedAt,
 		); err != nil {

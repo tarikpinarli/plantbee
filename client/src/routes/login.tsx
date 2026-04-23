@@ -3,6 +3,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import kitchenImg from "@/assets/kitchen_backside.webp";
 import { SharedButton } from "@/components/ui/CustomedButton";
 import { loginTo42 } from "@/api/auth.api";
+import logo from "@/assets/logo_upscaled.webp";
 
 export const Route = createFileRoute("/login")({
   component: RouteComponent,
@@ -12,8 +13,10 @@ function RouteComponent() {
   return (
     <div className="relative min-h-screen flex flex-col md:flex-row">
       <nav className="absolute top-0 left-0 p-4 z-10 text-3xl text-white">
-        <Link to="/" className="hover:text-[#FFDD03]">
-          ← PlantBee
+        <Link to="/" className="flex items-center gap-2 hover:text-[#FFDD03] transition-colors">
+          <span>←</span>
+          <img src={logo} alt="PlantBee Logo" className="w-8 h-8 object-contain" />
+          <span>PlantBee</span>
         </Link>
       </nav>
 
