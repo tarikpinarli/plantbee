@@ -1,8 +1,9 @@
-import type { PlantFormData } from "@/types/plant.types"
+import type { PlantPayload } from "@/types/plant.types"
 import { useState } from "react"
 
 type ApiErrorResponse = {
-	field?: keyof PlantFormData;
+	// field?: keyof PlantFormData;
+	field?: string;
 	error?: string;
 }
 
@@ -13,7 +14,7 @@ export function usePlantApi() {
   	// save addPlant error
   	const [apiError, setApiError] = useState<string | null>(null)
 
-	const createPlant = async (payload: PlantFormData) => {
+	const createPlant = async (payload: PlantPayload) => {
 		setStatus('loading')
      	setApiError(null);
 

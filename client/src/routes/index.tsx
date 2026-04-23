@@ -16,8 +16,8 @@ export const Route = createFileRoute("/")({
 type PlantSearch = z.infer<typeof searchPlantSchema>;
 
 const defaultSearch: PlantSearch = {
-  page: 1,
-  limit: 6,
+  // page: 1,
+  // limit: 6,
   sortBy: "name",
   order: "asc",
   query: "",

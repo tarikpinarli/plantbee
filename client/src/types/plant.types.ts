@@ -1,4 +1,4 @@
-// Backend expect JSON
+
 export type PlantFormData = {
   name: string; // Required
   species: string; // Optional
@@ -7,13 +7,24 @@ export type PlantFormData = {
   light_need: string; // Required — 'Low' | 'Medium' | 'High'
   target_moisture: number; // Required — 0 to 100, default 50
   sensor_id: string; // Required
-  image_url: string; // Required
-  //  Plant, AddPlantPayload, schema
+  image_url: string; // Optional fallback
+  image: File | null; // UI required
+};
+
+export type PlantPayload = {
+  name: string;
+  species: string;
+  category: string;
+  pot_volume_l: number;
+  light_need: string;
+  target_moisture: number;
+  sensor_id: string;
+  image_url: string; //backend required
 };
 
 export type FetchPlantParams = {
-  page: number;
-  limit: number;
+  // page: number;
+  // limit: number;
   sortBy: 'name' | 'current_moisture' | 'target_moisture' | 'light_need';
   order: 'asc' | 'desc';
   query: string;

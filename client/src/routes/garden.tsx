@@ -4,7 +4,6 @@ import { useQuery } from '@tanstack/react-query'
 import { fetchPlants } from '@/api/plants.api'
 import { PlantDetailsModal } from '@/components/ui/PlantDetailsModal'
 import { searchPlantSchema } from '@/types/plant.schema'
-import { PaginationButton } from '@/components/ui/Pagination'
 import { usePlantSearch } from '@/hooks/usePlantSearch'
 import { GardenControls } from '@/components/ui/GardenControls'
 import { GardenGrid } from '@/components/ui/GardenGrid'
@@ -64,10 +63,10 @@ function GardenPage() {
       )}
 
       {/* Pagination controls */}
-      <PaginationButton
+      {/* <PaginationButton
         page={search.page}
         onPageChange={(newPage) => setSearch({ page: newPage})}
-      ></PaginationButton>
+      ></PaginationButton> */}
 
     </div>
   )

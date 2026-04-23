@@ -1,11 +1,9 @@
 import type { PlantFormData } from "@/types/plant.types";
 
 export type PlantFormErrors =
-  Partial<Record<keyof PlantFormData, string>> & {
-    image?: string;
-  };
+  Partial<Record<keyof PlantFormData, string>>;
 
-export function validatePlantForm(form: PlantFormData, image: File | null): PlantFormErrors {
+export function validatePlantForm(form: PlantFormData): PlantFormErrors {
 	const newErrors: PlantFormErrors = {};
 
 	if (!form.name.trim())
@@ -20,7 +18,7 @@ export function validatePlantForm(form: PlantFormData, image: File | null): Plan
 	if (!form.sensor_id.trim())
 		newErrors.sensor_id = 'Sensor ID is required'
 
-	 if (!image && !form.image_url) {
+	 if (!form.image && !form.image_url) {
 		newErrors.image = 'Image is required'
 	}
 	// Returns true only if no errors found
