@@ -31,10 +31,10 @@ export const LeaderboardTable = ({data}: TableProps) => {
 			{/* Section Header */}
 			<div className="flex justify-between items-center mb-6">
 				<h3 className="text-2xl font-black text-green-600">Full Rankings</h3>
-				<div className="flex gap-2">
+				{/* <div className="flex gap-2">
 					<button className="px-4 py-2 text-sm font-semibold text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition">All Time</button>
 					<button className="px-4 py-2 text-sm font-semibold text-emerald-600 bg-emerald-50 hover:bg-emerald-100 rounded-lg transition">This Month</button>
-				</div>
+				</div> */}
 			</div>
 
 			{/* Table Container */}
