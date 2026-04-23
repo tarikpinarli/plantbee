@@ -1,13 +1,31 @@
 import type { LeaderboardItem } from "@/types/leaderboard.types"
-import { LeaderboardTableHead, LeaderboardTableRow } from "./LeaderboardComponent";
+import { LeaderboardTableHead } from "./LeaderboardTableHead";
+import { LeaderboardTableRow } from "./LeaderboardTableRow";
+import { useContext } from "react";
+import AuthContext from "@/context/AuthContext";
 
 type TableProps = {
 	data: LeaderboardItem[];
-	currentUserId?: number;
 }
 
-export const LeaderboardTable = ({data, currentUserId}: TableProps) => {
-	
+export const LeaderboardTable = ({data}: TableProps) => {
+	const { user } = useContext(AuthContext);
+	const currentUserId = user?.id;
+
+	const myIndex = data.findIndex(
+		(user) => user.user_id === Number(currentUserId)
+	);
+
+	let displayData: LeaderboardItem[] = [];
+
+	if (myIndex === -1 || myIndex < 5) {
+		displayData = data.slice(0, 5);
+	} else {
+		displayData = [ ...data.slice(0, 4), data[myIndex]];
+	}
+
+	const hasMoreThan5 = data.length > 5;
+
 		return (
 		<div className="mt-12">
 			{/* Section Header */}
@@ -27,42 +45,38 @@ export const LeaderboardTable = ({data, currentUserId}: TableProps) => {
 
 					{/* Table Body */}
 					<tbody className="divide-y divide-gray-500">
-						{data.map((user, idx) => {
-							const isMe = user.user_id === currentUserId;
+						{displayData.map((userItem, index) => {
+							const isMe = 
+								currentUserId != null && 
+								userItem.user_id === Number(currentUserId);
+
+							// console.log("ROW DEBUG →", {
+							// 	userId: user.user_id,
+							// 	currentUserId,
+							// 	isMe
+							// });
+
 							return (
 								<LeaderboardTableRow 
-									key={user.user_id}
-									user={user}
-									index={idx}
+									key={userItem.user_id}
+									user={userItem}
+									index={index} //for odd and even coloring
 									isMe={isMe}
 								/>
 							);
 						})}
+
+						{hasMoreThan5 && (
+							<tr>
+								<td colSpan={4} className="px-6 py-4 font-black text-lg text-center bg-green-100">
+									<button className="text-emerald-700 font-bold hover:underline">
+										Show all volunteers
+									</button>
+								</td>
+							</tr>
+						)}
 					</tbody>
 				</table>
-			</div>
-
-			{/* CTA Section */}
-			<div className="mt-12 bg-linear-to-r from-gray-900 to-gray-800 rounded-2xl p-8 text-white">
-				<div className="max-w-2xl">
-					<h4 className="text-2xl font-black mb-3">Want to climb the ranks?</h4>
-					<p className="text-gray-300 mb-6">Every watering task completed earns you points. Visit the task board to see which plants need your attention right now.</p>
-					<button className="bg-emerald-500 hover:bg-emerald-600 text-white font-bold py-3 px-6 rounded-lg transition-colors">
-						View Active Tasks
-					</button>
-				</div>
-
-				{/* Stats Row */}
-				<div className="grid grid-cols-2 gap-6 mt-8 pt-8 border-t border-gray-700">
-					<div>
-						<div className="text-emerald-400 text-sm font-bold tracking-widest mb-1">TOTAL LITERS</div>
-						<div className="text-4xl font-black">14.2k</div>
-					</div>
-					<div>
-						<div className="text-emerald-400 text-sm font-bold tracking-widest mb-1">ACTIVE GUARDIANS</div>
-						<div className="text-4xl font-black">452</div>
-					</div>
-				</div>
 			</div>
 		</div>
 	);
