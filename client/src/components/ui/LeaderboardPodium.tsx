@@ -13,16 +13,16 @@ export const LeaderboardPodium = ({data}: PodiumProps) => {
 		<div className="mb-6">
 
 			{/* Podium Grid */}
-			<div className="grid grid-cols-3 gap-6">
+			<div className="grid grid-cols-1 md:grid-cols-3 gap-6">
 				{data.map((user, index) => (
 					<div
 						key={user.user_id}
 						className={`relative flex flex-col items-center rounded-5xl overflow-hidden transition-transform duration-300 hover:scale-110 ${
 							index === 0 
-								? "md:col-span-1 order-2 md:order-2 transform md:scale-105" 
+								? "order-1 md:col-span-1 md:order-2 transform md:scale-105" 
 								: index === 1 
-								? "order-1" 
-								: "order-3"
+								? "order-2 md:order-1" 
+								: "order-3 md:order-3"
 						}`}
 					>
 						{/* Card with Border */}

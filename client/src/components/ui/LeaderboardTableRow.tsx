@@ -26,13 +26,13 @@ export const LeaderboardTableRow = ({user, index, isMe}: RowProps) => {
 					: "bg-gray-100 hover:bg-gray-200"
 			}`}
 		>
-			<td className={`px-6 py-4 font-black text-sm ${isMe ? "text-emerald-700" : "text-gray-700"}`}>
+			<td className={`px-2 py-3 md:px-6 md:py-4 font-black text-sm ${isMe ? "text-emerald-700" : "text-gray-700"}`}>
 				#{user.rank}
 			</td>
 
-			<td className="px-6 py-4">
-				<div className="flex items-center gap-3">
-					<div className="w-10 h-10 rounded-full bg-linear-to-br from-emerald-400 to-teal-500 flex items-center justify-center text-white font-bold text-sm overflow-hidden">
+			<td className="px-2 py-3 md:px-6 md:py-4">
+				<div className="flex items-center gap-2 md:gap-3">
+					<div className="w-8 h-8 md:w-10 md:h-10 shrink-0 rounded-full bg-linear-to-br from-emerald-400 to-teal-500 flex items-center justify-center text-white font-bold text-xs md:text-sm overflow-hidden">
 						{user.image_url ? (
 							<img src={user.image_url} alt={user.intra_name} className="w-full h-full object-cover" />
 						) : (
@@ -40,24 +40,24 @@ export const LeaderboardTableRow = ({user, index, isMe}: RowProps) => {
 						)}
 					</div>
 
-					<div>
-						<div className={`font-semibold ${isMe ? "text-emerald-700 font-black" : "text-gray-900"}`}>
+					<div className="overflow-hidden">
+						<div className={`font-semibold text-sm md:text-base truncate ${isMe ? "text-emerald-700 font-black" : "text-gray-900"}`}>
 							@{user.intra_name}
 						</div>
 						{isMe && 
-							<div className="text-xs text-emerald-600 font-bold">⭐ That's you!</div>}
+							<div className="text-[10px] md:text-xs text-emerald-600 font-bold truncate">⭐ That's you!</div>}
 					</div>
 				</div>
 			</td>
 
-			<td className="px-6 py-4 flex items-center gap-2">
-				<span className={`font-bold text-lg ${isMe ? "text-emerald-700" : "text-gray-900"}`}>
+			<td className="px-2 py-3 md:px-6 md:py-4">
+				<span className={`font-bold text-base md:text-lg ${isMe ? "text-emerald-700" : "text-gray-900"}`}>
 					💧{user.water_count}
 				</span>
 			</td>
 
-			<td className="px-6 py-4">
-				<span className={`inline-block px-3 py-1 rounded-full text-sm font-bold ${isMe ? "text-emerald-700" : "text-gray-700"}`}>
+			<td className="px-2 py-3 md:px-6 md:py-4 hidden md:table-cell">
+				<span className={`inline-block px-2 md:px-3 py-1 rounded-full text-xs md:text-sm font-bold ${isMe ? "text-emerald-700" : "text-gray-700"}`}>
 					{badgeLabel}
 				</span>
 			</td>

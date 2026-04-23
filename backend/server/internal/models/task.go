@@ -17,7 +17,7 @@ type Task struct {
 }
 
 type TaskDTO struct {
-	TaskID          int        `json:"task_id"`
+	TaskID          int			`json:"task_id"`
 	PlantID         int        `json:"plant_id"`
 	SensorID        string     `json:"sensor_id"`
 	Type            string     `json:"type"`
