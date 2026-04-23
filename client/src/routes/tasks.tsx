@@ -24,11 +24,12 @@ function TasksPage() {
   const [typeFilter, setTypeFilter] = useState<Task["type"] | "all">("all");
   const [showMyTasks, setShowMyTasks] = useState(true);
 
-  const filtered = tasks.filter((t) => {
-    const matchStatus = statusFilter === "all" || t.status === statusFilter;
-    const matchType = typeFilter === "all" || t.type === typeFilter;
-    return matchStatus && matchType;
-  });
+ const filtered = tasks.filter(t => {
+  const matchStatus = statusFilter === 'all' || t.status === statusFilter
+  const matchType = typeFilter === 'all' || t.type === typeFilter
+  const matchMine = !showMyTasks || t.volunteer_id === Number(user?.id)  // ← Number() converts string id
+  return matchStatus && matchType && matchMine
+})
 
   useEffect(() => {
     const fetchTasks = async () => {
@@ -112,6 +113,7 @@ function TasksPage() {
         typeFilter={typeFilter}
         onStatusChange={setStatusFilter}
         onTypeChange={setTypeFilter}
+        totalResults={filtered.length}
       />
       {filtered.length === 0 ? (
         <section className="bg-gray-100 border border-gray-300 rounded-lg p-6 text-center">
