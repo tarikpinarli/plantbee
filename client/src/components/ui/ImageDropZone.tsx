@@ -1,13 +1,5 @@
 import type React from "react";
-import { useEffect, useRef, useState } from "react";
-
-// interface ImageDropZoneProps {
-// 	preview: string | null;
-// 	onDrop: (e: React.DragEvent<HTMLDivElement>) => void;
-// 	onDragOver: (e: React.DragEvent<HTMLDivElement>) => void;
-// 	onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-// 	onRemove: () => void;
-// }
+import { useEffect, useRef } from "react";
 
 type ImageDropZoneProps = {
   value: File | null;
@@ -18,19 +10,13 @@ type ImageDropZoneProps = {
 export const ImageDropZone = ({value, onChange, error} : ImageDropZoneProps) => {
 	const fileInputRef = useRef<HTMLInputElement | null>(null);
 
-	const [preview, setPreview] = useState<string | null>(null);
+	const preview = value ? URL.createObjectURL(value) : null;
 
 	useEffect(() => {
-		if (!value) {
-			setPreview(null);
-			return;
-		}
-
-		const url = URL.createObjectURL(value);
-		setPreview(url);
-
-		return () => URL.revokeObjectURL(url);
-	}, [value]);
+		return () => {
+		if (preview) URL.revokeObjectURL(preview);
+		};
+	}, [preview]);
 
 	const handleFile = (file: File | null) => {
 		if (file && file.type.startsWith("image/")) {
