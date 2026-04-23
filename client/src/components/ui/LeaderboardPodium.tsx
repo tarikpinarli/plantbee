@@ -2,7 +2,7 @@ import type { LeaderboardItem } from "@/types/leaderboard.types"
 import { getRankColor } from "@/utils/getRankColor";
 
 type PodiumProps = {
-	data: LeaderboardItem[];
+	data: (LeaderboardItem & {isMe?: boolean})[];
 };
 
 export const LeaderboardPodium = ({data}: PodiumProps) => {
@@ -27,28 +27,42 @@ export const LeaderboardPodium = ({data}: PodiumProps) => {
 					>
 						{/* Card with Border */}
 						<div 
-							className={`w-full bg-white rounded-2xl p-6 border-3 ${
-								index === 0 
+							className={`w-full rounded-2xl p-6 border-3 
+								${index === 0 
 									? "border-green-500" 
 									: index == 1
 									? "border-gray-500"
-									: "border-amber-400"
-							}`}>
+									: "border-amber-400"}
+								${user.isMe ? "bg-green-200 hover:bg-emerald-100" : "bg-white hover:bg-gray-50 "}
+							`}>
 
 							{/* Avatar Container */}
 							<div className="flex justify-center mb-4">
-								<div className={`w-16 h-16 rounded-full flex items-center justify-center text-2xl font-bold ${badgeColors[index]} shadow-md border-3 border-white`}>
+								<div className={`w-16 h-16 rounded-full flex items-center justify-center text-2xl font-bold 
+								${badgeColors[index]} shadow-md border-3 border-white`}>
 									👤
 								</div>
 								
-								<div className={`absolute top-2 right-2 w-8 h-8 flex items-center justify-center bg-emerald-400 rounded-full border-2 border-white text-sm font-bold ${getRankColor(index)} `}> 
+								<div className={`absolute top-2 right-2 w-8 h-8 flex items-center justify-center bg-emerald-400 rounded-full border-2 border-white text-sm font-bold 
+									${getRankColor(index)}
+								`}> 
 									{index + 1}
 								</div>
+
+								{user.isMe && (
+									<div className="absolute top-4 left-4 flex items-center gap-1 bg-white text-emerald-700 text-ml font-bold px-2 py-1 rounded-full shadow-xl border border-emerald-200">
+										<span>⭐</span>
+										<span>You</span>
+									</div>
+								)}
 							</div>
 
 							{/* Username */}
 							<div className="text-center mb-2">
-								<div className="font-bold text-lg text-gray-900">{`@${user.intra_name}`}</div>
+								<div className={`font-bold text-lg text-gray-900`}>
+									@{user.intra_name}
+								</div>
+
 								<div className="text-xs font-semibold text-emerald-600">{badges[index]}</div>
 							</div>
 
