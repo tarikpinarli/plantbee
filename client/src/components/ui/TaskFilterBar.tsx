@@ -29,7 +29,7 @@ export const TaskFilterBar = ({
   const typeOptions: (Task["type"] | "all")[] = [
     "all",
     "water",
-    "offline_error",
+    "error",
   ];
 
   return (
@@ -111,7 +111,7 @@ export const TaskFilterBar = ({
           )}
           {typeFilter !== "all" && (
             <span className="ml-2 text-blue-500 capitalize">
-              · {typeFilter === "water" ? "💧 Water" : "⚠️ Sensor Error"}
+              · {typeFilter === "water" ? "💧 Water" : "⚠️ Error"}
             </span>
           )}
         </h2>

@@ -5,6 +5,7 @@ export interface User {
   imageUrl: string;
   intendToHelp: boolean;
   firstVisit: boolean;
+  waterCount: number;
 }
 
 export type UserRole = "volunteer" | "observer" | null;

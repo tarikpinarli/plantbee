@@ -49,7 +49,7 @@ export const TaskCard = ({
                 />
                 <StatusTag
                   status={
-                    task.type === "water" ? "💧 Water Plant" : "⚠️ Sensor Error"
+                    task.type === "water" ? "💧 Water Plant" : "⚠️ Error"
                   }
                   styles={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold ${task.type === "water" ? "bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400" : "bg-amber-100 text-amber-800 dark:bg-amber-900/30 dark:text-amber-400"} mb-2 uppercase tracking-wider`}
                 />
@@ -67,7 +67,7 @@ export const TaskCard = ({
                 </p>
                 {task.volunteer_id != 0 && (
                   <p className="text-md text-slate-600 dark:text-slate-400 font-medium">
-                    Assigned to: {task.volunteer_id}
+                    Assigned to: {task.volunteer_intra_name}
                   </p>
                 )}
                 {task.status === "completed" && (
@@ -93,10 +93,12 @@ export const TaskCard = ({
             )}
           </div>
           {task.type === "water" ? (
-            <ProgressBar
-              currentMoisture={task.current_moisture}
-              targetMoisture={task.target_moisture}
-            />
+            task.status !== "completed" && (
+              <ProgressBar
+                currentMoisture={task.current_moisture}
+                targetMoisture={task.target_moisture}
+              />
+            )
           ) : (
             <p className="bg-red-300/10 dark:bg-primary/10 rounded-lg p-3 border border-red-300/30 text-md text-red-700 dark:text-slate-400">
               {task.message}

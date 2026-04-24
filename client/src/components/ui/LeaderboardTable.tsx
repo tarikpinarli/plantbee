@@ -56,7 +56,7 @@ export const LeaderboardTable = ({data}: TableProps) => {
 
 						{hasMoreThan5 && (
 							<tr>
-								<td colSpan={4} className="px-6 py-4 font-black text-lg text-center bg-green-100">
+								<td colSpan={4} className="px-2 py-3 md:px-6 md:py-4 font-black text-base md:text-lg text-center bg-green-100">
 									<button 
 										className="text-emerald-700 font-bold hover:underline"
 										onClick={() => setShowAll((prev) => !prev)}

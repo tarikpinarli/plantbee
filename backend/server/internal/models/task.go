@@ -17,19 +17,19 @@ type Task struct {
 }
 
 type TaskDTO struct {
-	TaskID          int        `json:"task_id"`
-	PlantID         int        `json:"plant_id"`
-	SensorID        string     `json:"sensor_id"`
-	Type            string     `json:"type"`
-	PlantName       string     `json:"plant_name"`
-	ImageURL        string     `json:"image_url"`
-	Status          string     `json:"status"`
-	CurrentMoisture int        `json:"current_moisture"`
-	TargetMoisture  int        `json:"target_moisture"`
-	WaterNeededML   int        `json:"water_needed_ml"`
-	Message         string     `json:"message"`
-	VolunteerID     int        `json:"volunteer_id"`
-	VolunteerName   string     `json:"volunteer_name"`
-	ScheduledAt     time.Time  `json:"scheduled_at"`
-	CompletedAt     *time.Time `json:"completed_at"`
+	TaskID             int        `json:"task_id"`
+	PlantID            int        `json:"plant_id"`
+	SensorID           string     `json:"sensor_id"`
+	Type               string     `json:"type"`
+	PlantName          string     `json:"plant_name"`
+	ImageURL           string     `json:"image_url"`
+	Status             string     `json:"status"`
+	CurrentMoisture    int        `json:"current_moisture"`
+	TargetMoisture     int        `json:"target_moisture"`
+	WaterNeededML      int        `json:"water_needed_ml"`
+	Message            string     `json:"message"`
+	VolunteerID        int        `json:"volunteer_id"`
+	VolunteerIntraName string     `json:"volunteer_intra_name"`
+	ScheduledAt        time.Time  `json:"scheduled_at"`
+	CompletedAt        *time.Time `json:"completed_at"`
 }

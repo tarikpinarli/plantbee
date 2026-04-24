@@ -73,7 +73,7 @@ function Index() {
       >
         <div className="flex flex-col items-center gap-4 text-center md:text-left">
           <h1 className="text-3xl md:text-4xl font-black leading-tight max-w-260">
-            Grow somethihng great together! 🌱🐝
+            Grow something great together! 🌱🐝
           </h1>
           <p className="text-slate-600 dark:text-slate-400 text-lg font-normal leading-relaxed max-w-180">
             Welcome to PlantBee, a community-driven smart plant monitoring
@@ -90,8 +90,8 @@ function Index() {
                 Volunteering is the heartbeat of our system. While sensors tell
                 us when a plant is thirsty, it's the community members who
                 provide the care that makes the difference. When a plant needs
-                attention, volunteers receive notifications and step in to
-                water, prune, or simply check on the plant's health. This human
+                attention, volunteers step in to
+                water, or simply check on the plant's health. This human
                 touch ensures that our plants not only survive but thrive,
                 fostering a strong sense of community and shared responsibility
                 for our green spaces.
@@ -131,13 +131,13 @@ function Index() {
             alt="sensor icon"
             title="Smart Monitoring"
             description="Utilizing advanced ESP32 IoT sensors for real-time plant health
-                data, tracking moisture, light, and temperature."
+                data and moisture tracking."
           />
           <IntroCard
             icon={team}
             alt="team icon"
             title="Volunteer Care"
-            description="A collaborative effort where notified volunteers step in when
+            description="A collaborative effort where volunteers step in when
                 plants need care, fostering a strong community bond."
           />
           <IntroCard

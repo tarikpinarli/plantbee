@@ -13,16 +13,16 @@ export const LeaderboardPodium = ({data}: PodiumProps) => {
 		<div className="mb-6">
 
 			{/* Podium Grid */}
-			<div className="grid grid-cols-3 gap-6">
+			<div className="grid grid-cols-1 md:grid-cols-3 gap-6">
 				{data.map((user, index) => (
 					<div
 						key={user.user_id}
 						className={`relative flex flex-col items-center rounded-5xl overflow-hidden transition-transform duration-300 hover:scale-110 ${
 							index === 0 
-								? "md:col-span-1 order-2 md:order-2 transform md:scale-105" 
+								? "order-1 md:col-span-1 md:order-2 transform md:scale-105" 
 								: index === 1 
-								? "order-1" 
-								: "order-3"
+								? "order-2 md:order-1" 
+								: "order-3 md:order-3"
 						}`}
 					>
 						{/* Card with Border */}
@@ -39,8 +39,12 @@ export const LeaderboardPodium = ({data}: PodiumProps) => {
 							{/* Avatar Container */}
 							<div className="flex justify-center mb-4">
 								<div className={`w-16 h-16 rounded-full flex items-center justify-center text-2xl font-bold 
-								${badgeColors[index]} shadow-md border-3 border-white`}>
-									👤
+								${badgeColors[index]} shadow-md border-3 border-white overflow-hidden`}>
+									{user.image_url ? (
+										<img src={user.image_url} alt={user.intra_name} className="w-full h-full object-cover" />
+									) : (
+										"👤"
+									)}
 								</div>
 								
 								<div className={`absolute top-2 right-2 w-8 h-8 flex items-center justify-center bg-emerald-400 rounded-full border-2 border-white text-sm font-bold 
