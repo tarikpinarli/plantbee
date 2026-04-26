@@ -9,12 +9,13 @@ import (
 )
 
 type Config struct {
-	Port         string
-	DatabaseURL  string
-	ClientID     string
-	ClientSecret string
-	RedirectURI  string
-	UploadDir    string
+	Port           string
+	DatabaseURL    string
+	ClientID       string
+	ClientSecret   string
+	RedirectURI    string
+	UploadDir      string
+	AllowedOrigins []string
 }
 
 func Load() *Config {
@@ -23,13 +24,25 @@ func Load() *Config {
 	}
 
 	return &Config{
-		Port:         fixPortAddr(getEnv("PORT", "8080")),
-		DatabaseURL:  getEnv("DATABASE_URL", ""),
-		ClientID:     getEnv("CLIENT_ID", ""),
-		ClientSecret: getEnv("CLIENT_SECRET", ""),
-		RedirectURI:  getEnv("REDIRECT_URI", "http://localhost:8080/auth/callback"),
-		UploadDir:    getEnv("UPLOAD_DIR", "./uploads"),
+		Port:           fixPortAddr(getEnv("PORT", "8080")),
+		DatabaseURL:    getEnv("DATABASE_URL", ""),
+		ClientID:       getEnv("CLIENT_ID", ""),
+		ClientSecret:   getEnv("CLIENT_SECRET", ""),
+		RedirectURI:    getEnv("REDIRECT_URI", "http://localhost:8080/auth/callback"),
+		UploadDir:      getEnv("UPLOAD_DIR", "./uploads"),
+		AllowedOrigins: parseOrigins(getEnv("ALLOWED_ORIGINS", "http://localhost:5173")),
 	}
+}
+
+func parseOrigins(raw string) []string {
+	parts := strings.Split(raw, ",")
+	out := make([]string, 0, len(parts))
+	for _, p := range parts {
+		if trimmed := strings.TrimSpace(p); trimmed != "" {
+			out = append(out, trimmed)
+		}
+	}
+	return out
 }
 
 func getEnv(key, fallback string) string {

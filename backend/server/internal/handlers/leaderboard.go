@@ -9,11 +9,6 @@ import (
 )
 
 func (h *Handler) HandleGetLeaderboard(w http.ResponseWriter, r *http.Request) {
-	if r.Method != http.MethodGet {
-		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
-		return
-	}
-
 	rankings, err := h.DB.GetLeaderboard()
 	if err != nil {
 		log.Printf("HandleGetLeaderboard: GetLeaderboard error: %v", err)
