@@ -4,5 +4,248 @@
     "english": "English",
     "french": "Français",
     "finnish": "Suomi"
+  },
+  "nav": {
+    "garden": "Garden",
+    "tasks": "Tasks",
+    "addPlant": "Add Plant",
+    "leaderboard": "Leaderboard",
+    "logIn": "LOG IN",
+    "logOut": "LOG OUT",
+    "profileAlt": "Profile",
+    "logoAlt": "PlantBee Logo"
+  },
+  "footer": {
+    "copyright": "©2026 PlantBee. A community-driven smart plant monitoring system built for Hive Helsinki."
+  },
+  "home": {
+    "heroSubtitle": "Cultivating a greener Hive Helsinki, one leaf at a time",
+    "heroDescription": "Empowering volunteers with ESP32 sensors to keep our plants thriving though precise, collaborative care. Join the smart plant revolution!",
+    "heroCta": "Meet our green friends! 🌿",
+    "introTitle": "Grow something great together! 🌱🐝",
+    "introDescription": "Welcome to PlantBee, a community-driven smart plant monitoring system that ensures our campus plants thrive through collective care. We turn sensor data into real-world action.",
+    "heartbeatTitle": "The human heartbeat",
+    "heartbeatDescription": "Volunteering is the heartbeat of our system. While sensors tell us when a plant is thirsty, it's the community members who provide the care that makes the difference. When a plant needs attention, volunteers step in to water, or simply check on the plant's health. This human touch ensures that our plants not only survive but thrive, fostering a strong sense of community and shared responsibility for our green spaces.",
+    "missionLabel": "Our mission",
+    "missionTitle": "How PlantBee works",
+    "missionDescription": "Combining smart IoT technology with community effort to ensure optimal plant health across our campus. 🐝",
+    "cards": {
+      "monitoringTitle": "Smart Monitoring",
+      "monitoringDescription": "Utilizing advanced ESP32 IoT sensors for real-time plant health data and moisture tracking.",
+      "monitoringAlt": "sensor icon",
+      "volunteerTitle": "Volunteer Care",
+      "volunteerDescription": "A collaborative effort where volunteers step in when plants need care, fostering a strong community bond.",
+      "volunteerAlt": "team icon",
+      "tasksTitle": "Automated Tasks",
+      "tasksDescription": "Exact water calculations and automated tracking for every leaf, ensuring precise hydration without the guesswork.",
+      "tasksAlt": "water drop icon"
+    }
+  },
+  "welcome": {
+    "tag": "New member onboarding",
+    "greeting": "Welcome, <name>{{name}}</name>, to <brand>PlantBee</brand>! 🌼 Grow something great together.",
+    "chooseRole": "Choose your first role 🌱🐝",
+    "rolePrompt": "How would you like to participate in PlantBee ecosystem?",
+    "volunteerTag": "Recommended for plant lovers 💖",
+    "volunteerTitle": "Become a Volunteer",
+    "volunteerDescription": "Get notified when plants near you need water or attention. Track your impact and climb the campus leaderboard!",
+    "volunteerAlt": "volunteer icon",
+    "observerTitle": "Continue as an Observer",
+    "observerDescription": "Browse the map and check plant health stats without committing to care tasks. You can still see all data.",
+    "observerAlt": "observer icon",
+    "switchHint": "Don't worry, you can always switch roles later in your profile settings.",
+    "continue": "Continue"
+  },
+  "login": {
+    "backgroundAlt": "background",
+    "title": "Log in to your <account>42 account</account> to use <brand>PlantBee</brand> 🌻",
+    "loginButton": "Log in with 42",
+    "loginSimple": "Log in to 42"
+  },
+  "addPlant": {
+    "title": "Add a New Plant 🌱",
+    "subtitle": "Expand your garden by registering a new plant.",
+    "basicInfo": "Basic Information",
+    "name": "Plant Name",
+    "namePlaceholder": "e.g. Monstera",
+    "species": "Species",
+    "speciesPlaceholder": "e.g. Monstera deliciosa (optional)",
+    "category": "Category",
+    "categoryPlaceholder": "Select a category (optional)",
+    "categories": {
+      "succulent": "Succulent",
+      "tropical": "Tropical",
+      "herb": "Herb",
+      "fern": "Fern",
+      "cactus": "Cactus",
+      "flowering": "Flowering"
+    },
+    "potVolume": "Pot Volume (Liters)",
+    "potVolumePlaceholder": "e.g. 2.5",
+    "careMonitoring": "Care & Monitoring",
+    "lightRequirement": "Light Requirement",
+    "lightLevels": {
+      "select": "Select light level",
+      "low": "🌙 Low — Shade tolerant",
+      "medium": "⛅ Medium — Indirect light",
+      "high": "☀️ High — Full sun"
+    },
+    "sensorId": "Sensor ID",
+    "sensorIdPlaceholder": "e.g. sensor-001",
+    "targetMoisture": "Target Moisture - {{value}}%",
+    "moistureDry": "0% Dry",
+    "moistureMid": "50%",
+    "moistureWet": "100% Wet",
+    "plantVisual": "Plant Visual",
+    "uploadHint": "Drag & drop an image or click to upload.",
+    "uploadFormats": "All image files are acceptable such as JPEG, SVG, PNG, etc.",
+    "submit": "Add Plant 🌿",
+    "saving": "Saving...",
+    "success": "✅ Plant added successfully!",
+    "errorGeneric": "Something went wrong"
+  },
+  "imageDropZone": {
+    "hint": "Drag & drop or click to upload",
+    "previewAlt": "Preview",
+    "remove": "Remove image"
+  },
+  "garden": {
+    "title": "Hivers' Garden",
+    "subtitle": "Keep track of your leafy friends and their needs.",
+    "loading": "Loading...",
+    "error": "Error loading plants",
+    "empty": "No plants found",
+    "controls": {
+      "sortBy": "Sort by",
+      "name": "Name",
+      "currentMoisture": "Current Moisture",
+      "targetMoisture": "Target Moisture",
+      "lightNeed": "Light need",
+      "order": "Order",
+      "search": "Search plant by name"
+    }
+  },
+  "plantCard": {
+    "addedBy": "👨🏻‍💻 Added by {{name}}",
+    "current": "Current",
+    "target": "Target",
+    "needsWatering": "⚠️ Needs watering"
+  },
+  "lightBadge": {
+    "lowLight": "Low Light",
+    "mediumLight": "Medium Light",
+    "highLight": "High Light"
+  },
+  "plantDetails": {
+    "loading": "Loading plant details...",
+    "error": "Failed to load details.",
+    "addedBy": "👨🏻‍💻 Added by <strong>{{name}}</strong> on {{date}}",
+    "category": "Category",
+    "lightNeed": "Light Need",
+    "potVolume": "Pot Volume",
+    "potVolumeValue": "{{value}}L",
+    "sensorId": "Sensor ID",
+    "na": "N/A",
+    "currentMoisture": "Current Moisture",
+    "target": "Target",
+    "activeTasks": "📋 Active Tasks",
+    "needsWatering": "💧 Needs Watering",
+    "systemError": "⚠️ System Error",
+    "targetAmount": "Target Amount: {{amount}} ml",
+    "volunteerHandling": "A volunteer is currently handling this.",
+    "noActiveTasks": "✅ All good! No active tasks for this plant.",
+    "recentLogs": "Recent Sensor Logs",
+    "noLogs": "No recent sensor readings available.",
+    "deleting": "Deleting...",
+    "delete": "Delete Plant",
+    "confirmDelete": "Are you sure you want to delete this plant? This action cannot be undone.",
+    "statusOpen": "open",
+    "statusInProgress": "in progress",
+    "statusCompleted": "completed"
+  },
+  "leaderboard": {
+    "pageTitle": "Green Guardians",
+    "pageContent": "Every drop counts! Join the effort, stay hydrated, and help our shared greenery thrive.",
+    "fullRankings": "Full Rankings",
+    "showMore": "Show all volunteers",
+    "showLess": "Show less",
+    "ctaTitle": "Want to climb the ranks?",
+    "ctaContent": "Every watering task completed earns you points. Visit the task board to see which plants need your attention right now.",
+    "ctaButton": "View Active Tasks",
+    "headers": {
+      "rank": "RANK",
+      "volunteer": "VOLUNTEER",
+      "drops": "DROPS",
+      "badge": "BADGE LEVEL"
+    },
+    "badges": {
+      "pro": "⚡Pro",
+      "intermediate": "⏱️Intermediate",
+      "sprout": "🌿Sprout"
+    },
+    "thatsYou": "⭐ That's you!",
+    "you": "You",
+    "podium": {
+      "first": "Master Gardener",
+      "second": "Green Heart",
+      "third": "Sprout Scout",
+      "totalWaterings": "TOTAL WATERINGS"
+    }
+  },
+  "tasks": {
+    "title": "Garden tasks",
+    "subtitle": "Your green companions need your help and care! Check out available tasks and keep your plants happy.",
+    "loading": "Loading tasks...",
+    "loadError": "Failed to load tasks. Please try again.",
+    "acceptError": "Failed to accept task. Please try again.",
+    "cancelError": "Failed to cancel task. Please try again.",
+    "loadTaskError": "Failed to load task.",
+    "empty": "No tasks assigned yet",
+    "filters": {
+      "view": "View",
+      "myTasks": "🙋 My Tasks",
+      "status": "Status",
+      "type": "Type",
+      "all": "All",
+      "allTypes": "All types",
+      "open": "open",
+      "inProgress": "in progress",
+      "completed": "completed",
+      "water": "water",
+      "error": "error",
+      "myTasksTitle": "My Tasks",
+      "allTasksTitle": "All Tasks",
+      "waterFilter": "💧 Water",
+      "errorFilter": "⚠️ Error",
+      "results_one": "{{count}} task found",
+      "results_other": "{{count}} tasks found"
+    },
+    "card": {
+      "statusOpen": "Open",
+      "statusInProgress": "In Progress",
+      "statusCompleted": "Completed",
+      "typeWater": "💧 Water Plant",
+      "typeError": "⚠️ Error",
+      "scheduledAt": "Scheduled at: {{time}}",
+      "assignedTo": "Assigned to: {{name}}",
+      "completedAt": "Completed at: {{time}}",
+      "waterNeeded": "Water Needed",
+      "waterAmount": "{{amount}} ml",
+      "accept": "Accept task",
+      "cancel": "Cancel task"
+    }
+  },
+  "profile": {
+    "confirmDelete": "Are you sure you want to delete your account? This action cannot be undone.",
+    "deletedAlert": "Your account has been deleted successfully.",
+    "deleteError": "An error occurred while trying to delete your account. Please try again later.",
+    "roleUpdated": "Your role has been updated to {{role}}",
+    "volunteer": "Volunteer 🐝",
+    "observer": "Quiet Observer 🌱",
+    "totalPoints": "Total Points",
+    "changeRole": "Change Volunteer Status",
+    "changeRoleHint": "Coming up: Receive weekly summaries of completed tasks to your email.",
+    "deleteAccount": "Delete Account",
+    "deleteAccountWarning": "This action is permanent and cannot be undone. All your data, plant records, and achievements will be removed from our servers."
   }
 }

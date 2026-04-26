@@ -4,5 +4,248 @@
     "english": "English",
     "french": "Français",
     "finnish": "Suomi"
+  },
+  "nav": {
+    "garden": "Puutarha",
+    "tasks": "Tehtävät",
+    "addPlant": "Lisää kasvi",
+    "leaderboard": "Tulostaulu",
+    "logIn": "KIRJAUDU SISÄÄN",
+    "logOut": "KIRJAUDU ULOS",
+    "profileAlt": "Profiili",
+    "logoAlt": "PlantBee-logo"
+  },
+  "footer": {
+    "copyright": "©2026 PlantBee. Yhteisövetoinen älykäs kasvien seurantajärjestelmä Hive Helsingille."
+  },
+  "home": {
+    "heroSubtitle": "Vihreämpää Hive Helsinkiä, lehti kerrallaan",
+    "heroDescription": "Annamme vapaaehtoisille ESP32-anturit, joilla pidämme kasvit kukoistavina tarkan ja yhteisöllisen hoidon avulla. Liity älykasvien vallankumoukseen!",
+    "heroCta": "Tutustu vihreisiin ystäviimme! 🌿",
+    "introTitle": "Kasvatetaan jotain hienoa yhdessä! 🌱🐝",
+    "introDescription": "Tervetuloa PlantBeehen, yhteisövetoiseen älykkääseen kasvien seurantajärjestelmään, joka varmistaa kampuksemme kasvien hyvinvoinnin yhteisen hoidon avulla. Muutamme anturien datan käytännön toiminnaksi.",
+    "heartbeatTitle": "Inhimillinen sydämensyke",
+    "heartbeatDescription": "Vapaaehtoistyö on järjestelmämme sydän. Vaikka anturit kertovat, milloin kasvi on janoinen, juuri yhteisön jäsenet tuovat sen ratkaisevan hoivan. Kun kasvi tarvitsee huomiota, vapaaehtoiset astuvat apuun kastelemaan tai vain tarkistamaan kasvin voinnin. Tämä inhimillinen kosketus varmistaa, etteivät kasvit vain selviä vaan kukoistavat, ja vahvistaa yhteisöllisyyttä ja yhteistä vastuuta vihreistä tiloistamme.",
+    "missionLabel": "Tehtävämme",
+    "missionTitle": "Näin PlantBee toimii",
+    "missionDescription": "Yhdistämme älykkään IoT-teknologian ja yhteisön voimat varmistaaksemme kasvien optimaalisen hyvinvoinnin koko kampuksella. 🐝",
+    "cards": {
+      "monitoringTitle": "Älykäs seuranta",
+      "monitoringDescription": "Edistyneet ESP32 IoT-anturit reaaliaikaiseen kasvien terveyden ja kosteuden seurantaan.",
+      "monitoringAlt": "anturin kuvake",
+      "volunteerTitle": "Vapaaehtoishoito",
+      "volunteerDescription": "Yhteisöllinen ponnistus, jossa vapaaehtoiset auttavat kasvien tarvitessa hoitoa ja vahvistavat yhteisön sidettä.",
+      "volunteerAlt": "tiimin kuvake",
+      "tasksTitle": "Automaattiset tehtävät",
+      "tasksDescription": "Tarkat kastelumäärälaskelmat ja automaattinen seuranta jokaiselle lehdelle, mikä takaa täsmällisen kostutuksen ilman arvailua.",
+      "tasksAlt": "vesipisaran kuvake"
+    }
+  },
+  "welcome": {
+    "tag": "Uuden jäsenen perehdytys",
+    "greeting": "Tervetuloa, <name>{{name}}</name>, palveluun <brand>PlantBee</brand>! 🌼 Kasvatetaan jotain hienoa yhdessä.",
+    "chooseRole": "Valitse ensimmäinen roolisi 🌱🐝",
+    "rolePrompt": "Miten haluat osallistua PlantBee-ekosysteemiin?",
+    "volunteerTag": "Suositellaan kasvien ystäville 💖",
+    "volunteerTitle": "Ryhdy vapaaehtoiseksi",
+    "volunteerDescription": "Saat ilmoituksen, kun lähelläsi olevat kasvit tarvitsevat vettä tai huomiota. Seuraa vaikutustasi ja kiipeä kampuksen tulostaulussa!",
+    "volunteerAlt": "vapaaehtoisen kuvake",
+    "observerTitle": "Jatka tarkkailijana",
+    "observerDescription": "Selaa karttaa ja katso kasvien tilatietoja sitoutumatta hoitotehtäviin. Pääset silti näkemään kaikki tiedot.",
+    "observerAlt": "tarkkailijan kuvake",
+    "switchHint": "Älä huoli, voit vaihtaa rooliasi myöhemmin profiilisi asetuksista.",
+    "continue": "Jatka"
+  },
+  "login": {
+    "backgroundAlt": "tausta",
+    "title": "Kirjaudu <account>42-tilillesi</account> käyttääksesi <brand>PlantBeetä</brand> 🌻",
+    "loginButton": "Kirjaudu sisään 42:lla",
+    "loginSimple": "Kirjaudu 42:een"
+  },
+  "addPlant": {
+    "title": "Lisää uusi kasvi 🌱",
+    "subtitle": "Laajenna puutarhaasi rekisteröimällä uusi kasvi.",
+    "basicInfo": "Perustiedot",
+    "name": "Kasvin nimi",
+    "namePlaceholder": "esim. Monstera",
+    "species": "Laji",
+    "speciesPlaceholder": "esim. Monstera deliciosa (valinnainen)",
+    "category": "Kategoria",
+    "categoryPlaceholder": "Valitse kategoria (valinnainen)",
+    "categories": {
+      "succulent": "Mehikasvi",
+      "tropical": "Trooppinen",
+      "herb": "Yrtti",
+      "fern": "Saniainen",
+      "cactus": "Kaktus",
+      "flowering": "Kukkiva"
+    },
+    "potVolume": "Ruukun tilavuus (litraa)",
+    "potVolumePlaceholder": "esim. 2,5",
+    "careMonitoring": "Hoito ja seuranta",
+    "lightRequirement": "Valon tarve",
+    "lightLevels": {
+      "select": "Valitse valotaso",
+      "low": "🌙 Matala — Sietää varjoa",
+      "medium": "⛅ Keskitaso — Epäsuora valo",
+      "high": "☀️ Korkea — Täysi auringonvalo"
+    },
+    "sensorId": "Anturin tunnus",
+    "sensorIdPlaceholder": "esim. sensor-001",
+    "targetMoisture": "Kosteustavoite - {{value}} %",
+    "moistureDry": "0 % Kuiva",
+    "moistureMid": "50 %",
+    "moistureWet": "100 % Märkä",
+    "plantVisual": "Kasvin kuva",
+    "uploadHint": "Vedä ja pudota kuva tai napsauta lisätäksesi.",
+    "uploadFormats": "Kaikki kuvatiedostot kelpaavat, esim. JPEG, SVG, PNG.",
+    "submit": "Lisää kasvi 🌿",
+    "saving": "Tallennetaan...",
+    "success": "✅ Kasvi lisätty onnistuneesti!",
+    "errorGeneric": "Jotain meni pieleen"
+  },
+  "imageDropZone": {
+    "hint": "Vedä ja pudota tai napsauta lisätäksesi",
+    "previewAlt": "Esikatselu",
+    "remove": "Poista kuva"
+  },
+  "garden": {
+    "title": "Hiveläisten puutarha",
+    "subtitle": "Pidä huolta lehtevistä ystävistäsi ja heidän tarpeistaan.",
+    "loading": "Ladataan...",
+    "error": "Kasvien lataus epäonnistui",
+    "empty": "Kasveja ei löytynyt",
+    "controls": {
+      "sortBy": "Lajittele",
+      "name": "Nimi",
+      "currentMoisture": "Nykyinen kosteus",
+      "targetMoisture": "Tavoitekosteus",
+      "lightNeed": "Valon tarve",
+      "order": "Järjestys",
+      "search": "Hae kasvia nimellä"
+    }
+  },
+  "plantCard": {
+    "addedBy": "👨🏻‍💻 Lisännyt {{name}}",
+    "current": "Nykyinen",
+    "target": "Tavoite",
+    "needsWatering": "⚠️ Tarvitsee kastelua"
+  },
+  "lightBadge": {
+    "lowLight": "Vähän valoa",
+    "mediumLight": "Keskitason valo",
+    "highLight": "Runsas valo"
+  },
+  "plantDetails": {
+    "loading": "Ladataan kasvin tietoja...",
+    "error": "Tietojen lataus epäonnistui.",
+    "addedBy": "👨🏻‍💻 Lisännyt <strong>{{name}}</strong> – {{date}}",
+    "category": "Kategoria",
+    "lightNeed": "Valon tarve",
+    "potVolume": "Ruukun tilavuus",
+    "potVolumeValue": "{{value}} l",
+    "sensorId": "Anturin tunnus",
+    "na": "–",
+    "currentMoisture": "Nykyinen kosteus",
+    "target": "Tavoite",
+    "activeTasks": "📋 Aktiiviset tehtävät",
+    "needsWatering": "💧 Tarvitsee kastelua",
+    "systemError": "⚠️ Järjestelmävirhe",
+    "targetAmount": "Tavoitemäärä: {{amount}} ml",
+    "volunteerHandling": "Vapaaehtoinen hoitaa parhaillaan tätä.",
+    "noActiveTasks": "✅ Kaikki hyvin! Tällä kasvilla ei ole aktiivisia tehtäviä.",
+    "recentLogs": "Viimeisimmät anturilukemat",
+    "noLogs": "Viimeaikaisia anturilukemia ei ole saatavilla.",
+    "deleting": "Poistetaan...",
+    "delete": "Poista kasvi",
+    "confirmDelete": "Haluatko varmasti poistaa tämän kasvin? Toimintoa ei voi peruuttaa.",
+    "statusOpen": "avoin",
+    "statusInProgress": "käynnissä",
+    "statusCompleted": "valmis"
+  },
+  "leaderboard": {
+    "pageTitle": "Vihreät vartijat",
+    "pageContent": "Jokainen pisara merkitsee! Liity mukaan, pysy nesteytettynä ja auta jaettua vihreyttämme kukoistamaan.",
+    "fullRankings": "Koko tulostaulu",
+    "showMore": "Näytä kaikki vapaaehtoiset",
+    "showLess": "Näytä vähemmän",
+    "ctaTitle": "Haluatko nousta sijoituksissa?",
+    "ctaContent": "Jokainen suoritettu kastelutehtävä tuo pisteitä. Käy tehtävälaudalla katsomassa, mitkä kasvit tarvitsevat huomiotasi juuri nyt.",
+    "ctaButton": "Katso aktiiviset tehtävät",
+    "headers": {
+      "rank": "SIJA",
+      "volunteer": "VAPAAEHTOINEN",
+      "drops": "PISARAT",
+      "badge": "TASO"
+    },
+    "badges": {
+      "pro": "⚡Pro",
+      "intermediate": "⏱️Edistynyt",
+      "sprout": "🌿Verso"
+    },
+    "thatsYou": "⭐ Sinä siellä!",
+    "you": "Sinä",
+    "podium": {
+      "first": "Mestaripuutarhuri",
+      "second": "Vihreä sydän",
+      "third": "Versopartio",
+      "totalWaterings": "KASTELUT YHTEENSÄ"
+    }
+  },
+  "tasks": {
+    "title": "Puutarhan tehtävät",
+    "subtitle": "Vihreät kumppanisi tarvitsevat apuasi ja huolenpitoasi! Katso saatavilla olevat tehtävät ja pidä kasvisi onnellisina.",
+    "loading": "Ladataan tehtäviä...",
+    "loadError": "Tehtävien lataus epäonnistui. Yritä uudelleen.",
+    "acceptError": "Tehtävän hyväksyminen epäonnistui. Yritä uudelleen.",
+    "cancelError": "Tehtävän peruutus epäonnistui. Yritä uudelleen.",
+    "loadTaskError": "Tehtävän lataus epäonnistui.",
+    "empty": "Sinulle ei ole vielä määritetty tehtäviä",
+    "filters": {
+      "view": "Näkymä",
+      "myTasks": "🙋 Omat tehtävät",
+      "status": "Tila",
+      "type": "Tyyppi",
+      "all": "Kaikki",
+      "allTypes": "Kaikki tyypit",
+      "open": "avoin",
+      "inProgress": "käynnissä",
+      "completed": "valmis",
+      "water": "kastelu",
+      "error": "virhe",
+      "myTasksTitle": "Omat tehtävät",
+      "allTasksTitle": "Kaikki tehtävät",
+      "waterFilter": "💧 Kastelu",
+      "errorFilter": "⚠️ Virhe",
+      "results_one": "{{count}} tehtävä löytyi",
+      "results_other": "{{count}} tehtävää löytyi"
+    },
+    "card": {
+      "statusOpen": "Avoin",
+      "statusInProgress": "Käynnissä",
+      "statusCompleted": "Valmis",
+      "typeWater": "💧 Kastele kasvi",
+      "typeError": "⚠️ Virhe",
+      "scheduledAt": "Aikataulu: {{time}}",
+      "assignedTo": "Vastuuhenkilö: {{name}}",
+      "completedAt": "Valmistui: {{time}}",
+      "waterNeeded": "Vettä tarvitaan",
+      "waterAmount": "{{amount}} ml",
+      "accept": "Hyväksy tehtävä",
+      "cancel": "Peruuta tehtävä"
+    }
+  },
+  "profile": {
+    "confirmDelete": "Haluatko varmasti poistaa tilisi? Toimintoa ei voi peruuttaa.",
+    "deletedAlert": "Tilisi on poistettu onnistuneesti.",
+    "deleteError": "Tilisi poistossa tapahtui virhe. Yritä myöhemmin uudelleen.",
+    "roleUpdated": "Roolisi on päivitetty: {{role}}",
+    "volunteer": "Vapaaehtoinen 🐝",
+    "observer": "Hiljainen tarkkailija 🌱",
+    "totalPoints": "Pisteitä yhteensä",
+    "changeRole": "Vaihda vapaaehtoistilaa",
+    "changeRoleHint": "Tulossa: viikoittaiset yhteenvedot suoritetuista tehtävistä sähköpostiisi.",
+    "deleteAccount": "Poista tili",
+    "deleteAccountWarning": "Toiminto on lopullinen eikä sitä voi peruuttaa. Kaikki tietosi, kasvitietueesi ja saavutuksesi poistetaan palvelimiltamme."
   }
 }

@@ -1,4 +1,5 @@
 import type { LeaderboardItem } from "@/types/leaderboard.types";
+import { useTranslation } from "react-i18next";
 
 type RowProps = {
   user: LeaderboardItem;
@@ -7,22 +8,23 @@ type RowProps = {
 };
 
 export const LeaderboardTableRow = ({user, index, isMe}: RowProps) => {
+	const { t } = useTranslation();
 	const getBadge = (water_count: number) => {
-		if (water_count >= 30) return "⚡Pro";
-		if (water_count >= 15) return "⏱️Intermediate";
-		return "🌿Sprout";
+		if (water_count >= 30) return t("leaderboard.badges.pro");
+		if (water_count >= 15) return t("leaderboard.badges.intermediate");
+		return t("leaderboard.badges.sprout");
 	};
 
 	const badgeLabel = getBadge(user.water_count);
-	
+
 	return (
 		<tr
 			// key={user.user_id}
 			className={`transition-colors ${
-				isMe 
-					? "bg-green-300 hover:bg-emerald-100" 
-					: index % 2 === 0 
-					? "bg-white hover:bg-gray-50" 
+				isMe
+					? "bg-green-300 hover:bg-emerald-100"
+					: index % 2 === 0
+					? "bg-white hover:bg-gray-50"
 					: "bg-gray-100 hover:bg-gray-200"
 			}`}
 		>
@@ -44,8 +46,8 @@ export const LeaderboardTableRow = ({user, index, isMe}: RowProps) => {
 						<div className={`font-semibold text-sm md:text-base truncate ${isMe ? "text-emerald-700 font-black" : "text-gray-900"}`}>
 							@{user.intra_name}
 						</div>
-						{isMe && 
-							<div className="text-[10px] md:text-xs text-emerald-600 font-bold truncate">⭐ That's you!</div>}
+						{isMe &&
+							<div className="text-[10px] md:text-xs text-emerald-600 font-bold truncate">{t('leaderboard.thatsYou')}</div>}
 					</div>
 				</div>
 			</td>

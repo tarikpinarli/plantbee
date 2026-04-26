@@ -8,6 +8,7 @@ import waterDrop from "@/assets/water_drop.svg";
 import { IntroCard } from "@/components/ui/IntroCard";
 import type { searchPlantSchema } from "@/types/plant.schema";
 import type z from "zod";
+import { useTranslation } from "react-i18next";
 
 export const Route = createFileRoute("/")({
   component: Index,
@@ -24,6 +25,7 @@ const defaultSearch: PlantSearch = {
 };
 
 function Index() {
+  const { t } = useTranslation();
   return (
     <>
       <section
@@ -46,15 +48,14 @@ function Index() {
             PlantBee
           </h1>
           <h2 className="text-4xl mt-4 tracking-wide font-semibold">
-            Cultivating a greener Hive Helsinki, one leaf at a time
+            {t("home.heroSubtitle")}
           </h2>
           <p className="mt-2 max-w-xl text-xl opacity-90">
-            Empowering volunteers with ESP32 sensors to keep our plants thriving
-            though precise, collaborative care. Join the smart plant revolution!
+            {t("home.heroDescription")}
           </p>
           <SharedButton className="max-w-full mt-6 font-extrabold border-white border-2 bg-transparent hover:border-transparent hover:bg-[#FFDD03] hover:text-slate-900 transition-colors:duration-300">
             <Link to="/garden" search={defaultSearch}>
-              Meet our green friends! 🌿
+              {t("home.heroCta")}
             </Link>
           </SharedButton>
         </div>
@@ -73,28 +74,19 @@ function Index() {
       >
         <div className="flex flex-col items-center gap-4 text-center md:text-left">
           <h1 className="text-3xl md:text-4xl font-black leading-tight max-w-260">
-            Grow something great together! 🌱🐝
+            {t("home.introTitle")}
           </h1>
           <p className="text-slate-600 dark:text-slate-400 text-lg font-normal leading-relaxed max-w-180">
-            Welcome to PlantBee, a community-driven smart plant monitoring
-            system that ensures our campus plants thrive through collective
-            care. We turn sensor data into real-world action.
+            {t("home.introDescription")}
           </p>
 
           <div className="flex flex-col gap-4 rounded-2xl border border-primary/20 bg-background-light dark:bg-background-dark/50 p-8 pt-4 shadow-lg shadow-primary/5 hover:border-primary/50 transition-colors group">
             <div className="flex flex-col gap-2 mt-4">
               <h2 className="text-xl font-bold leading-tight">
-                The human heartbeat
+                {t("home.heartbeatTitle")}
               </h2>
               <p className="text-slate-600 dark:text-slate-400 text-base font-normal leading-relaxed max-w-180">
-                Volunteering is the heartbeat of our system. While sensors tell
-                us when a plant is thirsty, it's the community members who
-                provide the care that makes the difference. When a plant needs
-                attention, volunteers step in to
-                water, or simply check on the plant's health. This human
-                touch ensures that our plants not only survive but thrive,
-                fostering a strong sense of community and shared responsibility
-                for our green spaces.
+                {t("home.heartbeatDescription")}
               </p>
             </div>
           </div>
@@ -115,37 +107,33 @@ function Index() {
       >
         <div className="flex flex-col items-center gap-4 text-center md:text-left">
           <h2 className="text-primary text-sm font-bold tracking-widest uppercase">
-            Our mission
+            {t("home.missionLabel")}
           </h2>
           <h3 className="text-3xl md:text-4xl font-black leading-tight max-w-180">
-            How PlantBee works
+            {t("home.missionTitle")}
           </h3>
           <p className="text-slate-600 dark:text-slate-400 text-lg font-normal leading-relaxed max-w-180">
-            Combining smart IoT technology with community effort to ensure
-            optimal plant health across our campus. 🐝
+            {t("home.missionDescription")}
           </p>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           <IntroCard
             icon={sensor}
-            alt="sensor icon"
-            title="Smart Monitoring"
-            description="Utilizing advanced ESP32 IoT sensors for real-time plant health
-                data and moisture tracking."
+            alt={t("home.cards.monitoringAlt")}
+            title={t("home.cards.monitoringTitle")}
+            description={t("home.cards.monitoringDescription")}
           />
           <IntroCard
             icon={team}
-            alt="team icon"
-            title="Volunteer Care"
-            description="A collaborative effort where volunteers step in when
-                plants need care, fostering a strong community bond."
+            alt={t("home.cards.volunteerAlt")}
+            title={t("home.cards.volunteerTitle")}
+            description={t("home.cards.volunteerDescription")}
           />
           <IntroCard
             icon={waterDrop}
-            alt="water drop icon"
-            title="Automated Tasks"
-            description="Exact water calculations and automated tracking for every leaf,
-                ensuring precise hydration without the guesswork."
+            alt={t("home.cards.tasksAlt")}
+            title={t("home.cards.tasksTitle")}
+            description={t("home.cards.tasksDescription")}
           />
         </div>
       </div>

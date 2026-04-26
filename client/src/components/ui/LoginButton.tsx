@@ -1,3 +1,5 @@
+import { useTranslation } from "react-i18next";
+
 const loginTo42 =  () => {
   try {
     const PATH = "/auth/login";
@@ -8,7 +10,8 @@ const loginTo42 =  () => {
 };
 
 export const LoginButton = () => {
+  const { t } = useTranslation();
   return (
-      <button onClick={loginTo42}>Log in to 42</button>
+      <button onClick={loginTo42}>{t("login.loginSimple")}</button>
   );
 };

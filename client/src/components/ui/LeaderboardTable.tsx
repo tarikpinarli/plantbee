@@ -2,13 +2,14 @@ import type { LeaderboardItem } from "@/types/leaderboard.types"
 import { LeaderboardTableHead } from "./LeaderboardTableHead";
 import { LeaderboardTableRow } from "./LeaderboardTableRow";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 
 type TableProps = {
 	data: (LeaderboardItem & { isMe?: boolean})[];
 }
 
 export const LeaderboardTable = ({data}: TableProps) => {
-	
+	const { t } = useTranslation();
 	const [showAll, setShowAll] = useState(false);
 
 	let displayData: typeof data = [];
@@ -30,7 +31,7 @@ export const LeaderboardTable = ({data}: TableProps) => {
 		<div className="mt-12">
 			{/* Section Header */}
 			<div className="flex justify-between items-center mb-6">
-				<h3 className="text-2xl font-black text-green-600">Full Rankings</h3>
+				<h3 className="text-2xl font-black text-green-600">{t('leaderboard.fullRankings')}</h3>
 				{/* <div className="flex gap-2">
 					<button className="px-4 py-2 text-sm font-semibold text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition">All Time</button>
 					<button className="px-4 py-2 text-sm font-semibold text-emerald-600 bg-emerald-50 hover:bg-emerald-100 rounded-lg transition">This Month</button>
@@ -61,7 +62,7 @@ export const LeaderboardTable = ({data}: TableProps) => {
 										className="text-emerald-700 font-bold hover:underline"
 										onClick={() => setShowAll((prev) => !prev)}
 									>
-										{showAll ? "Show less" : "Show all volunteers"}
+										{showAll ? t('leaderboard.showLess') : t('leaderboard.showMore')}
 									</button>
 								</td>
 							</tr>

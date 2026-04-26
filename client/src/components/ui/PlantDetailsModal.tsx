@@ -4,6 +4,7 @@ import { fetchPlantById } from '@/api/plants.api';
 import { SharedButton } from './CustomedButton';
 import { deletePlant } from '@/utils/deleteAPI';
 import { useCurrentOwnerId } from '@/hooks/useCurrentOwnerId';
+import { Trans, useTranslation } from 'react-i18next';
 
 interface PlantDetailsModalProps {
   plantId: number;
@@ -11,22 +12,26 @@ interface PlantDetailsModalProps {
 }
 
 export const PlantDetailsModal: React.FC<PlantDetailsModalProps> = ({ plantId, onClose }) => {
+  const { t, i18n } = useTranslation();
   const { data: plant, isLoading, error } = useQuery({
     queryKey: ['plant', plantId],
     queryFn: () => fetchPlantById(plantId),
   });
 
+  const localeMap: Record<string, string> = { en: 'en-US', fr: 'fr-FR', fi: 'fi-FI' };
+  const dateLocale = localeMap[i18n.language] ?? 'en-US';
+
   const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString('en-US', {
+    return new Date(dateString).toLocaleDateString(dateLocale, {
         year: 'numeric', month: 'long', day: 'numeric'
     });
   }
   const formatTime = (dateString: string) => {
-    return new Date(dateString).toLocaleTimeString('en-US', {
+    return new Date(dateString).toLocaleTimeString(dateLocale, {
         hour: '2-digit', minute: '2-digit'
     });
   }
-  
+
   const queryClient = useQueryClient();
 
   const deleteMutation = useMutation({
@@ -39,9 +44,7 @@ export const PlantDetailsModal: React.FC<PlantDetailsModalProps> = ({ plantId, o
   });
 
   const handleDelete = () => {
-    const confirmed = window.confirm(
-      'Are you sure you want to delete this plant? This action cannot be undone.'
-    );
+    const confirmed = window.confirm(t('plantDetails.confirmDelete'));
 
     if (!confirmed) return;
 
@@ -61,8 +64,8 @@ export const PlantDetailsModal: React.FC<PlantDetailsModalProps> = ({ plantId, o
       <div className="relative w-full max-w-lg bg-white rounded-3xl shadow-xl overflow-hidden z-10 flex flex-col max-h-[90vh]">
         <button onClick={onClose} className="absolute top-4 right-4 z-20 w-8 h-8 flex items-center justify-center bg-black/20 hover:bg-black/40 text-white rounded-full transition-colors">✕</button>
 
-        {isLoading && <div className="p-10 text-center text-slate-500">Loading plant details...</div>}
-        {error && <div className="p-10 text-center text-red-500">Failed to load details.</div>}
+        {isLoading && <div className="p-10 text-center text-slate-500">{t('plantDetails.loading')}</div>}
+        {error && <div className="p-10 text-center text-red-500">{t('plantDetails.error')}</div>}
 
         {plant && (
           <div className="overflow-y-auto pb-6">
@@ -81,29 +84,33 @@ export const PlantDetailsModal: React.FC<PlantDetailsModalProps> = ({ plantId, o
                 <h2 className="text-3xl font-bold text-green-900">{plant.name}</h2>
                 {plant.species && <p className="text-slate-500 italic mt-1">{plant.species}</p>}
                 <p className="text-sm text-slate-400 mt-2">
-                  👨🏻‍💻 Added by <span className="font-semibold text-slate-600">{plant.owner_name}</span> on {formatDate(plant.created_at)}
+                  <Trans
+                    i18nKey="plantDetails.addedBy"
+                    values={{ name: plant.owner_name, date: formatDate(plant.created_at) }}
+                    components={{ strong: <span className="font-semibold text-slate-600" /> }}
+                  />
                 </p>
               </div>
 
               {/* Data Grid */}
               <div className="grid grid-cols-2 gap-y-6 gap-x-4 pt-4 border-t border-slate-100">
                 <div>
-                  <p className="text-xs text-slate-400 uppercase tracking-wider font-semibold mb-1">Category</p>
-                  <p className="font-medium text-slate-800">{plant.category || "N/A"}</p>
+                  <p className="text-xs text-slate-400 uppercase tracking-wider font-semibold mb-1">{t('plantDetails.category')}</p>
+                  <p className="font-medium text-slate-800">{plant.category || t('plantDetails.na')}</p>
                 </div>
                 <div>
-                  <p className="text-xs text-slate-400 uppercase tracking-wider font-semibold mb-1">Light Need</p>
-                  <p className="font-medium text-slate-800">{plant.light_need || "N/A"}</p>
+                  <p className="text-xs text-slate-400 uppercase tracking-wider font-semibold mb-1">{t('plantDetails.lightNeed')}</p>
+                  <p className="font-medium text-slate-800">{plant.light_need || t('plantDetails.na')}</p>
                 </div>
                 <div>
-                  <p className="text-xs text-slate-400 uppercase tracking-wider font-semibold mb-1">Pot Volume</p>
+                  <p className="text-xs text-slate-400 uppercase tracking-wider font-semibold mb-1">{t('plantDetails.potVolume')}</p>
                   <p className="font-medium text-slate-800">
-                    {plant.pot_volume_l || plant.pot_volume_liters ? `${plant.pot_volume_l || plant.pot_volume_liters}L` : "N/A"}
+                    {plant.pot_volume_l || plant.pot_volume_liters ? t('plantDetails.potVolumeValue', { value: plant.pot_volume_l || plant.pot_volume_liters }) : t('plantDetails.na')}
                   </p>
                 </div>
                 <div>
-                  <p className="text-xs text-slate-400 uppercase tracking-wider font-semibold mb-1">Sensor ID</p>
-                  <p className="font-medium text-slate-800 font-mono text-sm bg-slate-100 px-2 py-0.5 rounded inline-block">{plant.sensor_id || "N/A"}</p>
+                  <p className="text-xs text-slate-400 uppercase tracking-wider font-semibold mb-1">{t('plantDetails.sensorId')}</p>
+                  <p className="font-medium text-slate-800 font-mono text-sm bg-slate-100 px-2 py-0.5 rounded inline-block">{plant.sensor_id || t('plantDetails.na')}</p>
                 </div>
 
                 {/* Moisture Section */}
@@ -111,12 +118,12 @@ export const PlantDetailsModal: React.FC<PlantDetailsModalProps> = ({ plantId, o
                   <div className="flex justify-between items-end mb-3">
                     <div>
                       <p className="text-xs text-slate-400 uppercase tracking-wider font-semibold mb-1 flex items-center gap-1">
-                        <span className="text-blue-500 text-base">💧</span> Current Moisture
+                        <span className="text-blue-500 text-base">💧</span> {t('plantDetails.currentMoisture')}
                       </p>
-                      <p className="font-bold text-2xl text-blue-600">{plant.current_moisture !== undefined ? `${plant.current_moisture}%` : "N/A"}</p>
+                      <p className="font-bold text-2xl text-blue-600">{plant.current_moisture !== undefined ? `${plant.current_moisture}%` : t('plantDetails.na')}</p>
                     </div>
                     <div className="text-right">
-                      <p className="text-xs text-slate-400 uppercase tracking-wider font-semibold mb-1">Target</p>
+                      <p className="text-xs text-slate-400 uppercase tracking-wider font-semibold mb-1">{t('plantDetails.target')}</p>
                       <p className="font-bold text-lg text-green-600">{plant.target_moisture ? `${plant.target_moisture}%` : "50%"}</p>
                     </div>
                   </div>
@@ -134,41 +141,48 @@ export const PlantDetailsModal: React.FC<PlantDetailsModalProps> = ({ plantId, o
                 {/* ACTIVE TASKS */}
                 <div className="col-span-2 mt-2">
                     <h3 className="text-xs text-slate-400 uppercase tracking-wider font-semibold mb-3 flex items-center gap-2">
-                       📋 Active Tasks
+                       {t('plantDetails.activeTasks')}
                     </h3>
                     {plant.active_tasks && plant.active_tasks.length > 0 ? (
                         <div className="space-y-3">
-                            {plant.active_tasks.map((task: { id: number, type: string, status: string, water_amount: number, message: string, volentee_id: number }) => (
+                            {plant.active_tasks.map((task: { id: number, type: string, status: string, water_amount: number, message: string, volentee_id: number }) => {
+                                const statusLabel = task.status === 'in_progress'
+                                    ? t('plantDetails.statusInProgress')
+                                    : task.status === 'completed'
+                                        ? t('plantDetails.statusCompleted')
+                                        : t('plantDetails.statusOpen');
+                                return (
                                 <div key={task.id} className={`flex flex-col border ${task.type === 'water' ? 'border-blue-200 bg-blue-50' : 'border-red-200 bg-red-50'} p-3 rounded-xl`}>
                                     <div className="flex justify-between items-center mb-1">
                                         <div className="font-bold text-sm flex items-center gap-1.5">
-                                            {task.type === 'water' ? '💧 Needs Watering' : '⚠️ System Error'}
+                                            {task.type === 'water' ? t('plantDetails.needsWatering') : t('plantDetails.systemError')}
                                         </div>
                                         <span className={`text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full ${task.status === 'in_progress' ? 'bg-yellow-200 text-yellow-800' : 'bg-slate-200 text-slate-700'}`}>
-                                            {task.status.replace('_', ' ')}
+                                            {statusLabel}
                                         </span>
                                     </div>
                                     <div className="text-sm text-slate-600">
-                                        {task.type === 'water' ? `Target Amount: ${task.water_amount} ml` : task.message}
+                                        {task.type === 'water' ? t('plantDetails.targetAmount', { amount: task.water_amount }) : task.message}
                                     </div>
                                     {task.status === 'in_progress' && (
                                         <div className="text-xs text-slate-500 mt-2 italic">
-                                            A volunteer is currently handling this.
+                                            {t('plantDetails.volunteerHandling')}
                                         </div>
                                     )}
                                 </div>
-                            ))}
+                                );
+                            })}
                         </div>
                     ) : (
                         <p className="text-sm text-slate-400 italic bg-slate-50 p-3 rounded-lg border border-slate-100 text-center">
-                            ✅ All good! No active tasks for this plant.
+                            {t('plantDetails.noActiveTasks')}
                         </p>
                     )}
                 </div>
 
                 {/* RECENT SENSOR LOGS */}
                 <div className="col-span-2 mt-2 pt-4 border-t border-slate-100">
-                    <h3 className="text-xs text-slate-400 uppercase tracking-wider font-semibold mb-3">Recent Sensor Logs</h3>
+                    <h3 className="text-xs text-slate-400 uppercase tracking-wider font-semibold mb-3">{t('plantDetails.recentLogs')}</h3>
                     {plant.recent_readings && plant.recent_readings.length > 0 ? (
                         <div className="space-y-2 max-h-40 overflow-y-auto pr-2">
                             {plant.recent_readings.map((log: { id: number, recorded_at: string, moisture: number, battery_level?: number }) => (
@@ -186,7 +200,7 @@ export const PlantDetailsModal: React.FC<PlantDetailsModalProps> = ({ plantId, o
                             ))}
                         </div>
                     ) : (
-                        <p className="text-sm text-slate-400 italic bg-slate-50 p-3 rounded-lg border border-slate-100 text-center">No recent sensor readings available.</p>
+                        <p className="text-sm text-slate-400 italic bg-slate-50 p-3 rounded-lg border border-slate-100 text-center">{t('plantDetails.noLogs')}</p>
                     )}
                 </div>
 
@@ -201,7 +215,7 @@ export const PlantDetailsModal: React.FC<PlantDetailsModalProps> = ({ plantId, o
                     disabled={deleteMutation.isPending}
                     className="bg-red-600 hover:bg-red-700 text-white"
                   >
-                    {deleteMutation.isPending ? 'Deleting...' : 'Delete Plant'}
+                    {deleteMutation.isPending ? t('plantDetails.deleting') : t('plantDetails.delete')}
                   </SharedButton>
                 </div>
               )}
