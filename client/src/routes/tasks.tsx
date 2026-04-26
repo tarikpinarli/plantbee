@@ -7,6 +7,7 @@ import { TaskCard } from "@/components/ui/TaskCard";
 import { TaskFilterBar } from "@/components/ui/TaskFilterBar";
 import { useAuth } from "@/hooks/useAuth";
 import { ErrorMessageBox } from "@/components/ui/ErrorMessageBox";
+import { useTranslation } from "react-i18next";
 
 type TasksSearch = {
   status?: Task["status"] | "all";
@@ -29,6 +30,7 @@ function TasksPage() {
   const { user } = useAuth();
   const navigate = useNavigate({ from: Route.fullPath });
   const search = Route.useSearch();
+  const { t } = useTranslation();
   
   const [tasks, setTasks] = useState<Task[]>([]);
   const [loading, setLoading] = useState(true);
@@ -59,13 +61,13 @@ function TasksPage() {
         setError(null);
       } catch (err) {
         console.error("Failed to fetch tasks:", err);
-        setError("Failed to load tasks. Please try again.");
+        setError(t("tasks.loadError"));
       } finally {
         setLoading(false);
       }
     };
     fetchTasks();
-  }, []);
+  }, [t]);
 
   if (!user) {
     navigate({ to: "/login" });
@@ -89,7 +91,7 @@ function TasksPage() {
       );
     } catch (err) {
       console.error("Failed to accept task:", err);
-      setError("Failed to accept task. Please try again.");
+      setError(t("tasks.acceptError"));
     }
   };
 
@@ -105,14 +107,14 @@ function TasksPage() {
       );
     } catch (err) {
       console.error("Failed to cancel task:", err);
-      setError("Failed to cancel task. Please try again.");
+      setError(t("tasks.cancelError"));
     }
   };
 
   if (loading) {
     return (
       <div className="p-8 text-center">
-        <p className="text-lg">Loading tasks...</p>
+        <p className="text-lg">{t("tasks.loading")}</p>
       </div>
     );
   }
@@ -122,8 +124,8 @@ function TasksPage() {
   return (
     <section className="p-8">
       <PageHeader
-        title="Garden tasks"
-        content="Your green companions need your help and care! Check out available tasks and keep your plants happy."
+        title={t("tasks.title")}
+        content={t("tasks.subtitle")}
       />
       <TaskFilterBar
         onMyTasksChange={setShowMyTasks}
@@ -136,7 +138,7 @@ function TasksPage() {
       />
       {filtered.length === 0 ? (
         <section className="bg-gray-100 border border-gray-300 rounded-lg p-6 text-center">
-          <p className="text-gray-600">No tasks assigned yet</p>
+          <p className="text-gray-600">{t("tasks.empty")}</p>
         </section>
       ) : (
         <ul className="space-y-8 mt-6">

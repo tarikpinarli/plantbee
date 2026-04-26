@@ -1,0 +1,251 @@
+{
+  "language": {
+    "label": "Langue",
+    "english": "English",
+    "french": "Français",
+    "finnish": "Suomi"
+  },
+  "nav": {
+    "garden": "Jardin",
+    "tasks": "Tâches",
+    "addPlant": "Ajouter une plante",
+    "leaderboard": "Classement",
+    "logIn": "SE CONNECTER",
+    "logOut": "SE DÉCONNECTER",
+    "profileAlt": "Profil",
+    "logoAlt": "Logo PlantBee"
+  },
+  "footer": {
+    "copyright": "©2026 PlantBee. Un système intelligent de surveillance des plantes animé par la communauté de Hive Helsinki."
+  },
+  "home": {
+    "heroSubtitle": "Cultivons une Hive Helsinki plus verte, une feuille à la fois",
+    "heroDescription": "Donnez aux bénévoles les capteurs ESP32 nécessaires pour faire prospérer nos plantes grâce à des soins précis et collaboratifs. Rejoignez la révolution des plantes connectées !",
+    "heroCta": "Rencontrez nos amis verts ! 🌿",
+    "introTitle": "Faisons pousser quelque chose de génial ensemble ! 🌱🐝",
+    "introDescription": "Bienvenue sur PlantBee, un système intelligent de surveillance des plantes animé par la communauté, qui assure la santé des plantes du campus grâce à un soin collectif. Nous transformons les données des capteurs en actions concrètes.",
+    "heartbeatTitle": "Le battement humain",
+    "heartbeatDescription": "Le bénévolat est le cœur de notre système. Si les capteurs nous indiquent qu'une plante a soif, ce sont les membres de la communauté qui apportent les soins qui font la différence. Quand une plante a besoin d'attention, les bénévoles interviennent pour l'arroser ou simplement vérifier sa santé. Cette touche humaine garantit non seulement la survie mais l'épanouissement de nos plantes, en renforçant le sens de la communauté et la responsabilité partagée envers nos espaces verts.",
+    "missionLabel": "Notre mission",
+    "missionTitle": "Comment fonctionne PlantBee",
+    "missionDescription": "Combiner la technologie IoT intelligente avec l'effort de la communauté pour assurer une santé optimale des plantes sur tout le campus. 🐝",
+    "cards": {
+      "monitoringTitle": "Surveillance intelligente",
+      "monitoringDescription": "Capteurs IoT ESP32 avancés pour le suivi en temps réel de la santé des plantes et de l'humidité.",
+      "monitoringAlt": "icône capteur",
+      "volunteerTitle": "Soins bénévoles",
+      "volunteerDescription": "Un effort collaboratif où les bénévoles interviennent quand les plantes ont besoin de soins, créant un lien communautaire fort.",
+      "volunteerAlt": "icône équipe",
+      "tasksTitle": "Tâches automatisées",
+      "tasksDescription": "Calculs précis d'arrosage et suivi automatisé pour chaque feuille, garantissant une hydratation exacte sans approximation.",
+      "tasksAlt": "icône goutte d'eau"
+    }
+  },
+  "welcome": {
+    "tag": "Intégration des nouveaux membres",
+    "greeting": "Bienvenue, <name>{{name}}</name>, sur <brand>PlantBee</brand> ! 🌼 Faisons pousser quelque chose de génial ensemble.",
+    "chooseRole": "Choisissez votre premier rôle 🌱🐝",
+    "rolePrompt": "Comment souhaitez-vous participer à l'écosystème PlantBee ?",
+    "volunteerTag": "Recommandé pour les amoureux des plantes 💖",
+    "volunteerTitle": "Devenir bénévole",
+    "volunteerDescription": "Recevez une notification quand des plantes près de vous ont besoin d'eau ou d'attention. Suivez votre impact et grimpez dans le classement du campus !",
+    "volunteerAlt": "icône bénévole",
+    "observerTitle": "Continuer en tant qu'observateur",
+    "observerDescription": "Parcourez la carte et consultez les statistiques de santé des plantes sans vous engager dans des tâches de soin. Vous gardez accès à toutes les données.",
+    "observerAlt": "icône observateur",
+    "switchHint": "Pas d'inquiétude, vous pouvez changer de rôle plus tard dans les paramètres de votre profil.",
+    "continue": "Continuer"
+  },
+  "login": {
+    "backgroundAlt": "arrière-plan",
+    "title": "Connectez-vous à votre <account>compte 42</account> pour utiliser <brand>PlantBee</brand> 🌻",
+    "loginButton": "Se connecter avec 42",
+    "loginSimple": "Se connecter à 42"
+  },
+  "addPlant": {
+    "title": "Ajouter une nouvelle plante 🌱",
+    "subtitle": "Agrandissez votre jardin en enregistrant une nouvelle plante.",
+    "basicInfo": "Informations de base",
+    "name": "Nom de la plante",
+    "namePlaceholder": "ex. Monstera",
+    "species": "Espèce",
+    "speciesPlaceholder": "ex. Monstera deliciosa (optionnel)",
+    "category": "Catégorie",
+    "categoryPlaceholder": "Sélectionner une catégorie (optionnel)",
+    "categories": {
+      "succulent": "Succulente",
+      "tropical": "Tropicale",
+      "herb": "Herbe aromatique",
+      "fern": "Fougère",
+      "cactus": "Cactus",
+      "flowering": "À fleurs"
+    },
+    "potVolume": "Volume du pot (litres)",
+    "potVolumePlaceholder": "ex. 2,5",
+    "careMonitoring": "Soins et suivi",
+    "lightRequirement": "Besoin en lumière",
+    "lightLevels": {
+      "select": "Sélectionner un niveau de lumière",
+      "low": "🌙 Faible — Tolère l'ombre",
+      "medium": "⛅ Moyen — Lumière indirecte",
+      "high": "☀️ Élevé — Plein soleil"
+    },
+    "sensorId": "ID du capteur",
+    "sensorIdPlaceholder": "ex. sensor-001",
+    "targetMoisture": "Humidité cible - {{value}}%",
+    "moistureDry": "0% Sec",
+    "moistureMid": "50%",
+    "moistureWet": "100% Humide",
+    "plantVisual": "Visuel de la plante",
+    "uploadHint": "Glissez-déposez une image ou cliquez pour téléverser.",
+    "uploadFormats": "Tous les formats d'image sont acceptés : JPEG, SVG, PNG, etc.",
+    "submit": "Ajouter la plante 🌿",
+    "saving": "Enregistrement...",
+    "success": "✅ Plante ajoutée avec succès !",
+    "errorGeneric": "Une erreur est survenue"
+  },
+  "imageDropZone": {
+    "hint": "Glissez-déposez ou cliquez pour téléverser",
+    "previewAlt": "Aperçu",
+    "remove": "Supprimer l'image"
+  },
+  "garden": {
+    "title": "Jardin des Hivers",
+    "subtitle": "Suivez vos amis feuillus et leurs besoins.",
+    "loading": "Chargement...",
+    "error": "Erreur de chargement des plantes",
+    "empty": "Aucune plante trouvée",
+    "controls": {
+      "sortBy": "Trier par",
+      "name": "Nom",
+      "currentMoisture": "Humidité actuelle",
+      "targetMoisture": "Humidité cible",
+      "lightNeed": "Besoin en lumière",
+      "order": "Ordre",
+      "search": "Rechercher une plante par nom"
+    }
+  },
+  "plantCard": {
+    "addedBy": "👨🏻‍💻 Ajoutée par {{name}}",
+    "current": "Actuelle",
+    "target": "Cible",
+    "needsWatering": "⚠️ Besoin d'arrosage"
+  },
+  "lightBadge": {
+    "lowLight": "Lumière faible",
+    "mediumLight": "Lumière moyenne",
+    "highLight": "Lumière forte"
+  },
+  "plantDetails": {
+    "loading": "Chargement des détails de la plante...",
+    "error": "Échec du chargement des détails.",
+    "addedBy": "👨🏻‍💻 Ajoutée par <strong>{{name}}</strong> le {{date}}",
+    "category": "Catégorie",
+    "lightNeed": "Besoin en lumière",
+    "potVolume": "Volume du pot",
+    "potVolumeValue": "{{value}} L",
+    "sensorId": "ID du capteur",
+    "na": "N/D",
+    "currentMoisture": "Humidité actuelle",
+    "target": "Cible",
+    "activeTasks": "📋 Tâches actives",
+    "needsWatering": "💧 Besoin d'arrosage",
+    "systemError": "⚠️ Erreur système",
+    "targetAmount": "Quantité cible : {{amount}} ml",
+    "volunteerHandling": "Un bénévole s'en occupe actuellement.",
+    "noActiveTasks": "✅ Tout va bien ! Aucune tâche active pour cette plante.",
+    "recentLogs": "Relevés récents du capteur",
+    "noLogs": "Aucun relevé récent disponible.",
+    "deleting": "Suppression...",
+    "delete": "Supprimer la plante",
+    "confirmDelete": "Êtes-vous sûr·e de vouloir supprimer cette plante ? Cette action est irréversible.",
+    "statusOpen": "ouverte",
+    "statusInProgress": "en cours",
+    "statusCompleted": "terminée"
+  },
+  "leaderboard": {
+    "pageTitle": "Les Gardiens Verts",
+    "pageContent": "Chaque goutte compte ! Rejoignez l'effort, restez hydraté·e et aidez notre verdure partagée à prospérer.",
+    "fullRankings": "Classement complet",
+    "showMore": "Afficher tous les bénévoles",
+    "showLess": "Afficher moins",
+    "ctaTitle": "Envie de grimper dans le classement ?",
+    "ctaContent": "Chaque tâche d'arrosage accomplie vous rapporte des points. Visitez le tableau des tâches pour voir quelles plantes ont besoin de vous maintenant.",
+    "ctaButton": "Voir les tâches actives",
+    "headers": {
+      "rank": "RANG",
+      "volunteer": "BÉNÉVOLE",
+      "drops": "GOUTTES",
+      "badge": "NIVEAU"
+    },
+    "badges": {
+      "pro": "⚡Pro",
+      "intermediate": "⏱️Intermédiaire",
+      "sprout": "🌿Pousse"
+    },
+    "thatsYou": "⭐ C'est vous !",
+    "you": "Vous",
+    "podium": {
+      "first": "Maître Jardinier",
+      "second": "Cœur Vert",
+      "third": "Éclaireur Pousse",
+      "totalWaterings": "ARROSAGES TOTAUX"
+    }
+  },
+  "tasks": {
+    "title": "Tâches du jardin",
+    "subtitle": "Vos compagnons verts ont besoin de votre aide et de vos soins ! Découvrez les tâches disponibles et gardez vos plantes heureuses.",
+    "loading": "Chargement des tâches...",
+    "loadError": "Échec du chargement des tâches. Veuillez réessayer.",
+    "acceptError": "Échec de l'acceptation de la tâche. Veuillez réessayer.",
+    "cancelError": "Échec de l'annulation de la tâche. Veuillez réessayer.",
+    "loadTaskError": "Échec du chargement de la tâche.",
+    "empty": "Aucune tâche assignée pour le moment",
+    "filters": {
+      "view": "Vue",
+      "myTasks": "🙋 Mes tâches",
+      "status": "Statut",
+      "type": "Type",
+      "all": "Toutes",
+      "allTypes": "Tous types",
+      "open": "ouverte",
+      "inProgress": "en cours",
+      "completed": "terminée",
+      "water": "arrosage",
+      "error": "erreur",
+      "myTasksTitle": "Mes tâches",
+      "allTasksTitle": "Toutes les tâches",
+      "waterFilter": "💧 Arrosage",
+      "errorFilter": "⚠️ Erreur",
+      "results_one": "{{count}} tâche trouvée",
+      "results_other": "{{count}} tâches trouvées"
+    },
+    "card": {
+      "statusOpen": "Ouverte",
+      "statusInProgress": "En cours",
+      "statusCompleted": "Terminée",
+      "typeWater": "💧 Arroser la plante",
+      "typeError": "⚠️ Erreur",
+      "scheduledAt": "Programmée le : {{time}}",
+      "assignedTo": "Assignée à : {{name}}",
+      "completedAt": "Terminée le : {{time}}",
+      "waterNeeded": "Eau nécessaire",
+      "waterAmount": "{{amount}} ml",
+      "accept": "Accepter la tâche",
+      "cancel": "Annuler la tâche"
+    }
+  },
+  "profile": {
+    "confirmDelete": "Êtes-vous sûr·e de vouloir supprimer votre compte ? Cette action est irréversible.",
+    "deletedAlert": "Votre compte a été supprimé avec succès.",
+    "deleteError": "Une erreur est survenue lors de la suppression de votre compte. Veuillez réessayer plus tard.",
+    "roleUpdated": "Votre rôle a été mis à jour : {{role}}",
+    "volunteer": "Bénévole 🐝",
+    "observer": "Observateur tranquille 🌱",
+    "totalPoints": "Points totaux",
+    "changeRole": "Changer le statut de bénévole",
+    "changeRoleHint": "À venir : recevez par e-mail un récapitulatif hebdomadaire de vos tâches accomplies.",
+    "deleteAccount": "Supprimer le compte",
+    "deleteAccountWarning": "Cette action est définitive et irréversible. Toutes vos données, vos plantes et vos succès seront supprimés de nos serveurs."
+  }
+}

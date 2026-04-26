@@ -1,5 +1,6 @@
 import type React from "react";
 import { useEffect, useRef } from "react";
+import { useTranslation } from "react-i18next";
 
 type ImageDropZoneProps = {
   value: File | null;
@@ -8,6 +9,7 @@ type ImageDropZoneProps = {
 };
 
 export const ImageDropZone = ({value, onChange, error} : ImageDropZoneProps) => {
+	const { t } = useTranslation();
 	const fileInputRef = useRef<HTMLInputElement | null>(null);
 
 	const preview = value ? URL.createObjectURL(value) : null;
@@ -47,12 +49,12 @@ export const ImageDropZone = ({value, onChange, error} : ImageDropZoneProps) => 
 			>
 				{!preview ? (
 				<p className="text-xs italic text-center px-2">
-					Drag & drop or click to upload
+					{t("imageDropZone.hint")}
 				</p>
 				) : (
 				<img
 					src={preview}
-					alt="Preview"
+					alt={t("imageDropZone.previewAlt")}
 					className="w-full h-full object-cover rounded-lg"
 				/>
 				)}
@@ -73,7 +75,7 @@ export const ImageDropZone = ({value, onChange, error} : ImageDropZoneProps) => 
 					onClick={() => onChange(null)}
 					className="text-xs text-red-500 hover:underline"
 				>
-					Remove image
+					{t("imageDropZone.remove")}
 				</button>
 			)}
 

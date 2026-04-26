@@ -1,12 +1,18 @@
 import type { LeaderboardItem } from "@/types/leaderboard.types"
 import { getRankColor } from "@/utils/getRankColor";
+import { useTranslation } from "react-i18next";
 
 type PodiumProps = {
 	data: (LeaderboardItem & {isMe?: boolean})[];
 };
 
 export const LeaderboardPodium = ({data}: PodiumProps) => {
-	const badges = ["Master Gardener", "Green Heart", "Sprout Scout"];
+	const { t } = useTranslation();
+	const badges = [
+		t("leaderboard.podium.first"),
+		t("leaderboard.podium.second"),
+		t("leaderboard.podium.third"),
+	];
 	const badgeColors = ["bg-yellow-300", "bg-gray-300", "bg-orange-300"];
 
 	return (
@@ -56,7 +62,7 @@ export const LeaderboardPodium = ({data}: PodiumProps) => {
 								{user.isMe && (
 									<div className="absolute top-4 left-4 flex items-center gap-1 bg-white text-emerald-700 text-ml font-bold px-2 py-1 rounded-full shadow-xl border border-emerald-200">
 										<span>⭐</span>
-										<span>You</span>
+										<span>{t("leaderboard.you")}</span>
 									</div>
 								)}
 							</div>
@@ -77,7 +83,7 @@ export const LeaderboardPodium = ({data}: PodiumProps) => {
 									: "bg-gray-100 text-gray-900"
 							}`}>
 								<div className="text-2xl">{user.water_count}</div>
-								<div className="text-xs tracking-wider">TOTAL WATERINGS</div>
+								<div className="text-xs tracking-wider">{t("leaderboard.podium.totalWaterings")}</div>
 							</div>
 						</div>
 					</div>

@@ -9,6 +9,7 @@ import volunteer from "../assets/volunteer.svg";
 import { SharedButton } from "@/components/ui/CustomedButton";
 import { StatusTag } from "@/components/ui/StatusTag";
 import { VolunteerCard } from "@/components/ui/VolunteerCard";
+import { Trans, useTranslation } from "react-i18next";
 
 export const Route = createFileRoute("/welcome")({
   beforeLoad: requireAuth,
@@ -36,6 +37,7 @@ function RouteComponent() {
   const { user } = useAuth();
   const [selected, setSelected] = useState<UserRole>(null);
   const navigate = useNavigate();
+  const { t } = useTranslation();
 
   if (!user) {
     navigate({ to: "/login" });
@@ -49,36 +51,38 @@ function RouteComponent() {
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-linear-to-b from-white to-green-100 w-full">
       <section className="max-w-4xl w-full px-6 py-12 text-center flex flex-col items-center">
-        <img src={logo} alt="PlantBee Logo" className="w-24 h-24 object-contain mb-6" />
+        <img src={logo} alt={t("nav.logoAlt")} className="w-24 h-24 object-contain mb-6" />
         <StatusTag
-          status="New member onboarding"
+          status={t("welcome.tag")}
           styles="bg-green-200 text-[#09431c] border border-[#09431c]"
         />
         <h1 className="text-5xl md:text-6xl mt-8">
-          Welcome,{" "}
-          <span className=" text-[#09431c] font-black">{user.login}</span>, to{" "}
-          <span className="font-black text-[#09431c] ">PlantBee</span>! 🌼 Grow
-          something great together.
+          <Trans
+            i18nKey="welcome.greeting"
+            values={{ name: user.login }}
+            components={{
+              name: <span className=" text-[#09431c] font-black" />,
+              brand: <span className="font-black text-[#09431c] " />,
+            }}
+          />
         </h1>
 
         <div className="max-w-4xl w-full px-6 py-6 text-center mt-6">
-          <h2 className="text-3xl font-bold">Choose your first role 🌱🐝</h2>
-          <p className="my-3 text-lg">
-            How would you like to participate in PlantBee ecosystem?
-          </p>
+          <h2 className="text-3xl font-bold">{t("welcome.chooseRole")}</h2>
+          <p className="my-3 text-lg">{t("welcome.rolePrompt")}</p>
 
           <div className="grid md:grid-cols-2 gap-10 mt-10 mb-6">
             <VolunteerCard
               id="volunteer"
               onClick={() => setSelected("volunteer")}
               img={volunteer}
-              alt="volunteer icon"
+              alt={t("welcome.volunteerAlt")}
               status={selected}
-              title="Become a Volunteer"
-              description="Get notified when plants near you need water or attention. Track your impact and climb the campus leaderboard!"
+              title={t("welcome.volunteerTitle")}
+              description={t("welcome.volunteerDescription")}
             >
               <StatusTag
-                status="Recommended for plant lovers 💖"
+                status={t("welcome.volunteerTag")}
                 styles="bg-green-200 text-[#09431c] border-1 border-green-400 absolute -top-4 left-1/2 -translate-x-1/2 w-max"
               />
             </VolunteerCard>
@@ -86,16 +90,13 @@ function RouteComponent() {
               id="observer"
               onClick={() => setSelected("observer")}
               img={bee}
-              alt="observer icon"
+              alt={t("welcome.observerAlt")}
               status={selected}
-              title="Continue as an Observer"
-              description="Browse the map and check plant health stats without committing to care tasks. You can still see all data."
+              title={t("welcome.observerTitle")}
+              description={t("welcome.observerDescription")}
             />
           </div>
-          <p className="text-lg">
-            Don't worry, you can always switch roles later in your profile
-            settings.
-          </p>
+          <p className="text-lg">{t("welcome.switchHint")}</p>
         </div>
 
         <SharedButton
@@ -110,7 +111,7 @@ function RouteComponent() {
           }}
           className="disabled:opacity-50 min-w-md"
         >
-          Continue
+          {t("welcome.continue")}
         </SharedButton>
       </section>
     </div>

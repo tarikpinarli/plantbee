@@ -6,6 +6,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { requireAuth } from "@/utils/helper";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 
 export const Route = createFileRoute("/profile")({
   beforeLoad: requireAuth,
@@ -15,6 +16,7 @@ export const Route = createFileRoute("/profile")({
 function Profile() {
   const { user, setUser } = useAuth();
   const navigate = useNavigate();
+  const { t } = useTranslation();
   const [intendedToHelp, setIntendedToHelp] = useState(
     user?.intendToHelp || false,
   );
@@ -23,9 +25,7 @@ function Profile() {
   const handleDeleteAccount = async () => {
     if (!user) return;
 
-    const confirmed = window.confirm(
-      "Are you sure you want to delete your account? This action cannot be undone.",
-    );
+    const confirmed = window.confirm(t("profile.confirmDelete"));
     if (!confirmed) return;
     try {
       const res = await fetch("/api/user", {
@@ -33,15 +33,13 @@ function Profile() {
         credentials: "include",
       });
       if (res.ok) {
-        alert("Your account has been deleted successfully.");
+        alert(t("profile.deletedAlert"));
         setUser(null);
         navigate({ to: "/" });
       }
     } catch (error) {
       console.error("Failed to delete account:", error);
-      alert(
-        "An error occurred while trying to delete your account. Please try again later.",
-      );
+      alert(t("profile.deleteError"));
     }
   };
 
@@ -66,7 +64,9 @@ function Profile() {
       <div className="relative flex flex-col items-center md:flex-row md:items-center gap-6 bg-white dark:bg-slate-900 p-8 rounded-xl shadow-sm border border-primary/5 w-full">
         {showToast && (
           <Toast
-            message={`Your role has been updated to ${intendedToHelp ? "Volunteer 🐝" : "Quiet Observer 🌱"}`}
+            message={t("profile.roleUpdated", {
+              role: intendedToHelp ? t("profile.volunteer") : t("profile.observer"),
+            })}
           />
         )}
         <div className="relative shrink-0">
@@ -88,7 +88,7 @@ function Profile() {
           </p>
           <div className="pt-2 flex flex-wrap justify-center md:justify-start gap-2">
             <StatusTag
-              status={intendedToHelp ? "Volunteer 🐝" : "Quiet Observer 🌱"}
+              status={intendedToHelp ? t("profile.volunteer") : t("profile.observer")}
               styles={
                 intendedToHelp
                   ? "bg-green-100 text-green-800"
@@ -100,7 +100,7 @@ function Profile() {
         <div className="flex justify-center md:justify-end mt-4 md:mt-0 shrink-0">
           <div className="flex flex-col items-center justify-center bg-linear-to-br from-emerald-400 to-teal-500 text-white rounded-2xl p-6 shadow-lg min-w-36 transform transition hover:-translate-y-1 hover:shadow-xl">
             <span className="text-4xl font-black mb-1">🪙 {user.waterCount}</span>
-            <span className="text-xs font-bold uppercase tracking-widest opacity-90 text-emerald-50">Total Points</span>
+            <span className="text-xs font-bold uppercase tracking-widest opacity-90 text-emerald-50">{t("profile.totalPoints")}</span>
           </div>
         </div>
       </div>
@@ -109,10 +109,10 @@ function Profile() {
         <div className="bg-white dark:bg-slate-900 p-6 rounded-xl shadow-sm border border-primary/5 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
           <div className="text-center md:text-left max-w-2xl">
             <h2 className="text-lg font-semibold mb-1">
-              Change Volunteer Status
+              {t("profile.changeRole")}
             </h2>
             <p className="text-md text-slate-500 dark:text-slate-400 leading-relaxed">
-              Coming up: Receive weekly summaries of completed tasks to your email. 
+              {t("profile.changeRoleHint")}
             </p>
           </div>
           <div className="flex items-center">
@@ -133,18 +133,17 @@ function Profile() {
         <div className="bg-red-50/30 dark:bg-red-900/10 border-2 border-dashed border-red-200 dark:border-red-900/50 p-8 rounded-xl flex flex-col md:flex-row items-center justify-between gap-6">
           <div className="text-center md:text-left max-w-2xl">
             <h2 className="text-lg font-bold text-red-700 dark:text-red-400">
-              Delete Account
+              {t("profile.deleteAccount")}
             </h2>
             <p className="text-md text-red-600/80 dark:text-red-400/60 mt-1 max-w-md">
-              This action is permanent and cannot be undone. All your data,
-              plant records, and achievements will be removed from our servers.
+              {t("profile.deleteAccountWarning")}
             </p>
           </div>
           <SharedButton
             className="bg-red-500 hover:bg-red-700 text-white hover:text-white font-bold py-3 px-8 rounded-lg transition-all shadow-lg shadow-red-500/20 active:scale-95 whitespace-nowrap"
             onClick={handleDeleteAccount}
           >
-            Delete Account
+            {t("profile.deleteAccount")}
           </SharedButton>
         </div>
       </section>

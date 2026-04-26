@@ -3,6 +3,7 @@ import type { plantSchema } from "@/types/plant.schema";
 import type React from "react";
 import { LightBadge } from "./LightBadge";
 import { BASE_URL } from "@/utils/helper";
+import { useTranslation } from "react-i18next";
 
 type Plant = z.infer<typeof plantSchema>
 
@@ -20,9 +21,10 @@ export const PlantCard: React.FC<PlantCardProps> = ({
     image_url,
     onClick
 }) => {
- 
+    const { t } = useTranslation();
+
     // Default to 50% if the plant doesn't have a specific target set
-    const target = target_moisture || 50; 
+    const target = target_moisture || 50;
     
     return (
         <article 
@@ -58,7 +60,7 @@ export const PlantCard: React.FC<PlantCardProps> = ({
                     
                     {owner_name &&
                         <p className="text-sm text-gray-400 px-4 truncate mt-1">
-                            👨🏻‍💻 Added by {owner_name} 
+                            {t('plantCard.addedBy', { name: owner_name })}
                         </p>
                     }
                 </div>
@@ -70,7 +72,7 @@ export const PlantCard: React.FC<PlantCardProps> = ({
                     <div className="flex justify-between items-end mb-2">
                         <div>
                             <p className="text-[10px] text-slate-400 uppercase tracking-wider font-semibold mb-0.5 flex items-center gap-1">
-                                <span className="text-blue-500 text-sm">💧</span> Current
+                                <span className="text-blue-500 text-sm">💧</span> {t('plantCard.current')}
                             </p>
                             <p className="font-bold text-xl text-blue-600">
                                 {current_moisture}%
@@ -78,7 +80,7 @@ export const PlantCard: React.FC<PlantCardProps> = ({
                         </div>
                         <div className="text-right">
                             <p className="text-[10px] text-slate-400 uppercase tracking-wider font-semibold mb-0.5">
-                                Target
+                                {t('plantCard.target')}
                             </p>
                             <p className="font-bold text-sm text-green-600">
                                 {target}%
@@ -104,7 +106,7 @@ export const PlantCard: React.FC<PlantCardProps> = ({
                     {/* Warning text if plant needs water */}
                     {current_moisture < target && (
                         <p className="text-[10px] text-orange-600 font-medium mt-2 text-center bg-orange-50 py-1 rounded">
-                            ⚠️ Needs watering
+                            {t('plantCard.needsWatering')}
                         </p>
                     )}
                 </div>

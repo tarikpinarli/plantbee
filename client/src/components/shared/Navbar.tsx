@@ -4,7 +4,9 @@ import { Link, useNavigate, useRouterState } from "@tanstack/react-router";
 import { useAuth } from "@/hooks/useAuth";
 import { SharedButton } from "../ui/CustomedButton";
 import { NavLink } from "../ui/NavLink";
+import { LanguageSwitcher } from "./LanguageSwitcher";
 import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import logo from "@/assets/logo_upscaled.webp";
 
 export function Navbar() {
@@ -14,6 +16,7 @@ export function Navbar() {
   const currentPath = router.location.pathname;
   const hideNavbarRoutes = ["/login", "/welcome"];
   const [menuOpen, setMenuOpen] = useState(false);
+  const { t } = useTranslation();
 
   useEffect(() => {
     return () => setMenuOpen(false);
@@ -34,7 +37,7 @@ export function Navbar() {
       <header className="sticky top-0 z-50 border-b border-[#09431c]/20 dark:bg-[#09431c]/80 backdrop-blur-md">
         <div className="max-w-7xl mx-auto flex items-center justify-between px-6 py-4">
           <Link to="/" className="flex items-center gap-3 text-[#13ec5b] group">
-            <img src={logo} alt="PlantBee Logo" className="w-12 h-12 object-contain transition-transform group-hover:scale-105" />
+            <img src={logo} alt={t("nav.logoAlt")} className="w-12 h-12 object-contain transition-transform group-hover:scale-105" />
             <span className="text-3xl font-bold -tracking-wide text-[#09431c] dark:text-slate-100 md:text-3xl leading-tight max-w-180">
               PlantBee
             </span>
@@ -43,35 +46,37 @@ export function Navbar() {
             {user && (
               <ul className="flex items-center gap-6">
                 <li>
-                  <NavLink href="/garden">Garden</NavLink>
+                  <NavLink href="/garden">{t("nav.garden")}</NavLink>
                 </li>
                 <li>
-                  <NavLink href="/tasks">Tasks</NavLink>
+                  <NavLink href="/tasks">{t("nav.tasks")}</NavLink>
                 </li>
                 <li>
-                  <NavLink href="/addPlant">Add Plant</NavLink>
+                  <NavLink href="/addPlant">{t("nav.addPlant")}</NavLink>
                 </li>
                 <li>
-                  <NavLink href="/leaderboard">Leaderboard</NavLink>
+                  <NavLink href="/leaderboard">{t("nav.leaderboard")}</NavLink>
                 </li>
               </ul>
             )}
+
+            <LanguageSwitcher />
 
             {user && (
               <Link to="/profile">
                 <img
                   src={user.imageUrl}
-                  alt="Profile"
+                  alt={t("nav.profileAlt")}
                   className="w-10 h-10 rounded-full"
                 />
               </Link>
             )}
 
             {!user ? (
-              <Link to="/login">LOG IN</Link>
+              <Link to="/login">{t("nav.logIn")}</Link>
             ) : (
               <SharedButton onClick={logout} className="m-0">
-                LOG OUT
+                {t("nav.logOut")}
               </SharedButton>
             )}
           </nav>
@@ -88,25 +93,26 @@ export function Navbar() {
           <nav className="md:hidden flex flex-col items-center gap-5 px-6 py-4 border-t border-[#09431c]/20 bg-white dark:bg-[#09431c]/80">
             {user && (
               <>
-                <NavLink href="/garden">Garden</NavLink>
-                <NavLink href="/tasks">Tasks</NavLink>
-                <NavLink href="/addPlant">Add Plant</NavLink>
-                <NavLink href="/leaderboard">Leaderboard</NavLink>
+                <NavLink href="/garden">{t("nav.garden")}</NavLink>
+                <NavLink href="/tasks">{t("nav.tasks")}</NavLink>
+                <NavLink href="/addPlant">{t("nav.addPlant")}</NavLink>
+                <NavLink href="/leaderboard">{t("nav.leaderboard")}</NavLink>
                 <Link to="/profile" className="flex items-center gap-2">
                   <img
                     src={user.imageUrl}
-                    alt="Profile"
+                    alt={t("nav.profileAlt")}
                     className="w-8 h-8 rounded-full"
                   />
                   {user.login}
                 </Link>
               </>
             )}
+            <LanguageSwitcher />
             {!user ? (
-              <Link to="/login">LOG IN</Link>
+              <Link to="/login">{t("nav.logIn")}</Link>
             ) : (
               <SharedButton onClick={logout} className="m-0 w-sm">
-                LOG OUT
+                {t("nav.logOut")}
               </SharedButton>
             )}
           </nav>
