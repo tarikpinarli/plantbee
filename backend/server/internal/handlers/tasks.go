@@ -8,12 +8,6 @@ import (
 )
 
 func (h *Handler) HandleAcceptTask(w http.ResponseWriter, r *http.Request) {
-	if r.Method != http.MethodPost {
-		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
-		return
-	}
-
-	// 1. Extract the logged-in user from the auth context
 	userID, ok := r.Context().Value(UserIDKey).(int)
 	if !ok {
 		http.Error(w, "Unauthorized", http.StatusUnauthorized)
@@ -42,12 +36,6 @@ func (h *Handler) HandleAcceptTask(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *Handler) HandleCancelTask(w http.ResponseWriter, r *http.Request) {
-	if r.Method != http.MethodPost {
-		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
-		return
-	}
-
-	// 1. Extract the logged-in user from the auth context
 	userID, ok := r.Context().Value(UserIDKey).(int)
 	if !ok {
 		http.Error(w, "Unauthorized", http.StatusUnauthorized)
@@ -71,11 +59,6 @@ func (h *Handler) HandleCancelTask(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *Handler) HandleGetTasks(w http.ResponseWriter, r *http.Request) {
-	if r.Method != http.MethodGet {
-		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
-		return
-	}
-
 	statusFilter := r.URL.Query().Get("status")
 	if statusFilter == "all" {
 		statusFilter = ""

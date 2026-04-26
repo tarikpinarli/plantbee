@@ -9,6 +9,8 @@ import (
 	"strings"
 
 	"plantbee-backend/internal/models"
+
+	"github.com/go-chi/chi/v5"
 )
 
 // addPlantRequest is the expected JSON body for creating a plant.
@@ -25,28 +27,9 @@ type addPlantRequest struct {
 
 // HandleListPlants returns a JSON array of all plants for the plant list page.
 func (h *Handler) HandleListPlants(w http.ResponseWriter, r *http.Request) {
-	// New read query param
 	sortBy := r.URL.Query().Get("sortBy")
 	order := r.URL.Query().Get("order")
 	query := strings.ToLower(r.URL.Query().Get("query"))
-
-	// fmt.Println("Sort params:", sortBy, order)
-
-	// CORS headers
-	w.Header().Set("Access-Control-Allow-Origin", "*")
-	w.Header().Set("Access-Control-Allow-Methods", "GET, OPTIONS")
-	w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
-
-	// Handle preflight
-	if r.Method == http.MethodOptions {
-		w.WriteHeader(http.StatusOK)
-		return
-	}
-
-	if r.Method != http.MethodGet {
-		jsonError(w, "Method not allowed", http.StatusMethodNotAllowed)
-		return
-	}
 
 	if h.DB == nil {
 		jsonError(w, "Database not available", http.StatusServiceUnavailable)
@@ -128,23 +111,6 @@ func (h *Handler) HandleListPlants(w http.ResponseWriter, r *http.Request) {
 
 // HandleListUserPlants returns a JSON array of plants owned by the authenticated user.
 func (h *Handler) HandleListUserPlants(w http.ResponseWriter, r *http.Request) {
-	// CORS headers
-	w.Header().Set("Access-Control-Allow-Origin", "*")
-	w.Header().Set("Access-Control-Allow-Methods", "GET, OPTIONS")
-	w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
-
-	// Handle preflight
-	if r.Method == http.MethodOptions {
-		w.WriteHeader(http.StatusOK)
-		return
-	}
-
-	if r.Method != http.MethodGet {
-		jsonError(w, "Method not allowed", http.StatusMethodNotAllowed)
-		return
-	}
-
-	// Extract user ID from context (provided by RequireAuth middleware)
 	userID, ok := r.Context().Value(UserIDKey).(int)
 	if !ok {
 		jsonError(w, "Unauthorized", http.StatusUnauthorized)
@@ -176,23 +142,6 @@ func (h *Handler) HandleListUserPlants(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *Handler) HandleAddPlant(w http.ResponseWriter, r *http.Request) {
-	// CORS headers
-	w.Header().Set("Access-Control-Allow-Origin", "*")
-	w.Header().Set("Access-Control-Allow-Methods", "POST, OPTIONS")
-	w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
-
-	// Handle preflight
-	if r.Method == http.MethodOptions {
-		w.WriteHeader(http.StatusOK)
-		return
-	}
-
-	if r.Method != http.MethodPost {
-		jsonError(w, "Method not allowed", http.StatusMethodNotAllowed)
-		return
-	}
-
-	// Parse JSON body
 	var req addPlantRequest
 	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
 		jsonError(w, "Invalid JSON payload", http.StatusBadRequest)
@@ -271,28 +220,13 @@ func (h *Handler) HandleAddPlant(w http.ResponseWriter, r *http.Request) {
 
 // HandleGetPlantByID returns detailed information for a single plant.
 func (h *Handler) HandleGetPlantByID(w http.ResponseWriter, r *http.Request) {
-	// CORS headers
-	w.Header().Set("Access-Control-Allow-Origin", "*")
-	w.Header().Set("Access-Control-Allow-Methods", "GET, OPTIONS")
-	w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
-
-	if r.Method == http.MethodOptions {
-		w.WriteHeader(http.StatusOK)
-		return
-	}
-
-	if r.Method != http.MethodGet {
-		jsonError(w, "Method not allowed", http.StatusMethodNotAllowed)
-		return
-	}
-
 	if h.DB == nil {
 		jsonError(w, "Database not available", http.StatusServiceUnavailable)
 		return
 	}
 
 	// Extract the ID from the URL path
-	idStr := r.PathValue("id")
+	idStr := chi.URLParam(r, "id")
 	plantID, err := strconv.Atoi(idStr)
 	if err != nil {
 		jsonError(w, "Invalid plant ID", http.StatusBadRequest)
@@ -367,28 +301,13 @@ func (h *Handler) HandleGetPlantByID(w http.ResponseWriter, r *http.Request) {
 // HandleDeletePlant removes a plant from the system.
 // Any user can delete "Community" plants. Owners can delete their own plants.
 func (h *Handler) HandleDeletePlant(w http.ResponseWriter, r *http.Request) {
-	// CORS headers
-	w.Header().Set("Access-Control-Allow-Origin", "*")
-	w.Header().Set("Access-Control-Allow-Methods", "DELETE, OPTIONS")
-	w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
-
-	if r.Method == http.MethodOptions {
-		w.WriteHeader(http.StatusOK)
-		return
-	}
-
-	if r.Method != http.MethodDelete {
-		jsonError(w, "Method not allowed", http.StatusMethodNotAllowed)
-		return
-	}
-
 	if h.DB == nil {
 		jsonError(w, "Database not available", http.StatusServiceUnavailable)
 		return
 	}
 
 	// Extract the ID from the URL path
-	idStr := r.PathValue("id")
+	idStr := chi.URLParam(r, "id")
 	plantID, err := strconv.Atoi(idStr)
 	if err != nil {
 		jsonError(w, "Invalid plant ID", http.StatusBadRequest)
@@ -439,15 +358,4 @@ func (h *Handler) HandleDeletePlant(w http.ResponseWriter, r *http.Request) {
 	fmt.Printf("🗑️ Plant deleted: id=%d name=%s deleted_by=%d (community=%v)\n", plantID, plant.Name, currentUserID, isCommunityPlant)
 
 	w.WriteHeader(http.StatusNoContent)
-}
-
-// HandlePlantByID is a unified entry point for /api/plants/{id}
-// It routes GET requests to HandleGetPlantByID and DELETE requests to HandleDeletePlant.
-func (h *Handler) HandlePlantByID(w http.ResponseWriter, r *http.Request) {
-	if r.Method == http.MethodDelete {
-		h.RequireAuth(h.HandleDeletePlant)(w, r)
-		return
-	}
-	// Default to GET behavior (which includes method check inside HandleGetPlantByID)
-	h.HandleGetPlantByID(w, r)
 }
