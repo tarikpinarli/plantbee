@@ -4,6 +4,7 @@ import { Link, useNavigate, useRouterState } from "@tanstack/react-router";
 import { useAuth } from "@/hooks/useAuth";
 import { SharedButton } from "../ui/CustomedButton";
 import { NavLink } from "../ui/NavLink";
+import { LanguageSwitcher } from "./LanguageSwitcher";
 import { useEffect, useState } from "react";
 import logo from "@/assets/logo_upscaled.webp";
 
@@ -57,6 +58,8 @@ export function Navbar() {
               </ul>
             )}
 
+            <LanguageSwitcher />
+
             {user && (
               <Link to="/profile">
                 <img
@@ -102,6 +105,7 @@ export function Navbar() {
                 </Link>
               </>
             )}
+            <LanguageSwitcher />
             {!user ? (
               <Link to="/login">LOG IN</Link>
             ) : (
