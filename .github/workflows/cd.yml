@@ -87,10 +87,8 @@ jobs:
             --service "${{ steps.outputs.outputs.service }}" \
             --force-new-deployment >/dev/null
 
-      - name: Build SPA against API URL
+      - name: Build SPA
         working-directory: client
-        env:
-          VITE_API_URL: ${{ steps.outputs.outputs.api_url }}
         run: |
           pnpm install --frozen-lockfile
           pnpm build

@@ -4,12 +4,16 @@ import * as origins from 'aws-cdk-lib/aws-cloudfront-origins';
 import * as s3 from 'aws-cdk-lib/aws-s3';
 import { Construct } from 'constructs';
 
+interface FrontendStackProps extends cdk.StackProps {
+  albDnsName: string;
+}
+
 export class FrontendStack extends cdk.Stack {
   readonly bucket: s3.Bucket;
   readonly distribution: cloudfront.Distribution;
   readonly distributionDomainName: string;
 
-  constructor(scope: Construct, id: string, props?: cdk.StackProps) {
+  constructor(scope: Construct, id: string, props: FrontendStackProps) {
     super(scope, id, props);
 
     this.bucket = new s3.Bucket(this, 'SpaBucket', {
@@ -21,6 +25,19 @@ export class FrontendStack extends cdk.Stack {
       enforceSSL: true,
     });
 
+    const albOrigin = new origins.HttpOrigin(props.albDnsName, {
+      protocolPolicy: cloudfront.OriginProtocolPolicy.HTTP_ONLY,
+      httpPort: 80,
+    });
+
+    const apiBehaviorOptions: cloudfront.AddBehaviorOptions = {
+      viewerProtocolPolicy: cloudfront.ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
+      allowedMethods: cloudfront.AllowedMethods.ALLOW_ALL,
+      cachePolicy: cloudfront.CachePolicy.CACHING_DISABLED,
+      originRequestPolicy: cloudfront.OriginRequestPolicy.ALL_VIEWER_EXCEPT_HOST_HEADER,
+      responseHeadersPolicy: cloudfront.ResponseHeadersPolicy.SECURITY_HEADERS,
+    };
+
     this.distribution = new cloudfront.Distribution(this, 'SpaDistribution', {
       defaultRootObject: 'index.html',
       defaultBehavior: {
@@ -29,6 +46,18 @@ export class FrontendStack extends cdk.Stack {
         allowedMethods: cloudfront.AllowedMethods.ALLOW_GET_HEAD_OPTIONS,
         cachePolicy: cloudfront.CachePolicy.CACHING_OPTIMIZED,
         compress: true,
+      },
+      additionalBehaviors: {
+        '/api/*': { origin: albOrigin, ...apiBehaviorOptions },
+        '/auth/*': { origin: albOrigin, ...apiBehaviorOptions },
+        '/uploads/*': {
+          origin: albOrigin,
+          viewerProtocolPolicy: cloudfront.ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
+          allowedMethods: cloudfront.AllowedMethods.ALLOW_GET_HEAD_OPTIONS,
+          cachePolicy: cloudfront.CachePolicy.CACHING_OPTIMIZED,
+          originRequestPolicy: cloudfront.OriginRequestPolicy.ALL_VIEWER_EXCEPT_HOST_HEADER,
+        },
+        '/health': { origin: albOrigin, ...apiBehaviorOptions },
       },
       errorResponses: [
         {

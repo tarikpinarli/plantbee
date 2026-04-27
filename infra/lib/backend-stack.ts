@@ -16,7 +16,6 @@ interface BackendStackProps extends cdk.StackProps {
   dbName: string;
   dbPasswordParam: ssm.IStringParameter;
   repository: ecr.IRepository;
-  allowedOrigins: string[];
 }
 
 export class BackendStack extends cdk.Stack {
@@ -35,6 +34,24 @@ export class BackendStack extends cdk.Stack {
       this,
       'OAuthClientSecretParam',
       { parameterName: '/plantbee/oauth/client_secret' },
+    );
+
+    const sessionSecretParam = ssm.StringParameter.fromSecureStringParameterAttributes(
+      this,
+      'SessionSecretParam',
+      { parameterName: '/plantbee/session/secret' },
+    );
+
+    const redirectUriParam = ssm.StringParameter.fromSecureStringParameterAttributes(
+      this,
+      'OAuthRedirectUriParam',
+      { parameterName: '/plantbee/oauth/redirect_uri' },
+    );
+
+    const allowedOriginsParam = ssm.StringParameter.fromSecureStringParameterAttributes(
+      this,
+      'AllowedOriginsParam',
+      { parameterName: '/plantbee/allowed_origins' },
     );
 
     const fileSystem = new efs.FileSystem(this, 'UploadsFs', {
@@ -92,8 +109,6 @@ export class BackendStack extends cdk.Stack {
       internetFacing: true,
     });
 
-    const apiBaseUrl = `http://${alb.loadBalancerDnsName}`;
-
     const container = taskDef.addContainer('api', {
       image: ecs.ContainerImage.fromEcrRepository(props.repository, 'latest'),
       logging: ecs.LogDriver.awsLogs({ streamPrefix: 'api', logGroup }),
@@ -104,13 +119,14 @@ export class BackendStack extends cdk.Stack {
         DB_USER: props.dbUsername,
         DB_NAME: props.dbName,
         UPLOAD_DIR: '/app/uploads',
-        ALLOWED_ORIGINS: props.allowedOrigins.join(','),
-        REDIRECT_URI: `${apiBaseUrl}/auth/callback`,
       },
       secrets: {
         DB_PASSWORD: ecs.Secret.fromSsmParameter(props.dbPasswordParam),
         CLIENT_ID: ecs.Secret.fromSsmParameter(oauthClientIdParam),
         CLIENT_SECRET: ecs.Secret.fromSsmParameter(oauthClientSecretParam),
+        SESSION_SECRET: ecs.Secret.fromSsmParameter(sessionSecretParam),
+        REDIRECT_URI: ecs.Secret.fromSsmParameter(redirectUriParam),
+        ALLOWED_ORIGINS: ecs.Secret.fromSsmParameter(allowedOriginsParam),
       },
       command: [
         'sh',
@@ -185,7 +201,7 @@ export class BackendStack extends cdk.Stack {
 
     this.loadBalancerDnsName = alb.loadBalancerDnsName;
 
-    new cdk.CfnOutput(this, 'ApiUrl', { value: apiBaseUrl });
+    new cdk.CfnOutput(this, 'ApiUrl', { value: `http://${alb.loadBalancerDnsName}` });
     new cdk.CfnOutput(this, 'EcsClusterName', { value: cluster.clusterName });
     new cdk.CfnOutput(this, 'EcsServiceName', { value: service.serviceName });
   }
