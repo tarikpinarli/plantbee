@@ -14,7 +14,7 @@ const account = process.env.CDK_DEFAULT_ACCOUNT;
 const region = process.env.CDK_DEFAULT_REGION ?? 'ap-northeast-2';
 const env = { account, region };
 
-const githubOwner = app.node.tryGetContext('githubOwner') ?? 'hyun-1324';
+const githubOwner = app.node.tryGetContext('githubOwner') ?? 'tarikpinarli';
 const githubRepo = app.node.tryGetContext('githubRepo') ?? 'plantbee';
 
 new CicdStack(app, 'Plantbee-Cicd', {
@@ -33,9 +33,7 @@ const database = new DatabaseStack(app, 'Plantbee-Database', {
   vpc: network.vpc,
 });
 
-const frontend = new FrontendStack(app, 'Plantbee-Frontend', { env });
-
-new BackendStack(app, 'Plantbee-Backend', {
+const backend = new BackendStack(app, 'Plantbee-Backend', {
   env,
   vpc: network.vpc,
   database: database.instance,
@@ -43,5 +41,9 @@ new BackendStack(app, 'Plantbee-Backend', {
   dbName: database.databaseName,
   dbPasswordParam: database.passwordParam,
   repository: registry.repository,
-  allowedOrigins: [`https://${frontend.distributionDomainName}`],
+});
+
+new FrontendStack(app, 'Plantbee-Frontend', {
+  env,
+  albDnsName: backend.loadBalancerDnsName,
 });
