@@ -1,8 +1,9 @@
 //  login, logout, register
-export const loginTo42 =  () => {
+const apiBase = (import.meta.env.VITE_API_URL ?? "").replace(/\/$/, "");
+
+export const loginTo42 = () => {
   try {
-    const PATH = "/auth/login";
-    window.location.href = PATH;
+    window.location.href = `${apiBase}/auth/login`;
   } catch (error) {
     console.error(error);
   }
