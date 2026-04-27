@@ -6,6 +6,17 @@ import { RouterProvider, createRouter } from "@tanstack/react-router";
 import "./index.css";
 import "./i18n";
 
+const apiBase = (import.meta.env.VITE_API_URL ?? "").replace(/\/$/, "");
+if (apiBase) {
+  const originalFetch = window.fetch.bind(window);
+  window.fetch = (input, init) => {
+    if (typeof input === "string" && /^\/(api|auth|uploads|health)(\/|$)/.test(input)) {
+      return originalFetch(apiBase + input, { credentials: "include", ...init });
+    }
+    return originalFetch(input, init);
+  };
+}
+
 // Import the generated route tree
 import { routeTree } from "./routeTree.gen";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";

@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as WelcomeRouteImport } from './routes/welcome'
 import { Route as TasksRouteImport } from './routes/tasks'
+import { Route as StatusRouteImport } from './routes/status'
 import { Route as ProfileRouteImport } from './routes/profile'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as LeaderboardRouteImport } from './routes/leaderboard'
@@ -27,6 +28,11 @@ const WelcomeRoute = WelcomeRouteImport.update({
 const TasksRoute = TasksRouteImport.update({
   id: '/tasks',
   path: '/tasks',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const StatusRoute = StatusRouteImport.update({
+  id: '/status',
+  path: '/status',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ProfileRoute = ProfileRouteImport.update({
@@ -73,6 +79,7 @@ export interface FileRoutesByFullPath {
   '/leaderboard': typeof LeaderboardRoute
   '/login': typeof LoginRoute
   '/profile': typeof ProfileRoute
+  '/status': typeof StatusRoute
   '/tasks': typeof TasksRoute
   '/welcome': typeof WelcomeRoute
 }
@@ -84,6 +91,7 @@ export interface FileRoutesByTo {
   '/leaderboard': typeof LeaderboardRoute
   '/login': typeof LoginRoute
   '/profile': typeof ProfileRoute
+  '/status': typeof StatusRoute
   '/tasks': typeof TasksRoute
   '/welcome': typeof WelcomeRoute
 }
@@ -96,6 +104,7 @@ export interface FileRoutesById {
   '/leaderboard': typeof LeaderboardRoute
   '/login': typeof LoginRoute
   '/profile': typeof ProfileRoute
+  '/status': typeof StatusRoute
   '/tasks': typeof TasksRoute
   '/welcome': typeof WelcomeRoute
 }
@@ -109,6 +118,7 @@ export interface FileRouteTypes {
     | '/leaderboard'
     | '/login'
     | '/profile'
+    | '/status'
     | '/tasks'
     | '/welcome'
   fileRoutesByTo: FileRoutesByTo
@@ -120,6 +130,7 @@ export interface FileRouteTypes {
     | '/leaderboard'
     | '/login'
     | '/profile'
+    | '/status'
     | '/tasks'
     | '/welcome'
   id:
@@ -131,6 +142,7 @@ export interface FileRouteTypes {
     | '/leaderboard'
     | '/login'
     | '/profile'
+    | '/status'
     | '/tasks'
     | '/welcome'
   fileRoutesById: FileRoutesById
@@ -143,6 +155,7 @@ export interface RootRouteChildren {
   LeaderboardRoute: typeof LeaderboardRoute
   LoginRoute: typeof LoginRoute
   ProfileRoute: typeof ProfileRoute
+  StatusRoute: typeof StatusRoute
   TasksRoute: typeof TasksRoute
   WelcomeRoute: typeof WelcomeRoute
 }
@@ -161,6 +174,13 @@ declare module '@tanstack/react-router' {
       path: '/tasks'
       fullPath: '/tasks'
       preLoaderRoute: typeof TasksRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/status': {
+      id: '/status'
+      path: '/status'
+      fullPath: '/status'
+      preLoaderRoute: typeof StatusRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/profile': {
@@ -223,6 +243,7 @@ const rootRouteChildren: RootRouteChildren = {
   LeaderboardRoute: LeaderboardRoute,
   LoginRoute: LoginRoute,
   ProfileRoute: ProfileRoute,
+  StatusRoute: StatusRoute,
   TasksRoute: TasksRoute,
   WelcomeRoute: WelcomeRoute,
 }
