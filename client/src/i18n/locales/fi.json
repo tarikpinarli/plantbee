@@ -247,5 +247,43 @@
     "changeRoleHint": "Tulossa: viikoittaiset yhteenvedot suoritetuista tehtävistä sähköpostiisi.",
     "deleteAccount": "Poista tili",
     "deleteAccountWarning": "Toiminto on lopullinen eikä sitä voi peruuttaa. Kaikki tietosi, kasvitietueesi ja saavutuksesi poistetaan palvelimiltamme."
+  },
+  "terms": {
+    "title": "Käyttöehdot",
+    "sections": [
+      {"heading": "Ehtojen hyväksyminen", "content": "Käyttämällä PlantBee-palvelua hyväksyt nämä käyttöehdot. Jos et hyväksy ehtoja, älä käytä sovellusta."},
+      {"heading": "Kelpoisuus", "content": "PlantBee on saatavilla yksinomaan 42 Networkiin kuuluville jäsenille (Hive Helsinki). Sinulla täytyy olla voimassa oleva 42 Intra -tili palvelun käyttämiseksi."},
+      {"heading": "Käyttäjän vastuut", "items": ["Hyväksyt käyttäväsi PlantBee-palvelua vain sen tarkoitukseen: kampuksen kasvien huolehtimiseen.", "Et saa väärinkäyttää tehtävä-järjestelmää tai täydentää tehtäviä väärin.", "Et saa yrittää hyödyntää, hakeroida tai häiritä palvelua.", "Olet vastuussa tilin toiminnasta."]},
+      {"heading": "Vapaaehtoistyötehtävät", "content": "Tehtävän hyväksyminen tarkoittaa, että sitoudut suorittamaan sen oikea-aikaisesti. Jos et voi suorittaa tehtävää, peruuta se, jotta toinen vapaaehtoinen voi ottaa sen."},
+      {"heading": "Tilin poisto", "content": "Voit poistaa tilisi milloin tahansa profiilia-asetuksista. Pidätämme oikeuden keskeyttää tilit, jotka rikkovat näitä ehtoja."},
+      {"heading": "Vastuuvapauslauseke", "content": "PlantBee on Hive Helsingissa kehitetty opiskelijaprojekti. Se toimitetaan sellaisenaan ilman mitään takuita. Emme ole vastuussa mistään kasvien vahingoista, jotka johtuvat järjestelmävirheistä tai menetetyistä tehtävistä."},
+      {"heading": "Muutokset ehtoihin", "content": "Voimme päivittää näitä ehtoja milloin tahansa. PlantBee-palvelun jatkuva käyttäminen muutosten jälkeen merkitsee uusien ehtojen hyväksymistä."},
+      {"heading": "Kielletyt toiminnot", "items": ["Haittakoodin tai skriptien injektointi mihinkään syöttökenttään", "Turvallisuusaukkojen etsiskely tai hyödyntäminen", "Muiden käyttäjien henkilöllisyyden vilpillinen väärinkäyttö", "Väärien tai harhaanjohtavien anturityslukemien lähettäminen", "Taustajärjestelmien käänteisen mallintaminen tai pääsyn yrittäminen", "Alustan vuorovaikutuksen automaatiointi ilman lupaa"]},
+      {"heading": "Immateriaalioikeudet ja käyttäjäsisältö", "content": "Säilytät omistajuuden kaikista lataamistasi valokuvista tai kuvauksista. Lähettämällä sisältöä, myönnät PlantBee-palvelulle maailmanlaajuisen, rojaltiivapaan lisenssin käyttää, näyttää ja jakaa sisältöä sovelluksessa. PlantBee ja kaikki sen alkuperäinen sisältö ovat Hive Helsingin opiskelijoiden omistuksessa ja tekijänoikeuden suojaa."},
+      {"heading": "Laitteiston ja anturien vastuuvapauslauseke", "content": "PlantBee käyttää ESP32-maankosteutta-antureita, joilla voi olla teknisiä häiriöitä, yhteysongelmia tai epätarkkoja lukemia. Emme ole vastuussa kasvien vahingoista, jotka johtuvat anturitysvirheistä, verkkokatkoksista tai kastelutehtävien laiminlyönnistä järjestelmävikojen vuoksi. Järjestelmä toimitetaan parhaalla mahdollisella vapaaehtoistyön koordinoimisen perusteella."},
+      {"heading": "Kolmannen osapuolen palvelut", "content": "PlantBee integroituu 42 Networkin OAuth-palveluun todennusta varten. Käyttämällä PlantBeeta hyväksyt myös 42 Networkin ehtojen ja tietosuojakäytäntöjen noudattamisen. Emme ole vastuussa mistään 42 Networkn palveluista johtuvista ongelmista."},
+      {"heading": "Palvelun muutokset ja lopettaminen", "content": "Pidätämme oikeuden muuttaa, keskeyttää tai lopettaa PlantBee-palvelun tai joitakin sen ominaisuuksia milloin tahansa ilmoituksetta. Emme ole vastuussa minkään palvelun katkeamisesta, muutoksista tai lopettamisesta aiheutuvasta menetyksestä tai häiriöistä."},
+      {"heading": "Vastuun rajoittaminen", "content": "Lain sallimassa laajuudessa PlantBee ja Hive Helsinki eivät ole vastuussa mistään epäsuorista, satunnaisista, erityisistä tai seurauksellisista vahingoista, jotka johtuvat palvelun käyttämisestä, mukaan lukien tietojen menetys, tuottojen menetys tai kasvien vauriot."}
+    ],
+    "lastUpdated": "Viimeksi päivitetty: 27. huhtikuuta 2026"
+  },
+  "privacy": {
+    "title": "Tietosuojakäytäntö",
+    "sections": [
+      {"heading": "Keitä olemme", "content": "PlantBee on Hive Helsingin kampuksella kehitetty älykäs kasvien seurantajärjestelmä. Se yhdistää ESP32-maankosteutta-anturit taustajärjestelmään auttaakseen vapaaehtoisia huolehtimaan kampuksen kasveista."},
+      {"heading": "Keräämme", "content": "Keräämme seuraavat henkilötiedot, kun kirjaudut 42 Networkn OAuth-palvelun kautta:", "items": ["42 Intra -kirjautumistunnuksesi", "Sähköpostiosoitteesi", "42-profiilikusivasi URL", "Vapaaehtoistyön aktiivisuutesi (hyväksytyt, suoritetut tehtävät)"]},
+      {"heading": "Kuinka käytämme tietojasi", "items": ["Todentaaksemme sinut 42 OAuth-palvelun kautta", "Näyttääksemme profiilisi ja aktiivisuutesi sijoituslistalla", "Määritelläksemme ja seurattaksemme kasvien hoitotehtäviä", "Lähettääksemme ilmoituksia kasveista, jotka tarvitsevat huolehtimista"]},
+      {"heading": "Tietojen varastointi", "content": "Tietosi tallennetaan PlantBee-infrastruktuurissa olevaan PostgreSQL-tietokantaan. Emme myy tai jaa tietojasi kolmansille osapuolille."},
+      {"heading": "Todennus", "content": "Käytämme 42 Networkn OAuth2-todennusta todentamiseen. Emme koskaan tallenna 42-salasanaasi. Todennusmerkit tallennetaan turvallisiin HttpOnly-evästeihin."},
+      {"heading": "Sinun oikeuksesi", "content": "Voit poistaa tilisi milloin tahansa profiilia-asetuksista. Tämä poistaa pysyvästi kaikki henkilötietosi järjestelmästämme."},
+      {"heading": "Yhteys", "content": "Tietosuojakysymyksiä varten ota yhteyttä PlantBee-tiimiin Hive Helsingissa."},
+      {"heading": "Evästeet", "content": "Käytämme yhtä HttpOnly-evästettä istuntosi ylläpitämiseen. Tämä eväste raukeaa 24 tunnin kuluttua eikä JavaScriptin voi käyttää sitä. Seurantaa tai analytiikkaa varten käytettäviä evästeitä ei käytetä."},
+      {"heading": "Tietojen säilyttäminen", "content": "Tietojasi säilytetään niin kauan kuin tilisi on olemassa. Kun poistat tilin, kaikki henkilötietosi, mukaan lukien kirjautumisesi, sähköpostisi, profiilikuvasi ja tehtävähistoriasi poistetaan välittömästi tietokannastamme."},
+      {"heading": "Anturi- ja ympäristötiedot", "content": "Henkilötietojen lisäksi keräämme ja tallenneme ESP32-laitteiden anturityslukemia, mukaan lukien:", "items": ["Maakosteuden tasot ja aikaleimaukset", "Laitteiden tunnukset ja sijainnit", "Historialliset lukemat analytiikkaa varten", "IP-osoitteet laitteiden, jotka lähettävät tietoja"], "note": "Näitä teknisiä tietoja käytetään kastelun suositusten parantamiseen ja järjestelmän luotettavuuteen."},
+      {"heading": "Tietomurron ilmoitus", "content": "Siinä tapauksessa, että henkilötietojasi koskee vahvistettu tietoturvaloukkaus, ilmoitamme kaikille asianomasille käyttäjille 72 tunnin kuluessa sähköpostitse ja sovelluksensa sisäisellä ilmoituksella. Toimittakaamme tietoja murto, kärsineistä tiedoista ja suositeltavista toimista."},
+      {"heading": "Ikärajoitukset ja lasten tietosuoja", "content": "PlantBee on yksinomaan 42 Networkiin kuuluville jäsenille (Hive Helsinki), jotka ovat vähintään 18-vuotiaita tai maan täysi-ikäisiä. Emme keräy tietoisesti tietoja alle 18-vuotiaita lapsilta. Jos havaitsemme, että käyttäjä on alle 18 vuotta, hänen tilinsä keskeytetään välittömästi ja tiedot poistetaan."},
+      {"heading": "Käytäntömuutokset ja päivitykset", "content": "Voimme päivittää tietosuojakäytäntöä milloin tahansa. Jos muutokset ovat merkittäviä, ilmoitamme sinulle sähköpostitse ja sovelluksensa sisäisellä ilmoituksella vähintään 14 päivää ennen muutosten voimaantuloa. PlantBee-palvelun jatkuva käyttäminen päivitysjaksolla merkitsee päivitetyn käytännön hyväksymistä."}
+    ],
+    "lastUpdated": "Viimeksi päivitetty: 27. huhtikuuta 2026"
   }
 }

@@ -247,5 +247,43 @@
     "changeRoleHint": "Coming up: Receive weekly summaries of completed tasks to your email.",
     "deleteAccount": "Delete Account",
     "deleteAccountWarning": "This action is permanent and cannot be undone. All your data, plant records, and achievements will be removed from our servers."
+  },
+  "terms": {
+    "title": "Terms of Service",
+    "sections": [
+      {"heading": "Acceptance of Terms", "content": "By accessing and using PlantBee, you agree to these Terms of Service. If you do not agree, please do not use the application."},
+      {"heading": "Eligibility", "content": "PlantBee is available exclusively to members of the 42 Network (Hive Helsinki). You must have a valid 42 Intra account to use this service."},
+      {"heading": "User Responsibilities", "items": ["You agree to use PlantBee only for its intended purpose: caring for campus plants.", "You must not abuse the task system or falsely complete tasks.", "You must not attempt to exploit, hack, or disrupt the service.", "You are responsible for your account activity."]},
+      {"heading": "Volunteer Tasks", "content": "Accepting a task means you commit to completing it in a timely manner. If you cannot complete a task, please cancel it so another volunteer can take over."},
+      {"heading": "Account Termination", "content": "You may delete your account at any time via profile settings. We reserve the right to suspend accounts that violate these terms."},
+      {"heading": "Disclaimer", "content": "PlantBee is a student project developed at Hive Helsinki. It is provided as-is without any warranty. We are not liable for any plant damage resulting from system errors or missed tasks."},
+      {"heading": "Changes to Terms", "content": "We may update these terms at any time. Continued use of PlantBee after changes constitutes acceptance of the new terms."},
+      {"heading": "Prohibited Activities", "items": ["Inject malicious code or scripts into any input field", "Probe or exploit security vulnerabilities", "Impersonate other users or misrepresent your identity", "Submit false or misleading sensor readings", "Reverse engineer or attempt to access backend systems", "Automate interactions with the platform without authorization"]},
+      {"heading": "Intellectual Property & User Content", "content": "You retain ownership of any photos or descriptions you upload. By submitting content, you grant PlantBee a worldwide, royalty-free license to use, display, and share that content within the application. PlantBee and all its original content are owned by Hive Helsinki students and protected by copyright."},
+      {"heading": "Hardware & Sensor Disclaimers", "content": "PlantBee relies on ESP32 soil-moisture sensors, which may experience technical failures, connectivity issues, or inaccurate readings. We are not liable for plant damage caused by sensor errors, network outages, or missed watering tasks due to system failures. The system is provided on a best-effort basis for volunteer coordination only."},
+      {"heading": "Third-Party Services", "content": "PlantBee integrates with the 42 Network OAuth service for authentication. By using PlantBee, you also agree to comply with 42 Network's terms and privacy policies. We are not responsible for any issues arising from 42 Network's services."},
+      {"heading": "Service Modifications & Discontinuation", "content": "We reserve the right to modify, suspend, or discontinue PlantBee or any of its features at any time without notice. We are not liable for any loss or inconvenience caused by service interruptions, modifications, or discontinuation."},
+      {"heading": "Limitation of Liability", "content": "To the fullest extent permitted by law, PlantBee and Hive Helsinki are not liable for any indirect, incidental, special, or consequential damages arising from your use of the service, including loss of data, lost profits, or plant damage."}
+    ],
+    "lastUpdated": "Last updated: April 27, 2026"
+  },
+  "privacy": {
+    "title": "Privacy Policy",
+    "sections": [
+      {"heading": "Who We Are", "content": "PlantBee is a smart plant monitoring system developed at Hive Helsinki campus. It connects ESP32 soil-moisture sensors to a backend system to help volunteers care for campus plants."},
+      {"heading": "Data We Collect", "content": "We collect the following personal data when you log in via 42 Network OAuth:", "items": ["Your 42 Intra login name", "Your email address", "Your 42 profile picture URL", "Your volunteer activity (tasks accepted, completed)"]},
+      {"heading": "How We Use Your Data", "items": ["To authenticate you via 42 OAuth", "To display your profile and activity on the leaderboard", "To assign and track plant care tasks", "To send notifications about plants that need care"]},
+      {"heading": "Data Storage", "content": "Your data is stored in a PostgreSQL database hosted within the PlantBee infrastructure. We do not sell or share your data with third parties."},
+      {"heading": "Authentication", "content": "We use 42 Network OAuth2 for authentication. We never store your 42 password. Authentication tokens are stored in secure HttpOnly cookies."},
+      {"heading": "Your Rights", "content": "You can delete your account at any time from your profile settings. This permanently removes all your personal data from our system."},
+      {"heading": "Contact", "content": "For any privacy-related questions, contact the PlantBee team at Hive Helsinki."},
+      {"heading": "Cookies", "content": "We use a single HttpOnly cookie to maintain your login session. This cookie expires after 24 hours and cannot be accessed by JavaScript. No tracking or analytics cookies are used."},
+      {"heading": "Data Retention", "content": "Your data is retained as long as your account exists. When you delete your account, all personal data including your login, email, profile picture, and task history is permanently removed from our database immediately."},
+      {"heading": "Sensor & Environmental Data", "content": "Beyond personal data, we collect and store sensor readings from ESP32 devices, including:", "items": ["Soil moisture levels and timestamps", "Device identifiers and locations", "Historical readings for analytics", "IP addresses of devices transmitting data"], "note": "This technical data is used to improve watering recommendations and system reliability."},
+      {"heading": "Data Breach Notification", "content": "In the event of a confirmed security breach affecting your personal data, we will notify all affected users within 72 hours via email and in-app notification. We will provide details about the breach, data affected, and recommended actions."},
+      {"heading": "Age Restrictions & Children's Privacy", "content": "PlantBee is exclusively for members of the 42 Network (Hive Helsinki), who must be at least 18 years old or the age of majority in their country. We do not knowingly collect data from children under 18. If we discover a user is under 18, their account will be immediately suspended and data deleted."},
+      {"heading": "Policy Changes & Updates", "content": "We may update this Privacy Policy at any time. If changes are material, we will notify you via email and in-app notification at least 14 days before the changes take effect. Continued use of PlantBee after the update period constitutes acceptance of the updated policy."}
+    ],
+    "lastUpdated": "Last updated: April 27, 2026"
   }
 }

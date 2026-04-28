@@ -12,9 +12,9 @@ export const useCurrentUser = () => {
         const res = await fetch("/auth/me", { credentials: "include" });
         const userData = await res.json();
         setUser(userData);
-      } catch (error) {
+      } catch {
         setUser(null);
-        console.error(error);
+        // console.error(error);
       }
     };
     getCallback();
