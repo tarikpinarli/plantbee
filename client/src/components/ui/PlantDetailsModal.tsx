@@ -72,7 +72,7 @@ export const PlantDetailsModal: React.FC<PlantDetailsModalProps> = ({ plantId, o
             {/* Header Image */}
             <div className="w-full h-48 bg-slate-200 relative">
               {plant.image_url ? (
-                <img src={`http://localhost:8080${plant.image_url}`} alt={plant.name} className="w-full h-full object-cover"/>
+                <img src={plant.image_url} alt={plant.name} className="w-full h-full object-cover"/>
               ) : (
                 <div className="w-full h-full flex items-center justify-center text-5xl">🌱</div>
               )}

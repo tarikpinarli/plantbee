@@ -93,6 +93,7 @@ export class BackendStack extends cdk.Stack {
         DB_USER: props.dbUsername,
         DB_NAME: props.dbName,
         S3_BUCKET_NAME: uploadsBucketName,
+        AWS_REGION: cdk.Stack.of(this).region,
       },
       secrets: {
         DB_PASSWORD: ecs.Secret.fromSsmParameter(props.dbPasswordParam),

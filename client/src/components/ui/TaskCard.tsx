@@ -4,7 +4,6 @@ import { ProgressBar } from "./ProgressBar";
 import { StatusTag } from "./StatusTag";
 import { SharedButton } from "./CustomedButton";
 import { useAuth } from "@/hooks/useAuth";
-import { BASE_URL } from "@/utils/helper";
 import { ErrorMessageBox } from "./ErrorMessageBox";
 import { useTranslation } from "react-i18next";
 
@@ -35,7 +34,7 @@ export const TaskCard = ({
     <li className="glass-card flex flex-col md:flex-row items-stretch rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-shadow group">
       <div className="flex w-full md:w-64 h-48 md:h-auto bg-center bg-no-repeat bg-cover shrink-0">
         <img
-          src={`${BASE_URL}${task.image_url}`}
+          src={task.image_url}
           alt={task.plant_name}
           className="w-4/5 h-4/5 justify-center items-center mx-auto my-auto opacity-70"
           onError={(e) => {

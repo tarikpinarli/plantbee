@@ -2,7 +2,6 @@ import z from "zod";
 import type { plantSchema } from "@/types/plant.schema";
 import type React from "react";
 import { LightBadge } from "./LightBadge";
-import { BASE_URL } from "@/utils/helper";
 import { useTranslation } from "react-i18next";
 
 type Plant = z.infer<typeof plantSchema>
@@ -36,7 +35,7 @@ export const PlantCard: React.FC<PlantCardProps> = ({
                 <div className="relative w-full h-40 bg-slate-200">
                     {image_url ? (
                         <img
-                        src={`${BASE_URL}${image_url}`}
+                        src={image_url}
                         className="w-full h-full object-cover"
                         />
                     ) : (

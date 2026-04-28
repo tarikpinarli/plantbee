@@ -11,6 +11,7 @@ import (
 	"os"
 	"path/filepath"
 
+	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/service/s3"
 )
 
@@ -36,18 +37,20 @@ func (h *Handler) HandleUploadImage(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Internal error", http.StatusInternalServerError)
 		return
 	}
-	filename := hex.EncodeToString(randBytes) + "_" + handler.Filename
+	filename := hex.EncodeToString(randBytes) + "_" + filepath.Base(handler.Filename)
 
 	var url string
 	if h.S3Client != nil {
 		key := "uploads/" + filename
-		_, err = h.S3Client.PutObject(context.Background(), &s3.PutObjectInput{
-			Bucket:      &h.Cfg.S3BucketName,
-			Key:         &key,
-			Body:        file,
-			ContentType: strPtr(handler.Header.Get("Content-Type")),
-		})
-		if err != nil {
+		input := &s3.PutObjectInput{
+			Bucket: aws.String(h.Cfg.S3BucketName),
+			Key:    aws.String(key),
+			Body:   file,
+		}
+		if ct := handler.Header.Get("Content-Type"); ct != "" {
+			input.ContentType = aws.String(ct)
+		}
+		if _, err = h.S3Client.PutObject(context.Background(), input); err != nil {
 			http.Error(w, "Failed to upload", http.StatusInternalServerError)
 			return
 		}
@@ -80,5 +83,3 @@ func (h *Handler) HandleUploadImage(w http.ResponseWriter, r *http.Request) {
 		fmt.Printf("error encoding json response: %v\n", err)
 	}
 }
-
-func strPtr(s string) *string { return &s }
