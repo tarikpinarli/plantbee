@@ -152,14 +152,27 @@ func (h *Handler) HandleAddPlant(w http.ResponseWriter, r *http.Request) {
 		jsonError(w, "Plant name is required", http.StatusBadRequest)
 		return
 	}
+	if len(req.Name) > 100 {
+		jsonError(w, "Plant name is too long (max 100 chars)", http.StatusBadRequest)
+		return
+	}
+
+	if len(req.Species) > 100 {
+		jsonError(w, "Species name is too long (max 100 chars)", http.StatusBadRequest)
+		return
+	}
 
 	if req.SensorID == "" {
 		jsonError(w, "Sensor ID is required", http.StatusBadRequest)
 		return
 	}
+	if len(req.SensorID) > 50 {
+		jsonError(w, "Sensor ID is too long (max 50 chars)", http.StatusBadRequest)
+		return
+	}
 
-	if req.PotVolumeLiters == 0 {
-		jsonError(w, "Pot volume is required", http.StatusBadRequest)
+	if req.PotVolumeLiters <= 0 {
+		jsonError(w, "Pot volume must be a positive number", http.StatusBadRequest)
 		return
 	}
 
@@ -168,8 +181,17 @@ func (h *Handler) HandleAddPlant(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	if req.TargetMoisture < 0 || req.TargetMoisture > 100 {
+		jsonError(w, "Target moisture must be between 0 and 100", http.StatusBadRequest)
+		return
+	}
 	if req.TargetMoisture == 0 {
 		req.TargetMoisture = 50
+	}
+
+	if req.ImageURL != "" && !strings.HasPrefix(req.ImageURL, "http://") && !strings.HasPrefix(req.ImageURL, "https://") {
+		jsonError(w, "Image URL must be a valid http or https link", http.StatusBadRequest)
+		return
 	}
 
 	// Extract user ID from context
