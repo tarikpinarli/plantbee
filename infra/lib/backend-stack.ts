@@ -2,10 +2,10 @@ import * as cdk from 'aws-cdk-lib';
 import * as ec2 from 'aws-cdk-lib/aws-ec2';
 import * as ecr from 'aws-cdk-lib/aws-ecr';
 import * as ecs from 'aws-cdk-lib/aws-ecs';
-import * as efs from 'aws-cdk-lib/aws-efs';
 import * as elbv2 from 'aws-cdk-lib/aws-elasticloadbalancingv2';
 import * as logs from 'aws-cdk-lib/aws-logs';
 import * as rds from 'aws-cdk-lib/aws-rds';
+import * as s3 from 'aws-cdk-lib/aws-s3';
 import * as ssm from 'aws-cdk-lib/aws-ssm';
 import { Construct } from 'constructs';
 
@@ -54,20 +54,8 @@ export class BackendStack extends cdk.Stack {
       { parameterName: '/plantbee/allowed_origins' },
     );
 
-    const fileSystem = new efs.FileSystem(this, 'UploadsFs', {
-      vpc: props.vpc,
-      vpcSubnets: { subnetType: ec2.SubnetType.PRIVATE_WITH_EGRESS },
-      performanceMode: efs.PerformanceMode.GENERAL_PURPOSE,
-      throughputMode: efs.ThroughputMode.BURSTING,
-      encrypted: true,
-      removalPolicy: cdk.RemovalPolicy.RETAIN,
-    });
-
-    const accessPoint = fileSystem.addAccessPoint('UploadsAp', {
-      path: '/uploads',
-      createAcl: { ownerUid: '1000', ownerGid: '1000', permissions: '0755' },
-      posixUser: { uid: '1000', gid: '1000' },
-    });
+    const uploadsBucketName = `plantbee-uploads-${this.account}`;
+    const uploadsBucket = s3.Bucket.fromBucketName(this, 'UploadsBucket', uploadsBucketName);
 
     const cluster = new ecs.Cluster(this, 'Cluster', {
       vpc: props.vpc,
@@ -77,23 +65,9 @@ export class BackendStack extends cdk.Stack {
     const taskDef = new ecs.FargateTaskDefinition(this, 'ApiTaskDef', {
       cpu: 256,
       memoryLimitMiB: 512,
-      volumes: [
-        {
-          name: 'uploads',
-          efsVolumeConfiguration: {
-            fileSystemId: fileSystem.fileSystemId,
-            transitEncryption: 'ENABLED',
-            authorizationConfig: {
-              accessPointId: accessPoint.accessPointId,
-              iam: 'ENABLED',
-            },
-          },
-        },
-      ],
     });
 
-    fileSystem.grantRootAccess(taskDef.taskRole);
-    fileSystem.grant(taskDef.taskRole, 'elasticfilesystem:ClientMount', 'elasticfilesystem:ClientWrite');
+    uploadsBucket.grantPut(taskDef.taskRole);
 
     const logGroup = new logs.LogGroup(this, 'ApiLogs', {
       logGroupName: '/plantbee/api',
@@ -118,7 +92,7 @@ export class BackendStack extends cdk.Stack {
         DB_PORT: dbPort,
         DB_USER: props.dbUsername,
         DB_NAME: props.dbName,
-        UPLOAD_DIR: '/app/uploads',
+        S3_BUCKET_NAME: uploadsBucketName,
       },
       secrets: {
         DB_PASSWORD: ecs.Secret.fromSsmParameter(props.dbPasswordParam),
@@ -143,11 +117,6 @@ export class BackendStack extends cdk.Stack {
     });
 
     container.addPortMappings({ containerPort: 8080 });
-    container.addMountPoints({
-      containerPath: '/app/uploads',
-      sourceVolume: 'uploads',
-      readOnly: false,
-    });
 
     const serviceSg = new ec2.SecurityGroup(this, 'ServiceSg', {
       vpc: props.vpc,
@@ -166,8 +135,6 @@ export class BackendStack extends cdk.Stack {
       maxHealthyPercent: 200,
       circuitBreaker: { rollback: true },
     });
-
-    fileSystem.connections.allowDefaultPortFrom(serviceSg);
 
     const dbSg = props.database.connections.securityGroups[0];
     if (dbSg) {

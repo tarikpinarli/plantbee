@@ -1,11 +1,16 @@
 package handlers
 
 import (
+	"context"
+	"log"
+
+	awsconfig "github.com/aws/aws-sdk-go-v2/config"
+	"github.com/aws/aws-sdk-go-v2/service/s3"
+	"golang.org/x/oauth2"
+
 	"plantbee-backend/internal/config"
 	"plantbee-backend/internal/services"
 	"plantbee-backend/internal/storage"
-
-	"golang.org/x/oauth2"
 )
 
 type Handler struct {
@@ -15,6 +20,7 @@ type Handler struct {
 	AuthService   *services.AuthService
 	TaskService   *services.TaskService
 	Cfg           *config.Config
+	S3Client      *s3.Client
 }
 
 func New(db *storage.DB, cfg *config.Config) *Handler {
@@ -29,6 +35,16 @@ func New(db *storage.DB, cfg *config.Config) *Handler {
 		},
 	}
 
+	var s3Client *s3.Client
+	if cfg.S3BucketName != "" {
+		awsCfg, err := awsconfig.LoadDefaultConfig(context.Background())
+		if err != nil {
+			log.Printf("warning: failed to load AWS config: %v", err)
+		} else {
+			s3Client = s3.NewFromConfig(awsCfg)
+		}
+	}
+
 	return &Handler{
 		DB:            db,
 		OAuthConfig:   oauth,
@@ -36,5 +52,6 @@ func New(db *storage.DB, cfg *config.Config) *Handler {
 		AuthService:   services.NewAuthService(),
 		TaskService:   services.NewTaskService(db),
 		Cfg:           cfg,
+		S3Client:      s3Client,
 	}
 }

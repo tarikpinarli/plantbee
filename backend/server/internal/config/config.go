@@ -14,6 +14,7 @@ type Config struct {
 	ClientID       string
 	ClientSecret   string
 	RedirectURI    string
+	S3BucketName   string
 	UploadDir      string
 	AllowedOrigins []string
 }
@@ -29,6 +30,7 @@ func Load() *Config {
 		ClientID:       getEnv("CLIENT_ID", ""),
 		ClientSecret:   getEnv("CLIENT_SECRET", ""),
 		RedirectURI:    getEnv("REDIRECT_URI", "http://localhost:8080/auth/callback"),
+		S3BucketName:   getEnv("S3_BUCKET_NAME", ""),
 		UploadDir:      getEnv("UPLOAD_DIR", "./uploads"),
 		AllowedOrigins: parseOrigins(getEnv("ALLOWED_ORIGINS", "http://localhost:5173")),
 	}

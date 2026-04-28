@@ -91,7 +91,9 @@ func main() {
 		})
 	})
 
-	r.Mount("/uploads/", http.StripPrefix("/uploads/", http.FileServer(http.Dir(cfg.UploadDir))))
+	if cfg.S3BucketName == "" {
+		r.Mount("/uploads/", http.StripPrefix("/uploads/", http.FileServer(http.Dir(cfg.UploadDir))))
+	}
 
 	fs := http.FileServer(http.Dir("/client/dist"))
 	r.NotFound(func(w http.ResponseWriter, req *http.Request) {

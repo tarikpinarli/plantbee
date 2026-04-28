@@ -25,6 +25,14 @@ export class FrontendStack extends cdk.Stack {
       enforceSSL: true,
     });
 
+    const uploadsBucket = new s3.Bucket(this, 'UploadsBucket', {
+      bucketName: `plantbee-uploads-${this.account}`,
+      blockPublicAccess: s3.BlockPublicAccess.BLOCK_ALL,
+      encryption: s3.BucketEncryption.S3_MANAGED,
+      removalPolicy: cdk.RemovalPolicy.RETAIN,
+      enforceSSL: true,
+    });
+
     const albOrigin = new origins.HttpOrigin(props.albDnsName, {
       protocolPolicy: cloudfront.OriginProtocolPolicy.HTTP_ONLY,
       httpPort: 80,
@@ -51,11 +59,10 @@ export class FrontendStack extends cdk.Stack {
         '/api/*': { origin: albOrigin, ...apiBehaviorOptions },
         '/auth/*': { origin: albOrigin, ...apiBehaviorOptions },
         '/uploads/*': {
-          origin: albOrigin,
+          origin: origins.S3BucketOrigin.withOriginAccessControl(uploadsBucket),
           viewerProtocolPolicy: cloudfront.ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
           allowedMethods: cloudfront.AllowedMethods.ALLOW_GET_HEAD_OPTIONS,
           cachePolicy: cloudfront.CachePolicy.CACHING_OPTIMIZED,
-          originRequestPolicy: cloudfront.OriginRequestPolicy.ALL_VIEWER_EXCEPT_HOST_HEADER,
         },
         '/health': { origin: albOrigin, ...apiBehaviorOptions },
       },
