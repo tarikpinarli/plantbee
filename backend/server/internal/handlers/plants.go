@@ -189,11 +189,6 @@ func (h *Handler) HandleAddPlant(w http.ResponseWriter, r *http.Request) {
 		req.TargetMoisture = 50
 	}
 
-	if req.ImageURL != "" && !strings.HasPrefix(req.ImageURL, "http://") && !strings.HasPrefix(req.ImageURL, "https://") {
-		jsonError(w, "Image URL must be a valid http or https link", http.StatusBadRequest)
-		return
-	}
-
 	// Extract user ID from context
 	userID, ok := r.Context().Value(UserIDKey).(int)
 	if !ok {
