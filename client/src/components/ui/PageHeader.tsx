@@ -1,6 +1,6 @@
 type PageHeaderProps = {
   title: string;
-  content: string;
+  content?: string;
 };
 
 export const PageHeader = ({ title, content }: PageHeaderProps) => (

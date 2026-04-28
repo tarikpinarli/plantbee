@@ -1,4 +1,5 @@
 import { useTranslation } from "react-i18next";
+import { NavLink } from "../ui/NavLink";
 
 export const Footer = () => {
   const { t } = useTranslation();
@@ -11,6 +12,10 @@ export const Footer = () => {
       <p className="text-slate-500 text-sm font-medium text-center md:text-left">
         {t("footer.copyright")}
       </p>
+      <div className="flex gap-6">
+        <NavLink href="/privacy">{t("privacy.title")}</NavLink>
+        <NavLink href="/terms">{t("terms.title")}</NavLink>
+      </div>
     </footer>
   );
 };
