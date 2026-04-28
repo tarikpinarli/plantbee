@@ -10,6 +10,7 @@ services:
     - plantbee_uploads:/app/uploads 
     environment:
       - UPLOAD_DIR=/app/uploads
+      - DATABASE_URL=postgres://${DB_USER:-postgres}:${DB_PASSWORD:-postgres}@db:5432/${DB_NAME:-plantbee}?sslmode=disable
     env_file:
       - path: ./backend/server/.env
         required: false
@@ -55,7 +56,7 @@ services:
       - ./client:/app
       - /app/node_modules
     environment:
-      - VITE_API_URL=http://app:8080
+      - VITE_API_URL=http://localhost:8080
     depends_on:
       - app
 
